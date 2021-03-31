@@ -32,7 +32,7 @@ if (!window.customElements.get(InputElement.selector)) {
 }
 
 const Generate: FC = () => (
-  <div element="generate-element" className={styles['generate']}>
+  <div element={InputElement.selector} className={styles['generate']}>
     <button>Generate my poster</button>
   </div>
 );

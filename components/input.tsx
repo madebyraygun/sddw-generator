@@ -79,7 +79,7 @@ if (!window.customElements.get(InputElement.selector)) {
 }
 
 const Input: FC = () => (
-  <div element="input-element" className={styles['input']}>
+  <div element={InputElement.selector} className={styles['input']}>
     <input type="text" maxLength={16} />
     <div className={styles['input__logo']}>
       <figure>

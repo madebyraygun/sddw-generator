@@ -4,7 +4,7 @@ import Router from '../../assets/js/utils/router';
 // https://developers.google.com/web/fundamentals/web-elements/customelements#extendhtml
 
 // export default class AppLinkElement extends HTMLAnchorElement {
-//   static selector = 'link-';
+//   static selector = 'app-link-element';
 //
 //   connectedCallback() {
 //     this.addEventListener('click', (e: MouseEvent) => {
@@ -42,7 +42,7 @@ const Link: FC<{
   href,
   children
 }) => (
-  <div element="app-link-element">
+  <div element={AppLinkElement.selector}>
     <a href={href}>{children}</a>
   </div>
 );

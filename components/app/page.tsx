@@ -1,10 +1,10 @@
 const Page: FC<{
-  key: string;
+  slug: string;
 }> = ({
-  key,
+  slug,
   children
 }) => (
-  <div data-page={key}>{children}</div>
+  <div data-page={slug}>{children}</div>
 );
 
 export default Page;

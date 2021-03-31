@@ -4,7 +4,7 @@ import Input from '../components/input';
 import Feed from '../components/feed';
 
 const Index: FC = () => (
-  <Page key="index">
+  <Page slug="index">
     <Intro />
     <Input />
     <Feed />
