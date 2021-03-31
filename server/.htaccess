@@ -1,0 +1,21 @@
+DirectorySlash Off
+
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} !/$
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule (.*) $1/index.html [L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+ErrorDocument 404 /404/index.html
+
+# Password Protected
+AuthType Basic
+AuthName "Password Protected Area"
+AuthUserFile /srv/users/basicdev/apps/basic/public/.htpasswd
+Require valid-user

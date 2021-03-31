@@ -1,0 +1,13 @@
+@import '../mixins/media-query';
+
+:root {
+  --grid-width: 100vw;
+  --grid-column-count: 6;
+  --grid-padding: 2rem;
+  --grid-gutter: 2rem;
+
+  @include mq('medium') {
+    --grid-column-count: 12;
+    --grid-padding: 4rem;
+  }
+}

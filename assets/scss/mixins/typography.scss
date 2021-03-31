@@ -1,0 +1,32 @@
+@mixin heading($i) {
+  font-size: var(--font-size-h#{$i});
+  line-height: var(--line-height-h#{$i});
+  font-family: var(--font-family-secondary);
+  letter-spacing: var(--letter-spacing-h#{$i});
+  text-transform: uppercase;
+}
+@mixin h1() {
+  @include heading(1);
+}
+@mixin h2() {
+  @include heading(2);
+}
+@mixin h3() {
+  @include heading(3);
+}
+@mixin h4() {
+  @include heading(4);
+}
+@mixin h5() {
+  @include heading(5);
+}
+@mixin h6() {
+  @include heading(6);
+}
+
+@mixin body() {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-body);
+  font-family: var(--font-family-roboto), sans-serif;
+}

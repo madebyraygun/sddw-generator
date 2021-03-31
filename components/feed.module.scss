@@ -1,0 +1,39 @@
+@import '../assets/scss/mixins/grid';
+
+.feed {
+  padding: 0 var(--grid-padding);
+    
+  ul {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+  }
+  li {
+    flex: 0 0 50%;
+    padding: 10vw grid(1, true);
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+        
+    &[data-full] {
+      flex: 0 0 100%;
+    }
+  }
+  &__ctas {
+    display: flex;
+        
+    * + * {
+      margin-left: 3rem;
+    }
+  }
+  &__poster {
+    width: grid(4);
+    margin-bottom: 5rem;
+        
+    svg {
+      background-color: red;
+      display: block;
+    }
+  }
+}

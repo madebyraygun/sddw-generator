@@ -1,0 +1,24 @@
+.footer {
+  width: 100%;
+  height: 0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+
+  &__design-week,
+  &__basic {
+    position: absolute;
+    bottom: var(--grid-padding);
+  }
+  &__design-week {
+    width: 10.5rem;
+    height: 10.3rem;
+    left: var(--grid-padding);
+  }
+  &__basic {
+    width: 11.5rem;
+    height: 2.7rem;
+    right: var(--grid-padding);
+  }
+}

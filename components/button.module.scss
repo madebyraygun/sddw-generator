@@ -1,0 +1,28 @@
+.button {
+  width: 28rem;
+  height: 7rem;
+  background-color: var(--dark);
+  background-clip: padding-box;
+  border: solid 0.5rem transparent;
+  border-radius: 3.5rem;
+  text-transform: uppercase;
+  display: inline-block;
+  position: relative;
+    
+  &:focus {
+    outline: 0;
+  }
+    
+  &:before {
+    content: '';
+    margin: -0.5rem;
+    border-radius: inherit;
+    background: linear-gradient(to right, var(--astral), var(--victoria), var(--zuccini), var(--rose-bud), var(--yellow-orange), var(--vermilion));
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "rules": {
+    "at-rule-no-unknown": [ true, {
+      "ignoreAtRules": [
+        "extends",
+        "include",
+        "function",
+        "return",
+        "mixin",
+        "for",
+        "each",
+        "if"
+      ]
+    }],
+    "block-closing-brace-empty-line-before": "never",
+    "block-closing-brace-newline-before": "always",
+    "block-opening-brace-space-before": "always",
+    "block-opening-brace-newline-after": "always",
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-block-no-shorthand-property-overrides": true,
+    "declaration-block-semicolon-newline-after": "always",
+    "declaration-block-semicolon-space-before": "never",
+    "declaration-block-single-line-max-declarations": 1,
+    "declaration-colon-space-before": "never",
+    "declaration-colon-space-after": "always-single-line",
+    "declaration-empty-line-before": "never",
+    "function-comma-space-after": "always",
+    "function-comma-space-before": "never",
+    "function-parentheses-space-inside": "never",
+    "function-url-quotes": "always",
+    "indentation": 2,
+    "no-empty-first-line": true,
+    "no-extra-semicolons": true,
+    "number-leading-zero": "always",
+    "number-no-trailing-zeros": true,
+    "selector-attribute-brackets-space-inside": "never",
+    "selector-attribute-operator-space-after": "never",
+    "selector-attribute-operator-space-before": "never",
+    "selector-attribute-quotes": "always",
+    "selector-combinator-space-before": "always",
+    "selector-combinator-space-after": "always",
+    "selector-descendant-combinator-no-non-space": true,
+    "selector-list-comma-space-before": "never",
+    "selector-list-comma-newline-after": "always",
+    "selector-max-empty-lines": 0,
+    "string-quotes": "single",
+    "unit-allowed-list": ["em", "rem", "s", "vw", "vh", "%", "deg"],
+    "value-list-comma-space-before": "never-single-line",
+    "value-list-comma-space-after": "always-single-line",
+    "value-list-max-empty-lines": 0
+  }
+}
