@@ -7,6 +7,7 @@ import SVGDsgnWknd from '../assets/vectors/dsgn-wknd';
 import styles from './input.module.scss';
 
 interface Reference {
+  generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
   output?: Element | null
 }
@@ -53,6 +54,10 @@ export class InputElement extends HTMLElement {
     if (e.keyCode === 37 || e.keyCode === 39) e.preventDefault();
   }
 
+  #onGenerateClick = () => {
+    if (this.ref.generate) Characters.generatePosters();
+  }
+
   #onOutputClick = () => {
     if (this.ref.input) this.ref.input.focus();
   }
@@ -69,6 +74,11 @@ export class InputElement extends HTMLElement {
     this.ref.output = this.querySelector('[data-output]');
     if (this.ref.output) {
       this.ref.output.addEventListener('click', this.#onOutputClick);
+    }
+
+    this.ref.generate = this.querySelector('[data-generate]');
+    if (this.ref.generate) {
+      this.ref.generate.addEventListener('click', this.#onGenerateClick);
     }
   }
 
@@ -88,7 +98,7 @@ const Input: FC = () => (
     </div>
     <p>Type your name and click a letter to pick the design you like.</p>
     <div className={styles['input__output']} data-output></div>
-    <div className={styles['input__generate']}>
+    <div className={styles['input__generate']} data-generate>
       <Button big={true}>Generate my poster</Button>
     </div>
     <button className={styles['input__clear']}>Clear</button>

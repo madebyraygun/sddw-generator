@@ -40,7 +40,7 @@ const appendChildren = (element: SVGElement | HTMLElement, children: any[]) => {
     if (Array.isArray(child)) {
       appendChildren(element, child);
     } else if (child instanceof Node) {
-      element.appendChild(child);
+      element.appendChild(child.cloneNode(true));
     } else if (child) {
       element.appendChild(document.createTextNode(child));
     }
