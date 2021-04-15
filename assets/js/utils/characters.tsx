@@ -54,8 +54,34 @@ class Characters {
     });
   }
 
-  shuffleColors() {
+  nextCharacter($character: Element, callback) {
+
+  }
+
+  prevCharacter($character: Element, callback) {
+
+  }
+
+  randomizeCharacter($character: Element, callback) {
+
+  }
+
+  randomizePhrase($container: Element, callback) {
+    for (let i = 0; i < this.value.length; i++) {
+      this.change(i);
+    }
+  }
+
+  getRandomColor() {
     return [...this.colors].sort(() => Math.random() - 0.5);
+  }
+
+  getNextColor() {
+
+  }
+
+  getPrevColor() {
+
   }
 
   pxToRem(value: number) {
@@ -72,7 +98,7 @@ class Characters {
             character,
             special,
             index: special ? 0 : Math.floor(Math.random() * 3),
-            colors: this.shuffleColors()
+            colors: this.getRandomColor()
           };
         }
       }
@@ -85,11 +111,14 @@ class Characters {
       let characterIndex = this.value[index].index + 1;
       if (characterIndex >= 3) characterIndex = 0;
       this.value[index].index = characterIndex;
-      this.value[index].colors = this.shuffleColors();
+      this.value[index].colors = this.getRandomColor();
     }
   }
 
-  render() {
+  // render characters to container
+  // TODO: separate characters from this class - make it a data object that can be passed
+
+  renderPhrase($container: Element | null) {
     const figures = [];
     for (const character of this.value) {
       const data = this.characters[character.character][character.index];
@@ -108,10 +137,22 @@ class Characters {
         </figure>
       );
     }
+
+    if ($container) {
+      $container.innerHTML = '';
+      $container.appendChild((
+        <figure data-phrase>
+          { figures }
+        </figure>
+      ));
+    }
+
     return figures;
   }
 
-  generatePoster($container: HTMLElement | null = null, renderDom = false) {
+  // TODO: multiple templates / designs - build out into classes
+
+  renderPoster($container: HTMLElement | null = null, renderDom = false) {
     const posterWidth = 1350;
     const posterHeight = 1800;
     const zoomFactor = 0.4 + Math.round(Math.random() * 10) / 3;
@@ -122,8 +163,6 @@ class Characters {
     const charSpacer = 0.12 * phraseHeight * zoomFactor;
     const wordSpacer = charSpacer;
     const lineSpacer = 10 * zoomFactor;
-
-    // TODO: multiple templates - build out into classes?
 
     // generate word
 
@@ -158,6 +197,7 @@ class Characters {
     const line = [];
     let k = 0;
     let phraseOffset = 0;
+
     do {
       phraseOffset = phraseWidth * k + wordSpacer * Math.max(0, k - 1);
 
@@ -167,7 +207,6 @@ class Characters {
         </g>
       );
       line.push(phrasePositioned);
-
       k++;
     } while (phraseOffset < posterWidth);
 
@@ -211,12 +250,11 @@ class Characters {
     return $output;
   }
 
-  generatePosters($container: HTMLElement = document.body) {
+  renderPosters($container: HTMLElement = document.body) {
     if ($container) {
       const $posterWrappers = $container.querySelectorAll('[data-poster]');
       for (const $posterWrapper of $posterWrappers) {
-        console.log($posterWrapper);
-        this.generatePoster($posterWrapper, true);
+        this.renderPoster($posterWrapper, true);
       }
     }
   }

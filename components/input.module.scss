@@ -17,7 +17,7 @@
     top: 0;
     opacity: 0;
     z-index: 1;
-        
+
     &:focus {
       outline: 0;
     }
@@ -25,7 +25,7 @@
   &__logo {
     width: 45rem;
     position: relative;
-        
+
     &:before {
       padding-top: 9%;
       content: '';
@@ -42,6 +42,15 @@
       margin-top: 4rem;
     }
   }
+  &__buttons-wrapper {
+    display: flex;
+    position: relative;
+    flex-flow: row nowrap;
+
+    > div + div {
+      margin-left: 1rem;
+    }
+  }
   &__output {
     height: 10rem;
     margin: 15vh auto 20vh;
@@ -49,7 +58,7 @@
     position: relative;
     user-select: none;
     z-index: 2;
-        
+
     @keyframes blink {
       0% {
         opacity: 1;
@@ -68,7 +77,7 @@
       bottom: -1rem;
       animation: blink 1s steps(1) infinite;
     }
-        
+
     // @keyframes scale-in {
     //     0% {
     //         transform: scale3d(0, 0, 1);
@@ -77,18 +86,24 @@
     //         transform: scale3d(1, 1, 1);
     //     }
     // }
-        
-    figure {
-      // &:last-child {
-      //     animation: scale-in 0.25s cubic-bezier(0.1, 0.5, 0.25, 1.25);
-      // }
-          
-      + figure {
-        margin-left: 1rem;
+
+    figure[data-phrase] {
+      display: flex;
+      position: relative;
+
+      figure {
+        // &:last-child {
+        //     animation: scale-in 0.25s cubic-bezier(0.1, 0.5, 0.25, 1.25);
+        // }
+
+        + figure {
+          margin-left: 1rem;
+        }
       }
     }
   }
   &__generate,
+  &__randomize,
   &__clear {
     position: relative;
     z-index: 2;
