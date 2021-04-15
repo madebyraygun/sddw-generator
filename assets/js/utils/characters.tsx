@@ -2,6 +2,12 @@
 
 class Characters {
 
+  config = {
+    character: {
+      variationsTotal: 3
+    }
+  };
+
   bright = '#F4EADF';
   dark = '#231F20';
   colors = [
@@ -54,38 +60,79 @@ class Characters {
     });
   }
 
-  nextCharacter($character: Element, callback) {
+  nextCharacter(index: number, $container: HTMLElement | null, callback?: (value) => void) {
+    this.changeCharacter(index, this.value[index].index + 1);
 
-  }
+    if ($container) {
+      this.renderPhrase($container);
+    }
 
-  prevCharacter($character: Element, callback) {
-
-  }
-
-  randomizeCharacter($character: Element, callback) {
-
-  }
-
-  randomizePhrase($container: Element, callback) {
-    for (let i = 0; i < this.value.length; i++) {
-      this.change(i);
+    if (callback) {
+      callback({ ...this.value[index] });
     }
   }
 
-  getRandomColor() {
+  prevCharacter(index: number, $container: HTMLElement | null, callback?: (value) => void) {
+    this.changeCharacter(index, this.value[index].index - 1);
+
+    if ($container) {
+      this.renderPhrase($container);
+    }
+
+    if (callback) {
+      callback({ ...this.value[index] });
+    }
+  }
+
+  shuffleCharacter(index: number, $container: HTMLElement | null, callback?: (value) => void) {
+    let randomIndex = index;
+    while (randomIndex === index) {
+      randomIndex = Math.round(Math.random() * (this.config.character.variationsTotal - 1));
+    }
+
+    this.changeCharacter(index, randomIndex);
+
+    if ($container) {
+      this.renderPhrase($container);
+    }
+
+    if (callback) {
+      callback({ ...this.value[index] });
+    }
+  }
+
+  shufflePhrase($container: HTMLElement | null, callback?: (value) => void) {
+    for (let i = 0; i < this.value.length; i++) {
+      this.shuffleCharacter(i);
+    }
+
+    if ($container) {
+      this.renderPhrase($container);
+    }
+
+    if (callback) {
+      callback({ ...this.value });
+    }
+  }
+
+  shuffleColors() {
     return [...this.colors].sort(() => Math.random() - 0.5);
-  }
-
-  getNextColor() {
-
-  }
-
-  getPrevColor() {
-
   }
 
   pxToRem(value: number) {
     return value / 10;
+  }
+
+  changeCharacter(characterIndex: number, nextIndex: number) {
+    if (this.value[characterIndex] && !this.value[characterIndex].special) {
+      let curCharacterIndex = nextIndex;
+
+      if (curCharacterIndex >= this.config.character.variationsTotal) curCharacterIndex = 0;
+      if (curCharacterIndex < 0) curCharacterIndex = this.config.character.variationsTotal - 1;
+
+      this.value[curCharacterIndex].index = curCharacterIndex;
+      this.value[curCharacterIndex].colors = this.shuffleColors();
+    }
   }
 
   feed(value: string) {
@@ -98,7 +145,7 @@ class Characters {
             character,
             special,
             index: special ? 0 : Math.floor(Math.random() * 3),
-            colors: this.getRandomColor()
+            colors: this.shuffleColors()
           };
         }
       }
@@ -106,26 +153,17 @@ class Characters {
     this.value.length = value.length;
   }
 
-  change(index: number) {
-    if (this.value[index] && !this.value[index].special) {
-      let characterIndex = this.value[index].index + 1;
-      if (characterIndex >= 3) characterIndex = 0;
-      this.value[index].index = characterIndex;
-      this.value[index].colors = this.getRandomColor();
-    }
-  }
-
   // render characters to container
   // TODO: separate characters from this class - make it a data object that can be passed
 
-  renderPhrase($container: Element | null) {
+  renderPhrase($container: HTMLElement | null) {
     const figures = [];
     for (const character of this.value) {
       const data = this.characters[character.character][character.index];
       const [width, height] = data.dimension;
       const phraseHeight = 100;
       figures.push(
-        <figure style={{ width: `${this.pxToRem(width * (phraseHeight / height))}rem`, height: `${this.pxToRem(phraseHeight)}rem` }}>
+        <figure data-character style={{ width: `${this.pxToRem(width * (phraseHeight / height))}rem`, height: `${this.pxToRem(phraseHeight)}rem` }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
             {[...data.paths].map((path, index) => {
               const d = path.getAttribute('d');
@@ -179,7 +217,7 @@ class Characters {
         phraseWidth += newWidth + (i > 0 ? charSpacer / factor : 0);
         charOffset = phraseWidth - newWidth;
         phrase.push((
-          <g key={`char${character.index}`} transform={`translate(${charOffset} 0) scale(${factor})`}>
+          <g key={`char${character.index}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character>
             {[...data.paths].map((path, index) => {
               const d = path.getAttribute('d');
               return d ? (
@@ -202,7 +240,7 @@ class Characters {
       phraseOffset = phraseWidth * k + wordSpacer * Math.max(0, k - 1);
 
       const phrasePositioned = (
-        <g key={`word${k}`} transform={`translate(${phraseOffset} 0)`}>
+        <g key={`word${k}`} transform={`translate(${phraseOffset} 0)`} data-word>
           {phrase}
         </g>
       );
@@ -218,7 +256,7 @@ class Characters {
 
     do {
       const linePositioned = (
-        <g key={`line${j}`} transform={`translate(0, ${lineOffset})`}>
+        <g key={`line${j}`} transform={`translate(0, ${lineOffset})`} data-line>
           {line}
         </g>
       );

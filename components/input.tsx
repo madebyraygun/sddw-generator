@@ -10,7 +10,7 @@ interface Reference {
   generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
   randomize?: HTMLInputElement | null,
-  output?: Element | null
+  output?: HTMLElement | null
 }
 
 export class InputElement extends HTMLElement {
@@ -23,7 +23,7 @@ export class InputElement extends HTMLElement {
     return value.replace(/[^A-Za-z&@#']/g, '').toLowerCase();
   }
 
-  renderCharacters() {
+  renderCharacters = () => {
     if (this.ref.output) {
       Characters.renderPhrase(this.ref.output, this.addPhraseListeners);
     }
@@ -31,18 +31,20 @@ export class InputElement extends HTMLElement {
 
   // add / remove listeners ------------------------------------------------ //
 
-  addCharacterListeners($character: Element | null) {
+  addCharacterListeners = ($character: HTMLElement | null) => {
     if ($character) {
+      console.log($character);
       $character.removeEventListener('click', this.#onCharacterClick);
       $character.addEventListener('click', this.#onCharacterClick);
     }
   }
 
-  addPhraseListeners($characters) {
-    $characters.map(($character: HTMLElement, index: number) => {
+  addPhraseListeners = ($characters) => {
+    for (let i = 0; i < $characters.length; i++) {
+      const $character = $characters[i];
       $character.removeEventListener('click', this.#onCharacterClick);
       $character.addEventListener('click', this.#onCharacterClick);
-    });
+    }
   }
 
   // listener methods ------------------------------------------------------ //
@@ -51,7 +53,7 @@ export class InputElement extends HTMLElement {
   #onCharacterClick = (e: MouseEvent) => {
     const $target: EventTarget | null = e.currentTarget;
     if ($target) {
-      Characters.nextCharacter($target, this.addCharacterListeners);
+      Characters.nextCharacter($target, true, this.addCharacterListeners);
     }
   }
 
@@ -89,7 +91,10 @@ export class InputElement extends HTMLElement {
   // randomize button: randomize phrase design
   #onRandomizeClick = () => {
     if (this.ref.generate) {
-      Characters.randomizePhrase(this.ref.output, this.addCharacterListeners);
+      Characters.shufflePhrase(this.ref.output, (value) => {
+        const $characters = this.ref.output?.querySelectorAll('[data-character]');
+        this.addPhraseListeners($characters);
+      });
       Characters.renderPosters();
     }
   }
