@@ -27,6 +27,14 @@ class Characters {
     }>
   } = {};
 
+  footers: {
+    [footer: string]: Array<{
+      svg: SVGElement | null,
+      paths: SVGPathElement[],
+      dimension: number[]
+    }>
+  } = {};
+
   value: Array<{
     character: string,
     special: boolean,
@@ -37,6 +45,7 @@ class Characters {
   constructor() {
     try {
       this.#requireCharacters();
+      this.#requirePosterFooters();
     } catch (e) {
       // console.log(e);
     }
@@ -57,6 +66,23 @@ class Characters {
         paths,
         dimension
       });
+    });
+  }
+
+  #requirePosterFooters = () => {
+    const required = require.context('../../vectors/footers/', true, /\.tsx$/);
+    required.keys().map((path: string) => {
+      const footer = path.split('/')[1].toLowerCase();
+      const { default: Footer } = required(path);
+      const svg = Footer({});
+      const paths = svg.querySelectorAll('path, rect, circle');
+      const [,, width, height] = svg.getAttribute('viewBox').split(' ');
+      const dimension = [parseFloat(width), parseFloat(height)];
+      this.footers[footer] = {
+        svg,
+        paths,
+        dimension
+      };
     });
   }
 
@@ -130,8 +156,8 @@ class Characters {
       if (curCharacterIndex >= this.config.character.variationsTotal) curCharacterIndex = 0;
       if (curCharacterIndex < 0) curCharacterIndex = this.config.character.variationsTotal - 1;
 
-      this.value[curCharacterIndex].index = curCharacterIndex;
-      this.value[curCharacterIndex].colors = this.shuffleColors();
+      this.value[characterIndex].index = curCharacterIndex;
+      this.value[characterIndex].colors = this.shuffleColors();
     }
   }
 
@@ -144,7 +170,7 @@ class Characters {
           this.value[index] = {
             character,
             special,
-            index: special ? 0 : Math.floor(Math.random() * 3),
+            index: special ? 0 : Math.round(Math.random() * (this.config.character.variationsTotal - 1)),
             colors: this.shuffleColors()
           };
         }
@@ -266,6 +292,35 @@ class Characters {
       lineOffset = phraseHeight * j + lineSpacer * j;
     } while (lineOffset < posterHeight);
 
+    // generate footer
+
+    const data = this.footers['template1.tsx'];
+    const [width, height] = data.dimension;
+    const footerWidth = posterWidth;
+    const factor = footerWidth / width;
+    const footerHeight = factor * height;
+    console.log(data);
+    const footer = (
+      <g transform={`translate(0 ${posterHeight - footerHeight}) scale(${factor})`} data-footer>
+        {[...data.paths].map((path, index) => {
+          const pathD = path.getAttribute('d');
+          const pathFill = path.getAttribute('fill');
+          const pathWidth = path.getAttribute('width');
+          const pathHeight = path.getAttribute('height');
+
+          if (path.nodeName === 'path') {
+            return (<path key={index} d={pathD} fill={pathFill}></path>);
+          } else if (path.nodeName === 'circle') {
+            return (<circle key={index} width={pathWidth} height={pathHeight} fill={pathFill}></circle>);
+          } else if (path.nodeName === 'rect') {
+            return (<rect key={index} width={pathWidth} height={pathHeight} fill={pathFill}></rect>);
+          }
+
+          return null;
+        })}
+      </g>
+    );
+
     // generate poster
 
     const $output = (
@@ -277,6 +332,7 @@ class Characters {
         }}>
           <rect width="1350" height="1800" fill={this.bright} />
           {lines}
+          {footer}
         </svg>
       </figure>
     );
