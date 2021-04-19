@@ -1,4 +1,4 @@
-import Button from './button';
+import Button from './buttons/button';
 
 import SVGDsgnWkndBig from '../assets/vectors/dsgn-wknd-big';
 

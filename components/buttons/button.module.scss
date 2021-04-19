@@ -8,11 +8,11 @@
   text-transform: uppercase;
   display: inline-block;
   position: relative;
-    
+
   &:focus {
     outline: 0;
   }
-    
+
   &:before {
     content: '';
     margin: -0.5rem;

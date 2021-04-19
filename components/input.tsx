@@ -1,4 +1,5 @@
-import Button from './button';
+import Button from './buttons/button';
+import ButtonToggle from './buttons/toggle';
 
 import Characters from '../assets/js/utils/characters';
 
@@ -127,7 +128,7 @@ export class InputElement extends HTMLElement {
 
 }
 
-// enable custom elements -------------------------------------------------- //
+// connect markup to javascript class -------------------------------------- //
 
 if (!window.customElements.get(InputElement.selector)) {
   window.customElements.define(InputElement.selector, InputElement);
@@ -151,6 +152,14 @@ const Input: FC = () => (
       </div>
       <div className={styles['input__randomize']} data-randomize>
         <Button big={true}>Randomize</Button>
+      </div>
+    </div>
+    <div className={styles['input__options-wrapper']}>
+      <div data-randomize-each-word>
+        <ButtonToggle>Randomize Each Word</ButtonToggle>
+      </div>
+      <div data-randomize-colors>
+        <ButtonToggle>Randomize Colors</ButtonToggle>
       </div>
     </div>
     <button className={styles['input__clear']}>Clear</button>

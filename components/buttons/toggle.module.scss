@@ -1,0 +1,85 @@
+.button-toggle {
+  $this: &;
+  width: auto;
+  height: 5rem;
+  background-color: var(--dark);
+  background-clip: padding-box;
+  border: none;
+  text-transform: uppercase;
+  display: inline-block;
+  position: relative;
+  padding-left: 6.2rem;
+  line-height: 5rem;
+  cursor: pointer;
+
+  &:focus {
+    outline: 0;
+  }
+
+  // c---[======================>
+  // state
+
+  &__knob {
+    [data-active] & {
+      left: 3rem;
+    }
+  }
+
+  &__knob-bg {
+    [data-active] & {
+      opacity: 1;
+    }
+
+    [data-active] &,
+    [data-color='1'] & {
+      background: linear-gradient(to right, var(--astral) 33%, var(--victoria));
+    }
+
+    [data-color='2'] & {
+      background: linear-gradient(to right, var(--zuccini) 33%, var(--rose-bud));
+    }
+
+    [data-color='3'] & {
+      background: linear-gradient(to right, var(--yellow-orange) 33%, var(--vermilion));
+    }
+
+    [data-color='4'] & {
+      background: linear-gradient(to right, var(--victoria) 33%, var(--astral));
+    }
+
+    [data-color='5'] & {
+      background: linear-gradient(to right, var(--rose-bud) 33%, var(--zuccini));
+    }
+
+    [data-color='6'] & {
+      background: linear-gradient(to right, var(--vermilion) 33%, var(--yellow-orange));
+    }
+  }
+
+  // c---[::::::::::::::::::::::>
+  // elements
+
+  &__knob,
+  &__knob-bg {
+    position: absolute;
+    top: calc(50% - 1rem);
+    left: 0rem;
+    width: 5rem;
+    height: 2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  &__knob {
+    position: absolute;
+    width: 2rem;
+    background: var(--bright);
+    z-index: 1;
+  }
+
+  &__knob-bg {
+    background: var(--bright);
+    opacity: 0.2;
+    z-index: 0;
+  }
+}

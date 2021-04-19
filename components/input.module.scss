@@ -42,13 +42,23 @@
       margin-top: 4rem;
     }
   }
-  &__buttons-wrapper {
+  &__buttons-wrapper,
+  &__options-wrapper {
     display: flex;
     position: relative;
     flex-flow: row nowrap;
+    z-index: 5;
 
     > div + div {
       margin-left: 1rem;
+    }
+  }
+  &__buttons-wrapper + &__options-wrapper {
+    margin-top: 2rem;
+  }
+  &__options-wrapper {
+    > div + div {
+      margin-left: 2.4rem;
     }
   }
   &__output {
