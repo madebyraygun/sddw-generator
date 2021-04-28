@@ -1,23 +1,24 @@
 // import swearjar from 'swearjar';
 
+import TwentyTwentyOne from '../../../components/themes/twenty-twenty-one';
+
 class Characters {
 
-  config = {
+  config: {
+    randomizeColors: boolean,
+    randomizeEachWord: boolean,
+    character: {
+      variationsTotal: number,
+    },
+  } = {
+    randomizeColors: false,
+    randomizeEachWord: false,
     character: {
       variationsTotal: 3
     }
   };
 
-  bright = '#F4EADF';
-  dark = '#231F20';
-  colors = [
-    '#FB4C00',
-    '#3483AE',
-    '#514C8F',
-    '#065B2F',
-    '#F8ACA4',
-    '#FEC045'
-  ];
+  theme: TwentyTwentyOne;
 
   characters: {
     [character: string]: Array<{
@@ -46,10 +47,13 @@ class Characters {
     try {
       this.#requireCharacters();
       this.#requirePosterFooters();
+      this.theme = new TwentyTwentyOne();
     } catch (e) {
       // console.log(e);
     }
   }
+
+  // load svgs
 
   #requireCharacters = () => {
     const required = require.context('../../vectors/characters/', true, /\.tsx$/);
@@ -85,6 +89,20 @@ class Characters {
       };
     });
   }
+
+  // update current configuration
+
+  updateConfig = (config: { value: boolean }) => {
+    const goodValues = {};
+
+    for (const key in config) {
+      console.log('config', key, config[key]);
+    }
+
+    // this.config = { ...this.config, ...goodValues };
+  }
+
+  // render phrases and characters
 
   nextCharacter(index: number, $container: HTMLElement | null, callback?: (value) => void) {
     this.changeCharacter(index, this.value[index].index + 1);
@@ -141,8 +159,10 @@ class Characters {
     }
   }
 
+  // utilities
+
   shuffleColors() {
-    return [...this.colors].sort(() => Math.random() - 0.5);
+    return [...this.theme.colors].sort(() => Math.random() - 0.5);
   }
 
   pxToRem(value: number) {
@@ -194,7 +214,7 @@ class Characters {
             {[...data.paths].map((path, index) => {
               const d = path.getAttribute('d');
               return d ? (
-                <path key={index} d={d} fill={!character.index ? this.bright : character.colors[index]}></path>
+                <path key={index} d={d} fill={!character.index ? this.theme.bright : character.colors[index]}></path>
               ) : null;
             })}
           </svg>
@@ -247,7 +267,7 @@ class Characters {
             {[...data.paths].map((path, index) => {
               const d = path.getAttribute('d');
               return d ? (
-                <path key={index} d={d} fill={!character.index ? this.dark : character.colors[index]}></path>
+                <path key={index} d={d} fill={!character.index ? this.theme.dark : character.colors[index]}></path>
               ) : null;
             })}
           </g>
@@ -299,7 +319,6 @@ class Characters {
     const footerWidth = posterWidth;
     const factor = footerWidth / width;
     const footerHeight = factor * height;
-    console.log(data);
     const footer = (
       <g transform={`translate(0 ${posterHeight - footerHeight}) scale(${factor})`} data-footer>
         {[...data.paths].map((path, index) => {
@@ -330,7 +349,7 @@ class Characters {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${posterWidth} ${posterHeight}`} style={{
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
-          <rect width="1350" height="1800" fill={this.bright} />
+          <rect width="1350" height="1800" fill={this.theme.bright} />
           {lines}
           {footer}
         </svg>
