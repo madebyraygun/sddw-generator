@@ -1,3 +1,5 @@
+import WordState from './word-state';
+
 import styles from './word.module.scss';
 
 interface Reference {
@@ -9,30 +11,13 @@ export class WordElement extends HTMLElement {
   static selector = 'sddw-word';
 
   ref: Reference = {};
+  state: WordState;
 
   state: {
     isToggled: boolean,
   } = {
     isToggled: true,
   };
-
-  connectedCallback() {
-    this.ref.button = this;
-    if (this.ref.button) {
-      this.ref.button.addEventListener('click', this.#onButtonClick);
-    }
-  }
-
-  #onButtonClick = (e: MouseEvent) => {
-    this.state.isToggled = !this.state.isToggled;
-    if (this.state.isToggled) {
-      this.ref.button?.setAttribute('data-active', true);
-      this.ref.button?.setAttribute('data-color', Math.round(Math.random() * 5 + 1).toString());
-    } else {
-      this.ref.button?.removeAttribute('data-active');
-      this.ref.button?.removeAttribute('data-color');
-    }
-  }
 
 }
 

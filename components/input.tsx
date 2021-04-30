@@ -1,18 +1,21 @@
+import ThemeController from '../assets/js/controllers/theme';
+
 import Button from './buttons/button';
 import ButtonToggle from './buttons/toggle';
 
-import Characters from '../assets/js/utils/characters';
+import Editor from './editor/editor';
 
 import SVGDsgnWknd from '../assets/vectors/dsgn-wknd';
 
 import styles from './input.module.scss';
+import WordState from './poster/word-state';
 
 interface Reference {
   generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
   output?: HTMLElement | null,
-  randomizeColors: HTMLInputElement | null,
-  randomizeEachWord: HTMLInputElement | null,
+  randomizeColors?: HTMLInputElement | null,
+  randomizeEachWord?: HTMLInputElement | null,
   shuffle?: HTMLInputElement | null,
 }
 
@@ -22,29 +25,29 @@ export class InputElement extends HTMLElement {
 
   ref: Reference = {};
 
+  inputWord: WordState;
+
+  constructor() {
+    super();
+    this.inputWord = new WordState('', ThemeController.theme);
+    Editor.attachInputWord(this.inputWord);
+  }
+
   cleanValue(value: string) {
     return value.replace(/[^A-Za-z&@#']/g, '').toLowerCase();
   }
 
-  renderCharacters = () => {
+  renderInputCharacters = () => {
     if (this.ref.output) {
-      Characters.renderPhrase(this.ref.output, this.addPhraseListeners);
+      Editor.renderWord(this.inputWord, this.ref.output, this.addPhraseListeners);
     }
   }
 
   // add / remove listeners ------------------------------------------------ //
 
-  addCharacterListeners = ($character: HTMLElement | null) => {
-    if ($character) {
-      console.log($character);
-      $character.removeEventListener('click', this.#onCharacterClick);
-      $character.addEventListener('click', this.#onCharacterClick);
-    }
-  }
-
-  addPhraseListeners = ($characters) => {
+  addPhraseListeners = ($characters: HTMLElement[]) => {
     for (let i = 0; i < $characters.length; i++) {
-      const $character = $characters[i];
+      const $character: HTMLElement = $characters[i];
       $character.removeEventListener('click', this.#onCharacterClick);
       $character.addEventListener('click', this.#onCharacterClick);
     }
@@ -54,9 +57,9 @@ export class InputElement extends HTMLElement {
 
   // click character to change design
   #onCharacterClick = (e: MouseEvent) => {
-    const $target: EventTarget | null = e.currentTarget;
+    const $target: HTMLElement = e.currentTarget as HTMLElement;
     if ($target) {
-      Characters.nextCharacter($target, true, this.addCharacterListeners);
+      Editor.nextCharacter(this.inputWord, parseInt($target.dataset.index ?? '0'), $target);
     }
   }
 
@@ -66,8 +69,9 @@ export class InputElement extends HTMLElement {
     const target = e.currentTarget as HTMLInputElement;
     const value = this.cleanValue(target.value);
     target.value = value;
-    Characters.feed(value);
-    this.renderCharacters();
+
+    this.inputWord.feed(value);
+    this.renderInputCharacters();
   }
 
   // when clicking input, emulate focus state (cursor is fake)
@@ -88,29 +92,29 @@ export class InputElement extends HTMLElement {
 
   // generate button: render current design into posters
   #onGenerateClick = () => {
-    Characters.renderPosters();
+    Editor.renderPosters();
   }
 
   // randomize colors
   #onRandomizeColors = () => {
-    Characters.updateConfig({ randomizeColors: this.ref.randomizeColors?.children[0].hasAttribute('data-randomize-each-word') });
-    Characters.renderPosters();
+    // Characters.updateConfig({ randomizeColors: this.ref.randomizeColors?.children[0].hasAttribute('data-randomize-each-word') });
+    Editor.renderPosters();
   }
 
   // randomize each word
   #onRandomizeEachWord = () => {
-    Characters.updateConfig({ randomizeEachWord: this.ref.randomizeEachWord?.children[0].hasAttribute('data-randomize-each-word') });
-    Characters.renderPosters();
+    // Characters.updateConfig({ randomizeEachWord: this.ref.randomizeEachWord?.children[0].hasAttribute('data-randomize-each-word') });
+    Editor.renderPosters();
   }
 
   // shuffle button: shuffle phrase design
   #onShuffleClick = () => {
     if (this.ref.generate) {
-      Characters.shufflePhrase(this.ref.output, (value) => {
+      Editor.shuffleWord(this.ref.output, (value) => {
         const $characters = this.ref.output?.querySelectorAll('[data-character]');
         this.addPhraseListeners($characters);
       });
-      Characters.renderPosters();
+      Editor.renderPosters();
     }
   }
 

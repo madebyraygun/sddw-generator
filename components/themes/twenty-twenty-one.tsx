@@ -1,20 +1,23 @@
-// import swearjar from 'swearjar';
+import Theme from './theme';
 
-class TwentyTwentyOne {
+class TwentyTwentyOne extends Theme {
 
-  bright = '#F4EADF';
-  dark = '#231F20';
-  colors = [
-    '#FB4C00',
-    '#3483AE',
-    '#514C8F',
-    '#065B2F',
-    '#F8ACA4',
-    '#FEC045'
-  ];
+  slug = 'twenty-twenty-one';
 
-  constructor() {
-    console.log(this.colors);
+  flags: {
+    isLineClamped: boolean,
+    isWordWrap: boolean,
+  } = {
+    isLineClamped: true,
+    isWordWrap: true,
+  };
+
+  get isLineClamped():boolean {
+    return this.flags.isLineClamped;
+  }
+
+  get isWordWrap():boolean {
+    return this.flags.isWordWrap;
   }
 
 }

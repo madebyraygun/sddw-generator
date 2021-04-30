@@ -1,3 +1,5 @@
+import PosterState from './poster-state';
+
 import styles from './poster.module.scss';
 
 interface Reference {
@@ -8,6 +10,7 @@ export class PosterElement extends HTMLElement {
 
   static selector = 'sddw-poster';
 
+  state: PosterState;
   ref: Reference = {};
 
 }
@@ -21,11 +24,13 @@ if (!window.customElements.get(PosterElement.selector)) {
 // JSX template ------------------------------------------------------------ //
 
 const Poster: FC = ({ children }) => (
-  <button element={PosterElement.selector} className={styles['poster']}>
-    <figure className={styles['poster__knob']}></figure>
-    <figure className={styles['poster__knob-bg']}></figure>
-    <span>{children}</span>
-  </button>
+  <div element={PosterElement.selector} className={styles['poster']}>
+    <button>
+      <figure className={styles['poster__knob']}></figure>
+      <figure className={styles['poster__knob-bg']}></figure>
+      <span>{children}</span>
+    </button>
+  </div>
 );
 
 export default Poster;

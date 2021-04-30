@@ -1,4 +1,4 @@
-import Characters from '../assets/js/utils/characters';
+import Characters from './editor/editor';
 
 import styles from './generate.module.scss';
 
