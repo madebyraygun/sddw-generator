@@ -41,14 +41,14 @@ class Editor {
       this.#requireCharacters();
       this.#requirePosterFooters();
     } catch (e) {
-      // console.log(e);
+      console.error(e);
     }
   }
 
   // load svgs
 
   #requireCharacters = () => {
-    const required = require.context(`../../vectors/characters/${this.currentPoster.theme.slug}/`, true, /\.tsx$/);
+    const required:__WebpackModuleApi.RequireContext = this.currentPoster.theme.requiredCharacters;
     required.keys().map((path: string) => {
       const character = path.split('/')[1].toLowerCase();
       const { default: Character } = required(path);
@@ -63,10 +63,12 @@ class Editor {
         dimension
       });
     });
+    console.log(required);
+    console.log(this.assets.characters);
   }
 
   #requirePosterFooters = () => {
-    const required = require.context(`../../vectors/footers/${this.currentPoster.theme.slug}/`, true, /\.tsx$/);
+    const required:__WebpackModuleApi.RequireContext = this.currentPoster.theme.requiredFooters;
     required.keys().map((path: string) => {
       const footer = path.split('/')[1].toLowerCase();
       const { default: Footer } = required(path);
@@ -144,13 +146,13 @@ class Editor {
 
   // render word to container
 
-  renderWord(word: WordState, $container?: HTMLElement, callback?: (value: Node[]) => void) {
-    const $characters = [];
+  renderWord(word: WordState, $container?: HTMLElement, callback?: (value: NodeList) => void) {
+    const $characters: DocumentFragment = document.createDocumentFragment();
     for (const character of word.characters) {
       const data = this.assets.characters[character.glyph][character.variationIndex];
       const [width, height] = data.dimension;
       const phraseHeight = 100;
-      $characters.push(
+      $characters.appendChild(
         <figure data-character data-index={$characters.length} style={{ width: `${this.pxToRem(width * (phraseHeight / height))}rem`, height: `${this.pxToRem(phraseHeight)}rem` }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
             {[...data.paths].map((path, index) => {
@@ -173,7 +175,7 @@ class Editor {
       ));
     }
 
-    if (callback) callback($characters);
+    if (callback) callback($characters.childNodes);
 
     return $characters;
   }

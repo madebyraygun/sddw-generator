@@ -1,6 +1,6 @@
 import Theme from './theme';
 
-class TwentyTwentyOne extends Theme {
+class TwentyTwenty extends Theme {
 
   slug = 'default'; // directory for vector assets
 
@@ -22,4 +22,4 @@ class TwentyTwentyOne extends Theme {
 
 }
 
-export default TwentyTwentyOne;
+export default TwentyTwenty;

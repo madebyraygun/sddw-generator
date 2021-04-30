@@ -45,9 +45,9 @@ export class InputElement extends HTMLElement {
 
   // add / remove listeners ------------------------------------------------ //
 
-  addPhraseListeners = ($characters: HTMLElement[]) => {
+  addPhraseListeners = ($characters: NodeList) => {
     for (let i = 0; i < $characters.length; i++) {
-      const $character: HTMLElement = $characters[i];
+      const $character = $characters[i] as HTMLElement;
       $character.removeEventListener('click', this.#onCharacterClick);
       $character.addEventListener('click', this.#onCharacterClick);
     }
@@ -110,9 +110,11 @@ export class InputElement extends HTMLElement {
   // shuffle button: shuffle phrase design
   #onShuffleClick = () => {
     if (this.ref.generate) {
-      Editor.shuffleWord(this.ref.output, (value) => {
-        const $characters = this.ref.output?.querySelectorAll('[data-character]');
-        this.addPhraseListeners($characters);
+      Editor.shuffleWord(this.inputWord, this.ref.output, (value) => {
+        const $characters: NodeList | undefined = this.ref.output?.querySelectorAll('[data-character]');
+        if ($characters) {
+          this.addPhraseListeners($characters);
+        }
       });
       Editor.renderPosters();
     }
