@@ -1,9 +1,9 @@
+
+import Editor from '../assets/js/controllers/editor';
 import ThemeController from '../assets/js/controllers/theme';
 
 import Button from './buttons/button';
 import ButtonToggle from './buttons/toggle';
-
-import Editor from './editor/editor';
 
 import SVGDsgnWknd from '../assets/vectors/dsgn-wknd';
 
@@ -30,7 +30,7 @@ export class InputElement extends HTMLElement {
   constructor() {
     super();
     this.inputWord = new WordState('', ThemeController.theme);
-    Editor.attachInputWord(this.inputWord);
+    Editor.attachWord(this.inputWord);
   }
 
   cleanValue(value: string) {

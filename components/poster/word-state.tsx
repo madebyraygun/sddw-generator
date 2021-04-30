@@ -26,6 +26,10 @@ class WordState {
     this.poster = poster;
   }
 
+  attachPoster(poster: PosterState) {
+    this.poster = poster;
+  }
+
   // add new glyph
   addCharacter(character: CharacterState) {
     if (character) {
@@ -83,7 +87,7 @@ class WordState {
 
       // change glyph
       if (glyph) character.glyph = glyph;
-      else this.removeCharacter(character);
+      else if (typeof glyph !== 'undefined') this.removeCharacter(character);
     }
   }
 

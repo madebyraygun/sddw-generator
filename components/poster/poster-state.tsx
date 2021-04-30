@@ -34,8 +34,14 @@ class PosterState {
     isWordWrap: true,
   };
 
-  constructor(theme: Theme) {
+  constructor(theme: Theme, word?: WordState) {
     this.theme = theme;
+    if (word) this.word = word;
+  }
+
+  attachWord(word: WordState) {
+    this.word = word;
+    this.word.attachPoster(this);
   }
 
   // fun

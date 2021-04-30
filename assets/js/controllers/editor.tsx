@@ -1,11 +1,10 @@
 // import swearjar from 'swearjar';
 
-import ThemeController from '../../assets/js/controllers/theme';
+import ThemeController from './theme';
 
-import EditorState from './editor-state';
-import PosterState from '../poster/poster-state';
-import WordState from '../poster/word-state';
-import CharacterState from '../poster/character-state';
+import PosterState from '../../../components/poster/poster-state';
+import WordState from '../../../components/poster/word-state';
+import CharacterState from '../../../components/poster/character-state';
 
 class Editor {
 
@@ -30,10 +29,8 @@ class Editor {
   };
 
   posters: Array<PosterState>;
-  state: EditorState;
-
   currentPoster: PosterState;
-  inputWord: WordState;
+  currentWord: WordState;
 
   constructor() {
     try {
@@ -140,8 +137,9 @@ class Editor {
     return value / 10;
   }
 
-  attachInputWord(word: WordState) {
-    this.inputWord = word;
+  attachWord(word: WordState) {
+    this.currentWord = word;
+    this.currentPoster.attachWord(this.currentWord);
   }
 
   // render word to container
@@ -307,9 +305,9 @@ class Editor {
 
   renderPosters($container: HTMLElement = document.body) {
     if ($container) {
-      const $posterWrappers = $container.querySelectorAll('[data-poster]');
+      const $posterWrappers: NodeList = $container.querySelectorAll('[data-poster]');
       for (const $posterWrapper of $posterWrappers) {
-        this.renderPoster(this.currentPoster, $posterWrapper);
+        this.renderPoster(this.currentPoster, $posterWrapper as HTMLElement);
       }
     }
   }

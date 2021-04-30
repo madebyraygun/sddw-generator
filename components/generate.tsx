@@ -1,4 +1,4 @@
-import Characters from './editor/editor';
+import Editor from '../assets/js/controllers/editor';
 
 import styles from './generate.module.scss';
 
@@ -14,8 +14,7 @@ export class InputElement extends HTMLElement {
 
   #onButtonClick = (e: MouseEvent) => {
     e.preventDefault();
-    const poster = Characters.generatePoster();
-    document.body.append(poster);
+    Editor.renderPosters();
   }
 
   connectedCallback() {
