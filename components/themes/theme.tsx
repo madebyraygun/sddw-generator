@@ -27,14 +27,6 @@ class Theme {
     characterVariationsTotal: 3,
   }
 
-  required : {
-    characters: __WebpackModuleApi.RequireContext,
-    footers: __WebpackModuleApi.RequireContext,
-  } = {
-    characters: require.context('../../assets/vectors/characters/default/', true, /\.tsx$/),
-    footers: require.context('../../assets/vectors/footers/default/', true, /\.tsx$/),
-  }
-
   getShuffledColors() {
     return [...this.swatches].sort(() => Math.random() - 0.5);
   }

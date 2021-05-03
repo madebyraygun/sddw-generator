@@ -10,21 +10,6 @@ class Design {
   constructor(poster: PosterState) {
     this.poster = poster;
     this.theme = poster.theme;
-
-    this.#requireCharacters();
-    this.#requirePosterFooters();
-
-    console.log('design');
-  }
-
-  // load svgs
-
-  #requireCharacters = () => {
-    AssetController.requireCharacters(this.poster.theme.requiredCharacters, this.theme.slug);
-  }
-
-  #requirePosterFooters = () => {
-    AssetController.requireFooters(this.poster.theme.requiredFooters, this.theme.slug);
   }
 
   renderPoster(): Node {

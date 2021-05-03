@@ -14,7 +14,13 @@ class AssetController {
     }
   };
 
-  requireCharacters(required: __WebpackModuleApi.RequireContext, design = 'default') {
+  require() {
+    // default theme
+    this.loadCharacters(require.context('../../vectors/characters/default/', true, /\.tsx$/));
+    this.loadFooters(require.context('../../vectors/footers/default/', true, /\.tsx$/));
+  }
+
+  loadCharacters(required, design = 'default') {
     required.keys().map((path: string) => {
       const character = path.split('/')[1].toLowerCase();
       const { default: SvgCharacter } = required(path);
@@ -29,10 +35,9 @@ class AssetController {
         dimension
       });
     });
-    console.log(this.assets);
   }
 
-  requireFooters(required: __WebpackModuleApi.RequireContext, design = 'default') {
+  loadFooters(required, design = 'default') {
     required.keys().map((path: string) => {
       const footer = path.split('/')[1].toLowerCase();
       const { default: SvgFooter } = required(path);
