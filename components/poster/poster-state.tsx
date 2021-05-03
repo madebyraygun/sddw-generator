@@ -1,10 +1,12 @@
 import FooterState from './footer-state';
 import WordState from './word-state';
 import Theme from '../themes/theme';
+import Design from '../designs/design';
 
 class PosterState {
 
   footer: FooterState;
+  design: Design;
   theme: Theme;
   word: WordState;
 
@@ -34,8 +36,14 @@ class PosterState {
     isWordWrap: true,
   };
 
-  constructor(theme: Theme, word?: WordState) {
+  constructor(theme: Theme, design?: Design, word?: WordState) {
+    // theme dictates colors and svgs
     this.theme = theme;
+
+    // design dictates poster layout
+    if (design) this.design = design;
+    else this.design = new Design(this);
+
     if (word) this.word = word;
   }
 
@@ -48,6 +56,12 @@ class PosterState {
 
   shuffleScale() {
     this.adjustments.scale = 0.4 + Math.round(Math.random() * 10) / 3;
+  }
+
+  // return rendered output
+
+  render(): Node {
+    return this.design.renderPoster();
   }
 
   // getters / setters
@@ -71,7 +85,6 @@ class PosterState {
   get height(): number {
     return this.coords.height;
   }
-
 
 }
 
