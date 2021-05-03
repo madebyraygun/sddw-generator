@@ -4,7 +4,6 @@ import ThemeController from './theme';
 
 import PosterState from '../../../components/poster/poster-state';
 import WordState from '../../../components/poster/word-state';
-import CharacterState from '../../../components/poster/character-state';
 
 class Editor {
 
@@ -72,10 +71,6 @@ class Editor {
 
   // utilities
 
-  pxToRem(value: number) {
-    return value / 10;
-  }
-
   attachWord(word: WordState) {
     this.currentWord = word;
     this.currentPoster.attachWord(this.currentWord);
@@ -84,37 +79,20 @@ class Editor {
   // render word to container
 
   renderWord(word: WordState, $container?: HTMLElement, callback?: (value: NodeList) => void) {
-    const $characters: DocumentFragment = document.createDocumentFragment();
-    for (const character of word.characters) {
-      const data = this.assets.characters[character.glyph][character.variationIndex];
-      const [width, height] = data.dimension;
-      const phraseHeight = 100;
-      $characters.appendChild(
-        <figure data-character data-index={$characters.length} style={{ width: `${this.pxToRem(width * (phraseHeight / height))}rem`, height: `${this.pxToRem(phraseHeight)}rem` }}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
-            {[...data.paths].map((path, index) => {
-              const d = path.getAttribute('d');
-              return d ? (
-                <path key={index} d={d} fill={!character.variationIndex ? this.currentPoster.theme.bright : character.colors[index]}></path>
-              ) : null;
-            })}
-          </svg>
-        </figure>
-      );
-    }
+    const $word = word.render();
 
     if ($container) {
       $container.innerHTML = '';
       $container.appendChild((
         <figure data-phrase>
-          {$characters}
+          {$word}
         </figure>
       ));
     }
 
-    if (callback) callback($characters.childNodes);
+    if (callback) callback($word.childNodes);
 
-    return $characters;
+    return $word;
   }
 
   // render poster to container

@@ -1,6 +1,8 @@
 import Theme from '../themes/theme';
 import CharacterState from './character-state';
 import PosterState from './poster-state';
+import AssetController from '../../assets/js/controllers/assets';
+import PxToRem from '../../assets/js/utils/pxToRem';
 
 class WordState {
 
@@ -28,6 +30,7 @@ class WordState {
 
   attachPoster(poster: PosterState) {
     this.poster = poster;
+    this.theme = this.poster.theme;
   }
 
   // add new glyph
@@ -164,6 +167,35 @@ class WordState {
       }
     }
     return null;
+  }
+
+  // render based on theme
+  // NOTE: this is different from rendering based on design
+  // why? design may have additional rendering requirements, like breaking apart words
+
+  render(): Node {
+    const $word: DocumentFragment = document.createDocumentFragment();
+    const { word } = this.poster;
+
+    for (const character of word.characters) {
+      const svgCharacter = AssetController.getCharacter(character.glyph, character.variationIndex);
+      const [width, height] = svgCharacter.dimension;
+      const phraseHeight = 100;
+      $word.appendChild(
+        <figure data-character data-index={$word.length} style={{ width: `${PxToRem.convert(width * (phraseHeight / height))}rem`, height: `${PxToRem.convert(phraseHeight)}rem` }}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
+            {[...svgCharacter.paths].map((path, index) => {
+              const d = path.getAttribute('d');
+              return d ? (
+                <path key={index} d={d} fill={!character.variationIndex ? this.theme.bright : character.colors[index]}></path>
+              ) : null;
+            })}
+          </svg>
+        </figure>
+      );
+    }
+
+    return $word;
   }
 
 }

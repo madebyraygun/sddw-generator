@@ -1,4 +1,4 @@
-import AssetManager from '../../assets/js/controllers/assets';
+import AssetController from '../../assets/js/controllers/assets';
 import PosterState from '../poster/poster-state';
 import Theme from '../themes/theme';
 
@@ -13,39 +13,18 @@ class Design {
 
     this.#requireCharacters();
     this.#requirePosterFooters();
+
+    console.log('design');
   }
 
   // load svgs
 
   #requireCharacters = () => {
-    AssetManager.requireCharacters(this.poster.theme.requiredCharacters, this.theme.slug);
+    AssetController.requireCharacters(this.poster.theme.requiredCharacters, this.theme.slug);
   }
 
   #requirePosterFooters = () => {
-    AssetManager.requireFooters(this.poster.theme.requiredFooters, this.theme.slug);
-  }
-
-  renderWord() {
-    const $characters: DocumentFragment = document.createDocumentFragment();
-    const { word } = this.poster;
-
-    for (const character of word.characters) {
-      const svgCharacter = AssetManager.getCharacter(character.glyph, character.variationIndex);
-      const [width, height] = svgCharacter.dimension;
-      const phraseHeight = 100;
-      $characters.appendChild(
-        <figure data-character data-index={$characters.length} style={{ width: `${this.pxToRem(width * (phraseHeight / height))}rem`, height: `${this.pxToRem(phraseHeight)}rem` }}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
-            {[...svgCharacter.paths].map((path, index) => {
-              const d = path.getAttribute('d');
-              return d ? (
-                <path key={index} d={d} fill={!character.variationIndex ? this.theme.bright : character.colors[index]}></path>
-              ) : null;
-            })}
-          </svg>
-        </figure>
-      );
-    }
+    AssetController.requireFooters(this.poster.theme.requiredFooters, this.theme.slug);
   }
 
   renderPoster(): Node {
@@ -59,13 +38,13 @@ class Design {
 
     // generate word
 
-    const { word } = poster;
+    const { word } = this.poster;
     const characters = [];
     let i = 0;
     let charOffset = 0;
 
     for (const character of word.characters) {
-      const svgCharacter = AssetManager.getCharacter(character.glyph, character.variationIndex, this.theme.slug);
+      const svgCharacter = AssetController.getCharacter(character.glyph, character.variationIndex, this.theme.slug);
       if (svgCharacter) {
         const data = svgCharacter;
         const [width, height] = data.dimension;
@@ -121,7 +100,7 @@ class Design {
 
     // generate footer
 
-    const data = AssetManager.getFooter('template1.tsx', this.theme.slug);
+    const data = AssetController.getFooter('template1.tsx', this.theme.slug);
     const [width, height] = data.dimension;
     const footerWidth = this.poster.width;
     const factor = footerWidth / width;

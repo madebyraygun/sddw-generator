@@ -1,6 +1,6 @@
 import { Characters, Footers } from '../../../components/types/assets';
 
-class AssetManager {
+class AssetController {
 
   assets: {
     [theme: string]: {
@@ -29,6 +29,7 @@ class AssetManager {
         dimension
       });
     });
+    console.log(this.assets);
   }
 
   requireFooters(required: __WebpackModuleApi.RequireContext, design = 'default') {
@@ -57,4 +58,4 @@ class AssetManager {
 
 }
 
-export default new AssetManager();
+export default new AssetController();
