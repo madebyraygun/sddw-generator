@@ -5,6 +5,18 @@ import ThemeController from './theme';
 import PosterState from '../../../components/poster/poster-state';
 import WordState from '../../../components/poster/word-state';
 
+export interface CharacterCallback {
+  word: WordState,
+  characterIndex: number,
+  target?: HTMLElement | null,
+  container?: HTMLElement | null,
+}
+export interface WordCallback {
+  word: WordState,
+  target?: HTMLElement | null,
+  container?: HTMLElement | null,
+}
+
 class Editor {
 
   posters: Array<PosterState>;
@@ -21,51 +33,61 @@ class Editor {
 
   // render phrases and characters
 
-  nextCharacter(word: WordState, characterIndex: number, $container: HTMLElement | null, callback?: (value) => void) {
+  nextCharacter(word: WordState, characterIndex: number, $container?: HTMLElement | null, callback?: (value: CharacterCallback) => void) {
     word.nextCharacterByIndex(characterIndex);
 
+    let $word: HTMLElement | null = null;
     if ($container) {
-      this.renderWord(word, $container);
+      $word = this.renderWord(word, $container);
     }
 
     if (callback) {
-      callback({ word, characterIndex, $container });
+      callback({
+        word, characterIndex, target: $word, container: $container
+      });
     }
   }
 
-  prevCharacter(word: WordState, characterIndex: number, $container: HTMLElement | null, callback?: (value) => void) {
+  prevCharacter(word: WordState, characterIndex: number, $container?: HTMLElement | null, callback?: (value: CharacterCallback) => void) {
     word.prevCharacterByIndex(characterIndex);
 
+    let $word: HTMLElement | null = null;
     if ($container) {
-      this.renderWord(word, $container);
+      $word = this.renderWord(word, $container);
     }
 
     if (callback) {
-      callback({ word, characterIndex, $container });
+      callback({
+        word, characterIndex, target: $word, container: $container
+      });
     }
   }
 
-  shuffleCharacter(word: WordState, characterIndex: number, $container: HTMLElement | null, callback?: (value) => void) {
+  shuffleCharacter(word: WordState, characterIndex: number, $container?: HTMLElement | null, callback?: (value: CharacterCallback) => void) {
     word.shuffleCharacterByIndex(characterIndex);
 
+    let $word: HTMLElement | null = null;
     if ($container) {
-      this.renderWord(word, $container);
+      $word = this.renderWord(word, $container);
     }
 
     if (callback) {
-      callback({ word, characterIndex, $container });
+      callback({
+        word, characterIndex, target: $word, container: $container
+      });
     }
   }
 
-  shuffleWord(word: WordState, $container: HTMLElement | null, callback?: (value) => void) {
+  shuffleWord(word: WordState, $container?: HTMLElement | null, callback?: (value: WordCallback) => void) {
     word.shuffle();
 
+    let $word: HTMLElement | null = null;
     if ($container) {
-      this.renderWord(word, $container);
+      $word = this.renderWord(word, $container);
     }
 
     if (callback) {
-      callback({ word, $container });
+      callback({ word, target: $word, container: $container });
     }
   }
 
@@ -78,26 +100,23 @@ class Editor {
 
   // render word to container
 
-  renderWord(word: WordState, $container?: HTMLElement, callback?: (value: NodeList) => void) {
-    const $word = word.render();
+  renderWord(word: WordState, $container?: HTMLElement | null, callback?: (value: HTMLElement) => void) {
+    const $word:HTMLElement = word.render();
 
     if ($container) {
+      $word.setAttribute('data-phrase', '');
       $container.innerHTML = '';
-      $container.appendChild((
-        <figure data-phrase>
-          {$word}
-        </figure>
-      ));
+      $container.appendChild($word);
     }
 
-    if (callback) callback($word.childNodes);
+    if (callback) callback($word);
 
     return $word;
   }
 
   // render poster to container
 
-  renderPoster(poster: PosterState, $container: HTMLElement | null = null) {
+  renderPoster(poster: PosterState, $container?: HTMLElement | null) {
     const $output: HTMLElement = poster.render() as HTMLElement;
 
     if ($container) {

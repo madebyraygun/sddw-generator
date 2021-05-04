@@ -1,4 +1,4 @@
-import Editor from '../assets/js/controllers/editor';
+import Editor from '../../assets/js/controllers/editor';
 
 import styles from './generate.module.scss';
 

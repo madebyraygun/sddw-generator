@@ -1,14 +1,14 @@
 
-import Editor from '../assets/js/controllers/editor';
-import ThemeController from '../assets/js/controllers/theme';
+import Editor, { CharacterCallback } from '../../assets/js/controllers/editor';
+import ThemeController from '../../assets/js/controllers/theme';
 
-import Button from './buttons/button';
-import ButtonToggle from './buttons/toggle';
+import Button from '../buttons/button';
+import ButtonToggle from '../buttons/toggle';
 
-import SVGDsgnWknd from '../assets/vectors/dsgn-wknd';
+import SVGDsgnWknd from '../../assets/vectors/dsgn-wknd';
 
-import styles from './input.module.scss';
-import WordState from './poster/word-state';
+import styles from './input-word.module.scss';
+import WordState from '../poster/word-state';
 
 interface Reference {
   generate?: HTMLInputElement | null,
@@ -19,9 +19,9 @@ interface Reference {
   shuffle?: HTMLInputElement | null,
 }
 
-export class InputElement extends HTMLElement {
+export class InputWordElement extends HTMLElement {
 
-  static selector = 'input-element';
+  static selector = 'input-word-element';
 
   ref: Reference = {};
 
@@ -45,7 +45,8 @@ export class InputElement extends HTMLElement {
 
   // add / remove listeners ------------------------------------------------ //
 
-  addPhraseListeners = ($characters: NodeList) => {
+  addPhraseListeners = ($phrase: HTMLElement) => {
+    const $characters = $phrase.children;
     for (let i = 0; i < $characters.length; i++) {
       const $character = $characters[i] as HTMLElement;
       $character.removeEventListener('click', this.#onCharacterClick);
@@ -59,7 +60,13 @@ export class InputElement extends HTMLElement {
   #onCharacterClick = (e: MouseEvent) => {
     const $target: HTMLElement = e.currentTarget as HTMLElement;
     if ($target) {
-      Editor.nextCharacter(this.inputWord, parseInt($target.dataset.index ?? '0'), $target);
+      Editor.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.output, this.#onCharacterEdit);
+    }
+  }
+
+  #onCharacterEdit = (e:CharacterCallback) => {
+    if (e.target) {
+      this.addPhraseListeners(e.target);
     }
   }
 
@@ -111,9 +118,9 @@ export class InputElement extends HTMLElement {
   #onShuffleClick = () => {
     if (this.ref.generate) {
       Editor.shuffleWord(this.inputWord, this.ref.output, (value) => {
-        const $characters: NodeList | undefined = this.ref.output?.querySelectorAll('[data-character]');
-        if ($characters) {
-          this.addPhraseListeners($characters);
+        const $phrase: HTMLElement | null = this.ref.output?.querySelector('[data-phrase]') as HTMLElement;
+        if ($phrase) {
+          this.addPhraseListeners($phrase);
         }
       });
       Editor.renderPosters();
@@ -160,31 +167,31 @@ export class InputElement extends HTMLElement {
 
 // connect markup to javascript class -------------------------------------- //
 
-if (!window.customElements.get(InputElement.selector)) {
-  window.customElements.define(InputElement.selector, InputElement);
+if (!window.customElements.get(InputWordElement.selector)) {
+  window.customElements.define(InputWordElement.selector, InputWordElement);
 }
 
 // JSX template ------------------------------------------------------------ //
 
-const Input: FC = () => (
-  <div element={InputElement.selector} className={styles['input']}>
+const InputWord: FC = () => (
+  <div element={InputWordElement.selector} className={styles['input-word']}>
     <input type="text" maxLength={16} />
-    <div className={styles['input__logo']}>
+    <div className={styles['input-word__logo']}>
       <figure>
         <SVGDsgnWknd />
       </figure>
     </div>
     <p>Type your name and click a letter to pick the design you like.</p>
-    <div className={styles['input__output']} data-output></div>
-    <div className={styles['input__buttons-wrapper']}>
-      <div className={styles['input__generate']} data-generate>
+    <div className={styles['input-word__output']} data-output></div>
+    <div className={styles['input-word__buttons-wrapper']}>
+      <div className={styles['input-word__generate']} data-generate>
         <Button big={true}>Generate my poster</Button>
       </div>
-      <div className={styles['input__shuffle']} data-shuffle>
+      <div className={styles['input-word__shuffle']} data-shuffle>
         <Button big={true}>Shuffle</Button>
       </div>
     </div>
-    <div className={styles['input__options-wrapper']}>
+    <div className={styles['input-word__options-wrapper']}>
       <div data-randomize-each-word>
         <ButtonToggle>Randomize Each Word</ButtonToggle>
       </div>
@@ -192,8 +199,8 @@ const Input: FC = () => (
         <ButtonToggle>Randomize Colors</ButtonToggle>
       </div>
     </div>
-    <button className={styles['input__clear']}>Clear</button>
+    <button className={styles['input-word__clear']}>Clear</button>
   </div>
 );
 
-export default Input;
+export default InputWord;

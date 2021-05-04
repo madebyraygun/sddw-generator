@@ -1,12 +1,12 @@
 import Page from '../components/app/page';
 import Intro from '../components/intro';
-import Input from '../components/input';
+import InputWord from '../components/forms/input-word';
 import Feed from '../components/feed';
 
 const Index: FC = () => (
   <Page slug="index">
     <Intro />
-    <Input />
+    <InputWord />
     <Feed />
   </Page>
 );
