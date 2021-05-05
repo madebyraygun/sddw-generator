@@ -19,7 +19,7 @@ class WordState {
   constructor(characters: CharacterState[] | string, theme: Theme, poster?: PosterState) {
     this.theme = theme;
 
-    if (characters instanceof String) {
+    if (typeof (characters) === 'string') {
       this.characters = this.charactersFromString(String(characters));
     } else {
       this.characters = [...characters] as CharacterState[];
@@ -75,7 +75,7 @@ class WordState {
   }
 
   // change character's symbol, colors
-  changeCharacter(character: CharacterState, variationIndex: number, glyph?: string) {
+  changeCharacter(character: CharacterState, variationIndex: number, glyph?: string, colors?: string[]) {
     if (character && !character.special) {
       // change glyph variation
       let curVariationIndex = variationIndex;
@@ -84,7 +84,9 @@ class WordState {
       character.variationIndex = curVariationIndex;
 
       // use existing color sequence or new random order
-      if (!character?.colors.length) {
+      if (colors) {
+        character.colors = [...colors];
+      } else if (!character?.colors.length) {
         character.colors = this.getShuffledColors();
       }
 
@@ -161,8 +163,13 @@ class WordState {
 
   // clone word
   clone(): WordState {
-    // TODO: complete
-    return this;
+    const wordCopy = new WordState(this.toString(), this.theme, this.poster);
+    for (let i = 0; i < wordCopy.characters.length; i++) {
+      const character = this.characters[i];
+      const characterCopy = wordCopy.characters[i];
+      wordCopy.changeCharacter(characterCopy, character.variationIndex, character.glyph, character.colors);
+    }
+    return wordCopy;
   }
 
   // return randomized color swatches from theme
@@ -182,6 +189,17 @@ class WordState {
   // get character by index
   getCharacterByIndex(index:number): CharacterState | null {
     return this.characters[index] ?? null;
+  }
+
+  // translate characters to a string
+  toString(): string {
+    let characterString = '';
+    for (let i = 0; i < this.characters.length; i++) {
+      const character = this.characters[i];
+      characterString += character.glyph;
+    }
+
+    return characterString;
   }
 
   // render based on theme

@@ -77,18 +77,17 @@ class Design {
     };
   }
 
-  generateLine(): LineGenerated {
+  generateLine(showUserDesign = true): LineGenerated {
     const words = [];
     let k = 0;
     let wordOffset = 0;
     let fontSize = 0;
     let lineHeight = 0;
     let spacing = 0;
-
     do {
       const renderedWord = this.poster.word.clone();
 
-      if (k) {
+      if (!showUserDesign || k) {
         if (this.poster.isRandomColors) renderedWord.shuffleColors();
         if (this.poster.isRandomWords) renderedWord.shuffleCharacters();
       }
@@ -126,9 +125,10 @@ class Design {
     const lineSpacer = 10 * this.poster.scale;
     let j = 0;
     let lineOffset = 0;
+    let wordCount = 0;
 
     do {
-      const lineData = this.generateLine();
+      const lineData = this.generateLine(!wordCount);
       const { words } = lineData;
       const lineHeight: number = lineData.dimensions.height;
       lines.push((
@@ -138,6 +138,7 @@ class Design {
       ));
       j++;
       lineOffset = lineHeight * j + lineSpacer * j;
+      wordCount += words.length;
     } while (lineOffset < this.poster.height);
 
     // generate footer

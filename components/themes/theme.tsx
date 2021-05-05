@@ -49,15 +49,6 @@ class Theme {
     return this.config.characterVariationsTotal;
   }
 
-  // build-time loaded vector assets
-  get requiredCharacters():__WebpackModuleApi.RequireContext {
-    return this.required.characters;
-  }
-
-  get requiredFooters():__WebpackModuleApi.RequireContext {
-    return this.required.footers;
-  }
-
 }
 
 export default Theme;
