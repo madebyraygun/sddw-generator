@@ -130,6 +130,7 @@ class Editor {
     if ($container) {
       const $posterWrappers: NodeList = $container.querySelectorAll('[data-poster]');
       for (const $posterWrapper of $posterWrappers) {
+        this.currentPoster.shuffle();
         this.renderPoster(this.currentPoster, $posterWrapper as HTMLElement);
       }
     }

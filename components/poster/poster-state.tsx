@@ -10,12 +10,6 @@ class PosterState {
   theme: Theme;
   word: WordState;
 
-  adjustments: {
-    scale: number,
-  } = {
-    scale: 1,
-  };
-
   coords: {
     width: number,
     height: number,
@@ -54,8 +48,8 @@ class PosterState {
 
   // fun
 
-  shuffleScale() {
-    this.adjustments.scale = 0.4 + Math.round(Math.random() * 10) / 3;
+  shuffle() {
+    this.design.shuffle();
   }
 
   // return rendered output

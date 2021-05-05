@@ -7,6 +7,12 @@ class Design {
   poster: PosterState;
   theme: Theme;
 
+  adjustments: {
+    scale: number,
+  } = {
+    scale: 1,
+  };
+
   constructor(poster: PosterState) {
     this.poster = poster;
     this.theme = poster.theme;
@@ -16,39 +22,35 @@ class Design {
     let wordWidth = 0;
 
     const wordFontSize = 100;
-    const wordHeight = wordFontSize * this.poster.scale;
-    const charSpacer = 0.12 * wordHeight * this.poster.scale;
+    const wordHeight = wordFontSize * this.adjustments.scale;
+    const charSpacer = 0.12 * wordHeight * this.adjustments.scale;
     const wordSpacer = charSpacer;
-    const lineSpacer = 10 * this.poster.scale;
+    const lineSpacer = 10 * this.adjustments.scale;
 
     // generate word
 
     const { word } = this.poster;
-    const characters = [];
-    let i = 0;
+    const wordCharacters:Node[] = [];
     let charOffset = 0;
 
-    for (const character of word.characters) {
-      const svgCharacter = AssetController.getCharacter(character.glyph, character.variationIndex, this.theme.slug);
-      if (svgCharacter) {
-        const data = svgCharacter;
-        const [width, height] = data.dimension;
-        const factor = wordHeight / height;
-        const newWidth = width * factor;
-        wordWidth += newWidth + (i > 0 ? charSpacer / factor : 0);
-        charOffset = wordWidth - newWidth;
-        characters.push((
-          <g key={`char${character.index}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character>
-            {[...data.paths].map((path, index) => {
-              const d = path.getAttribute('d');
-              return d ? (
-                <path key={index} d={d} fill={!character.index ? this.theme.colors.dark : character.colors[index]}></path>
-              ) : null;
-            })}
-          </g>
-        ));
-      }
-      i++;
+    for (let i = 0; i < word.characters.length; i++) {
+      const character = word.characters[i];
+      const svgCharacter = AssetController.getCharacter(character.glyph, character.variationIndex);
+      const [width, height] = svgCharacter.dimension;
+      const factor = wordHeight / height;
+      const newWidth = width * factor;
+      wordWidth += newWidth + (i > 0 ? charSpacer / factor : 0);
+      charOffset = wordWidth - newWidth;
+      wordCharacters.push(
+        <g key={`char${character.variationIndex}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character>
+          {[...svgCharacter.paths].map((path, index) => {
+            const d = path.getAttribute('d');
+            return d ? (
+              <path key={index} d={d} fill={!character.variationIndex ? this.theme.colors.dark : character.colors[index]}></path>
+            ) : null;
+          })}
+        </g>
+      );
     }
 
     // put words together into a line
@@ -61,7 +63,7 @@ class Design {
       wordOffset = wordWidth * k + wordSpacer * Math.max(0, k - 1);
       words.push((
         <g key={`word${k}`} transform={`translate(${wordOffset} 0)`} data-word>
-          {word}
+          {wordCharacters}
         </g>
       ));
       k++;
@@ -127,6 +129,10 @@ class Design {
         </svg>
       </figure>
     );
+  }
+
+  shuffle() {
+    this.adjustments.scale = 0.4 + Math.round(Math.random() * 10) / 3;
   }
 
 }
