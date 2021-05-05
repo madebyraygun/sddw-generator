@@ -7,7 +7,7 @@ import ButtonToggle from '../buttons/toggle';
 
 import SVGDsgnWknd from '../../assets/vectors/dsgn-wknd';
 
-import styles from './input-word.module.scss';
+import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
 
 interface Reference {
@@ -19,9 +19,9 @@ interface Reference {
   shuffle?: HTMLInputElement | null,
 }
 
-export class InputWordElement extends HTMLElement {
+export class EditorControls extends HTMLElement {
 
-  static selector = 'input-word-element';
+  static selector = 'editor-controls-element';
 
   ref: Reference = {};
 
@@ -103,15 +103,21 @@ export class InputWordElement extends HTMLElement {
   }
 
   // randomize colors
-  #onRandomizeColors = () => {
-    // Characters.updateConfig({ randomizeColors: this.ref.randomizeColors?.children[0].hasAttribute('data-randomize-each-word') });
-    Editor.renderPosters();
+  #onRandomizeColors = (e: MouseEvent) => {
+    const $target = e.currentTarget as HTMLElement;
+    if ($target) {
+      const $button: HTMLElement = $target.children[0] as HTMLElement;
+      Editor.randomizeColors($button.dataset.active === 'true');
+    }
   }
 
   // randomize each word
-  #onRandomizeEachWord = () => {
-    // Characters.updateConfig({ randomizeEachWord: this.ref.randomizeEachWord?.children[0].hasAttribute('data-randomize-each-word') });
-    Editor.renderPosters();
+  #onRandomizeEachWord = (e: MouseEvent) => {
+    const $target = e.currentTarget as HTMLElement;
+    if ($target) {
+      const $button: HTMLElement = $target.children[0] as HTMLElement;
+      Editor.randomizeEachWord($button.dataset.active === 'true');
+    }
   }
 
   // shuffle button: shuffle phrase design
@@ -167,31 +173,31 @@ export class InputWordElement extends HTMLElement {
 
 // connect markup to javascript class -------------------------------------- //
 
-if (!window.customElements.get(InputWordElement.selector)) {
-  window.customElements.define(InputWordElement.selector, InputWordElement);
+if (!window.customElements.get(EditorControls.selector)) {
+  window.customElements.define(EditorControls.selector, EditorControls);
 }
 
 // JSX template ------------------------------------------------------------ //
 
 const InputWord: FC = () => (
-  <div element={InputWordElement.selector} className={styles['input-word']}>
+  <div element={EditorControls.selector} className={styles['editor-controls']}>
     <input type="text" maxLength={16} />
-    <div className={styles['input-word__logo']}>
+    <div className={styles['editor-controls__logo']}>
       <figure>
         <SVGDsgnWknd />
       </figure>
     </div>
     <p>Type your name and click a letter to pick the design you like.</p>
-    <div className={styles['input-word__output']} data-output></div>
-    <div className={styles['input-word__buttons-wrapper']}>
-      <div className={styles['input-word__generate']} data-generate>
+    <div className={styles['editor-controls__output']} data-output></div>
+    <div className={styles['editor-controls__buttons-wrapper']}>
+      <div className={styles['editor-controls__generate']} data-generate>
         <Button big={true}>Generate my poster</Button>
       </div>
-      <div className={styles['input-word__shuffle']} data-shuffle>
+      <div className={styles['editor-controls__shuffle']} data-shuffle>
         <Button big={true}>Shuffle</Button>
       </div>
     </div>
-    <div className={styles['input-word__options-wrapper']}>
+    <div className={styles['editor-controls__options-wrapper']}>
       <div data-randomize-each-word>
         <ButtonToggle>Randomize Each Word</ButtonToggle>
       </div>
@@ -199,7 +205,7 @@ const InputWord: FC = () => (
         <ButtonToggle>Randomize Colors</ButtonToggle>
       </div>
     </div>
-    <button className={styles['input-word__clear']}>Clear</button>
+    <button className={styles['editor-controls__clear']}>Clear</button>
   </div>
 );
 

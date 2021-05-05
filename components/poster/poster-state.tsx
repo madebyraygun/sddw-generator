@@ -1,3 +1,9 @@
+/*  *** POSTER ***
+    Differentiating Poster vs Design:
+    Poster contains the user's configuration - their word, tweaks, etc.
+    Design is a template to translate Poster data into a specific look.
+*/
+
 import FooterState from './footer-state';
 import WordState from './word-state';
 import Theme from '../themes/theme';
@@ -9,6 +15,24 @@ class PosterState {
   design: Design;
   theme: Theme;
   word: WordState;
+
+  adjustments: {
+    scale: number,
+  } = {
+    scale: 1,
+  };
+
+  flags: {
+    isRandomColors: boolean,
+    isRandomWords: boolean,
+    isLineClamped: boolean,
+    isWordWrap: boolean,
+  } = {
+    isRandomColors: true,
+    isRandomWords: true,
+    isLineClamped: true,
+    isWordWrap: true,
+  };
 
   coords: {
     width: number,
@@ -49,7 +73,7 @@ class PosterState {
   // fun
 
   shuffle() {
-    this.design.shuffle();
+    this.adjustments.scale = 0.4 + Math.round(Math.random() * 10) / 3;
   }
 
   // return rendered output
@@ -66,6 +90,14 @@ class PosterState {
 
   set isRandomColors(value: boolean) {
     this.flags.isRandomColors = value;
+  }
+
+  get isRandomWords(): boolean {
+    return this.flags.isRandomWords;
+  }
+
+  set isRandomWords(value: boolean) {
+    this.flags.isRandomWords = value;
   }
 
   get scale(): number {

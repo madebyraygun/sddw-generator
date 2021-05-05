@@ -20,11 +20,12 @@ export class ButtonToggleElement extends HTMLElement {
     this.ref.button = this;
     if (this.ref.button) {
       this.ref.button.addEventListener('click', this.#onButtonClick);
+      this.toggleButton(this.state.isToggled);
     }
   }
 
-  #onButtonClick = (e: MouseEvent) => {
-    this.state.isToggled = !this.state.isToggled;
+  toggleButton(isToggled = false) {
+    this.state.isToggled = isToggled;
     if (this.state.isToggled) {
       this.ref.button?.setAttribute('data-active', true);
       this.ref.button?.setAttribute('data-color', Math.round(Math.random() * 5 + 1).toString());
@@ -32,6 +33,10 @@ export class ButtonToggleElement extends HTMLElement {
       this.ref.button?.removeAttribute('data-active');
       this.ref.button?.removeAttribute('data-color');
     }
+  }
+
+  #onButtonClick = () => {
+    this.toggleButton(!this.state.isToggled);
   }
 
 }

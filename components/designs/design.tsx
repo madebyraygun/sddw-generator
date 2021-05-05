@@ -1,36 +1,49 @@
+/*  *** DESIGN ***
+    Differentiating Poster vs Design:
+    Poster contains the user's configuration - their word, tweaks, etc.
+    Design is a template to translate Poster data into a specific look.
+*/
+
 import AssetController from '../../assets/js/controllers/assets';
 import PosterState from '../poster/poster-state';
+import WordState from '../poster/word-state';
 import Theme from '../themes/theme';
+
+interface WordGenerated {
+  characters: Node[],
+  fontSize: number,
+  dimensions: {
+    width: number,
+    height: number,
+    spacing: number
+  }
+}
+
+interface LineGenerated {
+  words: Node[],
+  fontSize: number,
+  dimensions: {
+    width: number,
+    height: number
+  }
+}
 
 class Design {
 
   poster: PosterState;
   theme: Theme;
 
-  adjustments: {
-    scale: number,
-  } = {
-    scale: 1,
-  };
-
   constructor(poster: PosterState) {
     this.poster = poster;
     this.theme = poster.theme;
   }
 
-  renderPoster(): Node {
+  generateWord(word: WordState, fontSize = 100):WordGenerated {
     let wordWidth = 0;
 
-    const wordFontSize = 100;
-    const wordHeight = wordFontSize * this.adjustments.scale;
-    const charSpacer = 0.12 * wordHeight * this.adjustments.scale;
-    const wordSpacer = charSpacer;
-    const lineSpacer = 10 * this.adjustments.scale;
-
-    // generate word
-
-    const { word } = this.poster;
     const wordCharacters:Node[] = [];
+    const wordHeight = fontSize * this.poster.scale;
+    const charSpacer = 0.12 * wordHeight * this.poster.scale;
     let charOffset = 0;
 
     for (let i = 0; i < word.characters.length; i++) {
@@ -53,36 +66,78 @@ class Design {
       );
     }
 
-    // put words together into a line
+    return {
+      characters: wordCharacters,
+      fontSize: fontSize,
+      dimensions: {
+        width: wordWidth,
+        height: wordHeight,
+        spacing: charSpacer,
+      }
+    };
+  }
 
+  generateLine(): LineGenerated {
     const words = [];
     let k = 0;
     let wordOffset = 0;
+    let fontSize = 0;
+    let lineHeight = 0;
+    let spacing = 0;
 
     do {
-      wordOffset = wordWidth * k + wordSpacer * Math.max(0, k - 1);
+      const renderedWord = this.poster.word.clone();
+
+      if (k) {
+        if (this.poster.isRandomColors) renderedWord.shuffleColors();
+        if (this.poster.isRandomWords) renderedWord.shuffleCharacters();
+      }
+
+      const wordData: WordGenerated = this.generateWord(renderedWord);
+      lineHeight = Math.max(lineHeight, wordData.dimensions.height);
+      fontSize = Math.max(fontSize, wordData.fontSize);
+      ({ spacing } = wordData.dimensions);
+
       words.push((
         <g key={`word${k}`} transform={`translate(${wordOffset} 0)`} data-word>
-          {wordCharacters}
+          {wordData.characters}
         </g>
       ));
+      wordOffset += wordData.dimensions.width + wordData.dimensions.spacing;
       k++;
     } while (wordOffset < this.poster.width);
 
+    const lineWidth = wordOffset - spacing;
+
+    return {
+      words,
+      fontSize: fontSize,
+      dimensions: {
+        width: lineWidth,
+        height: lineHeight,
+      }
+    };
+  }
+
+  renderPoster(): Node {
     // put lines together to fill poster
 
     const lines = [];
+    const lineSpacer = 10 * this.poster.scale;
     let j = 0;
     let lineOffset = 0;
 
     do {
+      const lineData = this.generateLine();
+      const { words } = lineData;
+      const lineHeight: number = lineData.dimensions.height;
       lines.push((
         <g key={`line${j}`} transform={`translate(0, ${lineOffset})`} data-line>
           {words}
         </g>
       ));
       j++;
-      lineOffset = wordHeight * j + lineSpacer * j;
+      lineOffset = lineHeight * j + lineSpacer * j;
     } while (lineOffset < this.poster.height);
 
     // generate footer
@@ -129,10 +184,6 @@ class Design {
         </svg>
       </figure>
     );
-  }
-
-  shuffle() {
-    this.adjustments.scale = 0.4 + Math.round(Math.random() * 10) / 3;
   }
 
 }

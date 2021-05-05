@@ -84,7 +84,7 @@ class WordState {
       character.variationIndex = curVariationIndex;
 
       // use existing color sequence or new random order
-      if (this.poster?.isRandomColors || !character?.colors.length) {
+      if (!character?.colors.length) {
         character.colors = this.getShuffledColors();
       }
 
@@ -142,6 +142,27 @@ class WordState {
     for (let i = 0; i < this.characters.length; i++) {
       this.shuffleCharacter(this.characters[i]);
     }
+  }
+
+  // shuffle all characters
+  shuffleCharacters() {
+    for (let i = 0; i < this.characters.length; i++) {
+      const character = this.characters[i];
+      character.variationIndex = this.getShuffledVariationIndex(character.variationIndex);
+    }
+  }
+
+  // shuffle all colors
+  shuffleColors() {
+    for (let i = 0; i < this.characters.length; i++) {
+      this.characters[i].colors = this.getShuffledColors();
+    }
+  }
+
+  // clone word
+  clone(): WordState {
+    // TODO: complete
+    return this;
   }
 
   // return randomized color swatches from theme

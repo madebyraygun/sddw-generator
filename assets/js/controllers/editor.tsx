@@ -27,7 +27,7 @@ class Editor {
     try {
       this.currentPoster = new PosterState(ThemeController.theme);
     } catch (e) {
-      console.error(e);
+      console.warn(e);
     }
   }
 
@@ -78,6 +78,8 @@ class Editor {
     }
   }
 
+  // magic button fun modifications
+
   shuffleWord(word: WordState, $container?: HTMLElement | null, callback?: (value: WordCallback) => void) {
     word.shuffle();
 
@@ -91,7 +93,15 @@ class Editor {
     }
   }
 
-  // utilities
+  randomizeColors(isActive = false) {
+    this.currentPoster.isRandomColors = isActive;
+  }
+
+  randomizeEachWord(isActive = false) {
+    this.currentPoster.isRandomWords = isActive;
+  }
+
+  // connect primary input (or database stored) word object
 
   attachWord(word: WordState) {
     this.currentWord = word;
