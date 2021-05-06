@@ -4,11 +4,13 @@ import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
 import ButtonToggle from '../buttons/toggle';
+import RangeSlider from '../controls/range-slider';
 
 import SVGDsgnWknd from '../../assets/vectors/dsgn-wknd';
 
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
+import EditorView from './editor-view';
 
 interface Reference {
   generate?: HTMLInputElement | null,
@@ -19,7 +21,7 @@ interface Reference {
   shuffle?: HTMLInputElement | null,
 }
 
-export class EditorControls extends HTMLElement {
+export class EditorControlsElement extends HTMLElement {
 
   static selector = 'editor-controls-element';
 
@@ -106,8 +108,7 @@ export class EditorControls extends HTMLElement {
   #onRandomizeColors = (e: MouseEvent) => {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
-      const $button: HTMLElement = $target.children[0] as HTMLElement;
-      Editor.randomizeColors($button.dataset.active === 'true');
+      Editor.randomizeColors($target.dataset.active === 'true');
     }
   }
 
@@ -115,8 +116,7 @@ export class EditorControls extends HTMLElement {
   #onRandomizeEachWord = (e: MouseEvent) => {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
-      const $button: HTMLElement = $target.children[0] as HTMLElement;
-      Editor.randomizeEachWord($button.dataset.active === 'true');
+      Editor.randomizeEachWord($target.dataset.active === 'true');
     }
   }
 
@@ -173,40 +173,42 @@ export class EditorControls extends HTMLElement {
 
 // connect markup to javascript class -------------------------------------- //
 
-if (!window.customElements.get(EditorControls.selector)) {
-  window.customElements.define(EditorControls.selector, EditorControls);
+if (!window.customElements.get(EditorControlsElement.selector)) {
+  window.customElements.define(EditorControlsElement.selector, EditorControlsElement);
 }
 
 // JSX template ------------------------------------------------------------ //
 
-const InputWord: FC = () => (
-  <div element={EditorControls.selector} className={styles['editor-controls']}>
-    <input type="text" maxLength={16} />
-    <div className={styles['editor-controls__logo']}>
-      <figure>
-        <SVGDsgnWknd />
-      </figure>
-    </div>
-    <p>Type your name and click a letter to pick the design you like.</p>
-    <div className={styles['editor-controls__output']} data-output></div>
-    <div className={styles['editor-controls__buttons-wrapper']}>
-      <div className={styles['editor-controls__generate']} data-generate>
-        <Button big={true}>Generate my poster</Button>
+const EditorControls: FC = () => (
+  <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
+    <EditorView className={styles['editor-controls__view-inputs-primary']}>
+      <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
+      <div className={styles['editor-controls__logo']}>
+        <figure>
+          <SVGDsgnWknd />
+        </figure>
       </div>
-      <div className={styles['editor-controls__shuffle']} data-shuffle>
-        <Button big={true}>Shuffle</Button>
+      <p>Type your name and click a letter to pick the design you like.</p>
+      <div className={styles['editor-controls__output']} data-output></div>
+      <div className={styles['editor-controls__buttons-wrapper']}>
+        <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
+        <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
       </div>
-    </div>
-    <div className={styles['editor-controls__options-wrapper']}>
-      <div data-randomize-each-word>
-        <ButtonToggle>Randomize Each Word</ButtonToggle>
+      <div className={styles['editor-controls__options-wrapper']}>
+        <ButtonToggle dataName={{ 'data-randomize-each-word': '' }}>Randomize Each Word</ButtonToggle>
+        <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
       </div>
-      <div data-randomize-colors>
-        <ButtonToggle>Randomize Colors</ButtonToggle>
+      <button className={styles['editor-controls__clear']}>Clear</button>
+    </EditorView>
+    <EditorView className= {styles['editor-controls__view-inputs-poster']}>
+      <Button className={styles['editor-controls__button-restart']}>Restart</Button>
+      <div className={styles['editor-controls__poster-column']}>
+        <div className={styles['editor-controls__poster']} data-poster><svg viewBox="0 0 1350 1800"></svg></div>
+        <RangeSlider className={styles['editor_controls__slider']} name='poster-scale'>Adjust</RangeSlider>
       </div>
-    </div>
-    <button className={styles['editor-controls__clear']}>Clear</button>
+      <Button className={styles['editor-controls__button-finish']}>Finish</Button>
+    </EditorView>
   </div>
 );
 
-export default InputWord;
+export default EditorControls;

@@ -1,3 +1,5 @@
+import { CustomProps } from '../types/props';
+
 import styles from './toggle.module.scss';
 
 interface Reference {
@@ -49,8 +51,8 @@ if (!window.customElements.get(ButtonToggleElement.selector)) {
 
 // JSX template ------------------------------------------------------------ //
 
-const ButtonToggle: FC = ({ children }) => (
-  <button element={ButtonToggleElement.selector} className={styles['button-toggle']}>
+const ButtonToggle: FC<CustomProps> = ({ className, dataName, children }) => (
+  <button element={ButtonToggleElement.selector} className={`${className ?? ''} ${styles['button-toggle']}`} {...dataName}>
     <figure className={styles['button-toggle__knob']}></figure>
     <figure className={styles['button-toggle__knob-bg']}></figure>
     <span>{children}</span>
