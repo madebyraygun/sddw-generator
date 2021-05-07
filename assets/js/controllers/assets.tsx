@@ -1,6 +1,7 @@
 import { Characters, Footers } from '../../../components/types/assets';
+import Controller from './controller';
 
-class AssetsController {
+class AssetsController implements Controller {
 
   assets: {
     [theme: string]: {
@@ -13,6 +14,10 @@ class AssetsController {
       footers: {},
     }
   };
+
+  initialize() {
+    this.require();
+  }
 
   require() {
     // default theme

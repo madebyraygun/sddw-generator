@@ -5,6 +5,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import mq from '../utils/mq';
 
 import Platform from '../constants/platform';
+import Controller from './controller';
 
 /*  Resize Controller
 
@@ -49,7 +50,7 @@ interface Subscriber {
   render(): void
 }
 
-class ResizeController {
+class ResizeController implements Controller {
 
   coords: Coords = {
     window: {
@@ -137,7 +138,9 @@ class ResizeController {
     if (instant) {
       this._measureNow();
     } else {
-      this.throttled.measure();
+      if (this.throttled.measure) {
+        this.throttled.measure();
+      }
     }
   }
 
@@ -177,25 +180,15 @@ class ResizeController {
     this.states.lastPlatform = this.states.platform;
     this.states.platform = this.platform;
 
-    const e = {
-      isViewportChange: this.isViewportChange,
-      isPlatformChange: this.isPlatformChange,
-    };
-
     for (let i = 0, l = this.subscribers.length; i < l; ++i) {
       const subscriber = this.subscribers[i];
-      if (subscriber && subscriber.update(e)) subscriber.updated = true;
+      if (subscriber && subscriber.update()) subscriber.updated = true;
     }
   }
 
   // render (write cycle)
 
   render() {
-    const e = {
-      isViewportChange: this.isViewportChange,
-      isPlatformChange: this.isPlatformChange,
-    };
-
     const deadList: Subscriber[] = [];
 
     for (let i = 0, l = this.subscribers.length; i < l; ++i) {
@@ -203,7 +196,7 @@ class ResizeController {
       // will only fire if subscriber has returned true from previous update() cycle
       if (subscriber && subscriber.updated) {
         subscriber.updated = false;
-        subscriber.render(e);
+        subscriber.render();
         if (subscriber.die) deadList.push(subscriber);
       }
     }
@@ -221,11 +214,11 @@ class ResizeController {
   get platform() {
     let platform = Platform.DESKTOP;
 
-    if (mq('4xl') || mq('xxxl')) {
+    if (mq.media('4xl') || mq.media('xxxl')) {
       platform = Platform.DESKTOP_XL;
-    } else if (mq('xxl') || mq('xl') || mq('lg')) {
+    } else if (mq.media('xxl') || mq.media('xl') || mq.media('lg')) {
       platform = Platform.DESKTOP;
-    } else if (mq('md') || mq('sm')) {
+    } else if (mq.media('md') || mq.media('sm')) {
       platform = Platform.TABLET;
     } else {
       platform = Platform.MOBILE;

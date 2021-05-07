@@ -6,25 +6,22 @@
 */
 
 import gsap from 'gsap';
+import Controller from './controller';
 
-interface Subscriber {
-  die: boolean,
-  willRender: boolean,
-  update(): boolean,
-  render(): void
+export interface AnimationSubscriber {
+  die?: boolean,
+  willRender?: boolean,
+  update: () => boolean,
+  render?: (() => void) | null
 }
 
-class AnimationController {
+class AnimationController implements Controller {
 
-  subscribers: Subscriber[] = []; // objects assigned via set() or one() subscribed to update() & render()
-
-  // initialize
+  subscribers: AnimationSubscriber[] = []; // objects assigned via set() or one() subscribed to update() & render()
 
   initialize() {
     this.start();
   }
-
-  //
 
   loop() {
     this.update();
@@ -35,21 +32,21 @@ class AnimationController {
 
   update() {
     for (let i = 0, l = this.subscribers.length; i < l; ++i) {
-      const subscriber: Subscriber = this.subscribers[i];
-      if (subscriber && subscriber.update()) subscriber.willRender = true;
+      const subscriber: AnimationSubscriber = this.subscribers[i];
+      if (subscriber && subscriber.update() && subscriber.render) subscriber.willRender = true;
     }
   }
 
   // render (write cycle)
 
   render() {
-    const deadList: Subscriber[] = [];
+    const deadList: AnimationSubscriber[] = [];
 
     for (let i = 0, l = this.subscribers.length; i < l; ++i) {
       const subscriber = this.subscribers[i];
       if (subscriber) {
         // subscribers flagged to render, render now
-        if (subscriber.willRender) {
+        if (subscriber.willRender && subscriber.render) {
           subscriber.willRender = false;
           subscriber.render();
         }
@@ -61,9 +58,9 @@ class AnimationController {
 
     // remove dead subscribers from array
     for (let i = 0; i < deadList.length; i++) {
-      const subscriber: Subscriber = deadList[i];
+      const subscriber: AnimationSubscriber = deadList[i];
       const index: number = this.subscribers.indexOf(subscriber);
-      this.clear(index);
+      this.clearByIndex(index);
     }
   }
 
@@ -83,29 +80,40 @@ class AnimationController {
 
   // add / remove subscribers
 
-  set = (obj) => {
-    obj.willRender = false;
-    this.subscribers.push(obj);
-    return this.subscribers.length - 1;
+  set = (subscriber: AnimationSubscriber): AnimationSubscriber => {
+    subscriber.willRender = false;
+    this.subscribers.push(subscriber);
+    return subscriber;
   }
 
-  clear = (index) => {
+  clear = (subscriber: AnimationSubscriber) => {
+    for (let i = 0; i < this.subscribers.length; i++) {
+      const curSubscriber = this.subscribers[i];
+      if (subscriber === curSubscriber) {
+        this.subscribers.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  clearByIndex = (index: number) => {
     this.subscribers.splice(index, 1);
   }
 
   // subscribe new object for only one tick cycle
 
-  one = (obj) => {
-    const index = this.set(obj);
+  one = (subscriber: AnimationSubscriber) => {
+    const index = this.set(subscriber);
     this.subscribers[index].die = true;
   }
 
-  renderOne = (callback) => {
-    const index = this.set({
+  renderOne = (callback: () => void) => {
+    const tempSubscriber: AnimationSubscriber = {
       update: () => true,
       render: callback,
-    });
-    this.subscribers[index].die = true;
+      die: true,
+    };
+    this.set(tempSubscriber);
   }
 
 }

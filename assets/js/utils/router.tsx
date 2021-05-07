@@ -1,5 +1,3 @@
-import AssetController from '../controllers/assets';
-
 interface Redirects {
   [from: string]: string
 }
@@ -22,7 +20,6 @@ class Router {
 
   constructor() {
     this.addEventListeners();
-    AssetController.require();
   }
 
   parse(path: string) {

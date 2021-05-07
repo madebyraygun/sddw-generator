@@ -1,3 +1,8 @@
+import AssetsController from './controllers/assets';
+import AnimationController from './controllers/animation';
+import CursorController from './controllers/cursor';
+import ResizeController from './controllers/resize';
+
 import Router from './utils/router';
 
 import CONFIG from '../../config.json';
@@ -42,6 +47,13 @@ const renderPage = (page: Node | string) => {
   }
 };
 
+const initializeControllers = () => {
+  AssetsController.initialize();
+  AnimationController.initialize();
+  CursorController.initialize();
+  ResizeController.initialize();
+};
+
 // require all JSX files for proper linting
 requirePages(require.context('../../pages/', true, /\.tsx$/));
 requireComponents(require.context('../../components/', true, /\.tsx$/));
@@ -67,4 +79,5 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     Router.start(routing);
   }
+  initializeControllers();
 });
