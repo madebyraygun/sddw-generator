@@ -1,6 +1,6 @@
 import { Characters, Footers } from '../../../components/types/assets';
 
-class AssetController {
+class AssetsController {
 
   assets: {
     [theme: string]: {
@@ -63,4 +63,4 @@ class AssetController {
 
 }
 
-export default new AssetController();
+export default new AssetsController();

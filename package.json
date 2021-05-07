@@ -27,6 +27,7 @@
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-typescript": "^7.13.0",
+    "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/webpack-env": "^1.16.0",
@@ -52,6 +53,7 @@
     "node-watch": "^0.7.1",
     "ping": "^0.4.0",
     "postcss-loader": "^5.2.0",
+    "resize-observer-polyfill": "^1.5.1",
     "rimraf": "^3.0.2",
     "sass-loader": "^11.0.1",
     "serve": "^11.3.2",
@@ -65,5 +67,7 @@
     "webpack-cli": "^4.6.0",
     "webpack-dev-server": "^3.11.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "gsap": "file:gsap-bonus.tgz"
+  }
 }

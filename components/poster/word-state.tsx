@@ -1,7 +1,7 @@
 import Theme from '../themes/theme';
 import CharacterState from './character-state';
 import PosterState from './poster-state';
-import AssetController from '../../assets/js/controllers/assets';
+import AssetsController from '../../assets/js/controllers/assets';
 import PxToRem from '../../assets/js/utils/pxToRem';
 
 class WordState {
@@ -210,7 +210,7 @@ class WordState {
     const $word: HTMLElement = document.createElement('figure');
 
     for (const character of this.characters) {
-      const svgCharacter = AssetController.getCharacter(character.glyph, character.variationIndex);
+      const svgCharacter = AssetsController.getCharacter(character.glyph, character.variationIndex);
       const [width, height] = svgCharacter.dimension;
       const phraseHeight = 100;
       $word.appendChild(

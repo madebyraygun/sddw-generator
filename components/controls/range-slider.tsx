@@ -6,6 +6,39 @@ interface SliderProps extends CustomProps {
   value?: number
 }
 
+interface Reference {
+  el: HTMLElement,
+  inputRange?: HTMLInputElement | null
+}
+
+class RangeSliderElement extends HTMLElement {
+
+  static selector = 'range-slider';
+
+  ref: Reference = {};
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.ref.el = this;
+    this.ref.inputRange = this.ref.el.querySelector('input[type="range"]') as HTMLInputElement ?? null;
+    if (this.ref.inputRange) {
+      this.ref.inputRange.addEventListener('change', (e) => {
+        console.log('change', this.ref.inputRange.value);
+      });
+    }
+  }
+
+}
+
+// connect markup to javascript class -------------------------------------- //
+
+if (!window.customElements.get(RangeSliderElement.selector)) {
+  window.customElements.define(RangeSliderElement.selector, RangeSliderElement);
+}
+
 const RangeSlider: FC<SliderProps> = ({
   className, dataName, name, children, value = 50
 }) => (

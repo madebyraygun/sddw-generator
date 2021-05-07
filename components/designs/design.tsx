@@ -4,7 +4,7 @@
     Design is a template to translate Poster data into a specific look.
 */
 
-import AssetController from '../../assets/js/controllers/assets';
+import AssetsController from '../../assets/js/controllers/assets';
 import PosterState from '../poster/poster-state';
 import WordState from '../poster/word-state';
 import Theme from '../themes/theme';
@@ -48,7 +48,7 @@ class Design {
 
     for (let i = 0; i < word.characters.length; i++) {
       const character = word.characters[i];
-      const svgCharacter = AssetController.getCharacter(character.glyph, character.variationIndex);
+      const svgCharacter = AssetsController.getCharacter(character.glyph, character.variationIndex);
       const [width, height] = svgCharacter.dimension;
       const factor = wordHeight / height;
       const newWidth = width * factor;
@@ -143,7 +143,7 @@ class Design {
 
     // generate footer
 
-    const data = AssetController.getFooter('template1.tsx', this.theme.slug);
+    const data = AssetsController.getFooter('template1.tsx', this.theme.slug);
     const [width, height] = data.dimension;
     const footerWidth = this.poster.width;
     const factor = footerWidth / width;
