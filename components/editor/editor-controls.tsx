@@ -6,11 +6,10 @@ import Button from '../buttons/button';
 import ButtonToggle from '../buttons/toggle';
 import RangeSlider from '../controls/range-slider';
 
-import SVGDsgnWknd from '../../assets/vectors/dsgn-wknd';
-
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
 import EditorView from './editor-view';
+import SvgAsset from '../media/svg-asset';
 
 interface Reference {
   generate?: HTMLInputElement | null,
@@ -184,12 +183,27 @@ const EditorControls: FC = () => (
     <EditorView className={styles['editor-controls__view-inputs-primary']}>
       <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
       <div className={styles['editor-controls__logo']}>
-        <figure>
-          <SVGDsgnWknd />
-        </figure>
+        <SvgAsset svgId="dsgn-wknd" svgType="logo" />
       </div>
-      <p>Type your name and click a letter to pick the design you like.</p>
+      <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
+      <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
+      <div className={styles['editor-controls__input-placeholder']} data-input-placeholder>
+        <span className="h1">Your Name</span>
+      </div>
       <div className={styles['editor-controls__output']} data-output></div>
+      <div className={styles['editor-controls__buttons-wrapper']}>
+        <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
+      </div>
+    </EditorView>
+    <EditorView className= {styles['editor-controls__view-inputs-poster']}>
+      <Button className={styles['editor-controls__button-restart']}>Restart</Button>
+      <div className={styles['editor-controls__poster-column']}>
+        <div className={styles['editor-controls__poster']} data-poster><svg viewBox="0 0 1350 1800"></svg></div>
+        <RangeSlider className={styles['editor_controls__slider']} name='poster-scale'>Adjust</RangeSlider>
+      </div>
+      <Button className={styles['editor-controls__button-finish']}>Finish</Button>
+
+      {/* controls */}
       <div className={styles['editor-controls__buttons-wrapper']}>
         <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
         <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
@@ -199,14 +213,7 @@ const EditorControls: FC = () => (
         <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
       </div>
       <button className={styles['editor-controls__clear']}>Clear</button>
-    </EditorView>
-    <EditorView className= {styles['editor-controls__view-inputs-poster']}>
-      <Button className={styles['editor-controls__button-restart']}>Restart</Button>
-      <div className={styles['editor-controls__poster-column']}>
-        <div className={styles['editor-controls__poster']} data-poster><svg viewBox="0 0 1350 1800"></svg></div>
-        <RangeSlider className={styles['editor_controls__slider']} name='poster-scale'>Adjust</RangeSlider>
-      </div>
-      <Button className={styles['editor-controls__button-finish']}>Finish</Button>
+
     </EditorView>
   </div>
 );

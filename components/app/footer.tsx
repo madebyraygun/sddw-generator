@@ -1,16 +1,11 @@
-import SVGDesignWeekLogo from '../../assets/vectors/logos/design-week';
-import SVGBasicLogo from '../../assets/vectors/logos/basic';
+import SvgAsset from '../media/svg-asset';
 
 import styles from './footer.module.scss';
 
 const Footer: FC = () => (
   <footer className={styles['footer']}>
-    <figure className={styles['footer__design-week']}>
-      <SVGDesignWeekLogo />
-    </figure>
-    <figure className={styles['footer__basic']}>
-      <SVGBasicLogo />
-    </figure>
+    <SvgAsset className={styles['footer__design-week']} svgId='design-week' svgType='logo' />
+    <SvgAsset className={styles['footer__basic']} svgId='basic' svgType='logo' />
   </footer>
 );
 

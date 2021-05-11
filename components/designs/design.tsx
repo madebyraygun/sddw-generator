@@ -143,7 +143,7 @@ class Design {
 
     // generate footer
 
-    const data = AssetsController.getFooter('template1.tsx', this.theme.slug);
+    const data = AssetsController.getFooter('template1', this.theme.slug);
     const [width, height] = data.dimension;
     const footerWidth = this.poster.width;
     const factor = footerWidth / width;
@@ -151,7 +151,7 @@ class Design {
 
     const footer = (
       <g transform={`translate(0 ${this.poster.height - footerHeight}) scale(${factor})`} data-footer>
-        {[...data.paths].map((path, index) => {
+        {[...data.children].map((path, index) => {
           const pathD = path.getAttribute('d');
           const pathFill = path.getAttribute('fill');
           const pathWidth = path.getAttribute('width');

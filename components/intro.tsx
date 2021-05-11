@@ -1,14 +1,13 @@
 import Button from './buttons/button';
 
-import SVGDsgnWkndBig from '../assets/vectors/dsgn-wknd-big';
-
 import styles from './intro.module.scss';
+import SvgAsset from './media/svg-asset';
 
 const Intro: FC = () => (
-  <div element="intro-element" className={styles['intro']}>
+  <div className={styles['intro']}>
     <div className={styles['intro__logo']}>
       <figure>
-        <SVGDsgnWkndBig/>
+        <SvgAsset svgId='dsgn-wknd-big' svgType='logo' />
         <p>Design a poster or generate your logo. Let’s be part of the SDDW community.</p>
       </figure>
     </div>

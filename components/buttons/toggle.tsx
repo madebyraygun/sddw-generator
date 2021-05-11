@@ -43,7 +43,7 @@ export class ButtonToggleElement extends HTMLElement {
 
 }
 
-// connect markup to javascript class -------------------------------------- //
+// connect to functional component -------------------------------------- //
 
 if (!window.customElements.get(ButtonToggleElement.selector)) {
   window.customElements.define(ButtonToggleElement.selector, ButtonToggleElement);

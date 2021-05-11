@@ -1,4 +1,4 @@
-import { Characters, Footers } from '../../../components/types/assets';
+import { Character, Characters, InlineSVG, InlineSVGs } from '../../../components/types/assets';
 import Controller from './controller';
 
 class AssetsController implements Controller {
@@ -6,13 +6,23 @@ class AssetsController implements Controller {
   assets: {
     [theme: string]: {
       characters: Characters,
-      footers: Footers,
+      footers: InlineSVGs,
+      icons: InlineSVGs,
+      logos: InlineSVGs
     }
   } = {
     default: {
       characters: {},
       footers: {},
+      icons: {},
+      logos: {}
     }
+  };
+
+  state: {
+    theme: string
+  } = {
+    theme: 'default'
   };
 
   initialize() {
@@ -22,10 +32,14 @@ class AssetsController implements Controller {
   require() {
     // default theme
     this.loadCharacters(require.context('../../vectors/characters/default/', true, /\.tsx$/));
-    this.loadFooters(require.context('../../vectors/footers/default/', true, /\.tsx$/));
+    this.loadInlineSVGs(require.context('../../vectors/footers/default/', true, /\.tsx$/), 'footers');
+    this.loadInlineSVGs(require.context('../../vectors/icons/default/', true, /\.tsx$/), 'icons');
+    this.loadInlineSVGs(require.context('../../vectors/logos/default/', true, /\.tsx$/), 'logos');
+    // this.loadInlineSVGs(require.context('../../vectors/logos/2021/', true, /\.tsx$/), 'logos', '2021');
   }
 
-  loadCharacters(required, design = 'default') {
+  loadCharacters(required, themeSlug?: string | null) {
+    const theme = themeSlug || this.state.theme;
     required.keys().map((path: string) => {
       const character = path.split('/')[1].toLowerCase();
       const { default: SvgCharacter } = required(path);
@@ -33,8 +47,8 @@ class AssetsController implements Controller {
       const paths = svg.querySelectorAll('path');
       const [,, width, height] = svg.getAttribute('viewBox').split(' ');
       const dimension = [parseFloat(width), parseFloat(height)];
-      if (!this.assets[design].characters[character]) this.assets[design].characters[character] = [];
-      this.assets[design].characters[character].push({
+      if (!this.assets[theme].characters[character]) this.assets[theme].characters[character] = [];
+      this.assets[theme].characters[character].push({
         svg,
         paths,
         dimension
@@ -42,28 +56,57 @@ class AssetsController implements Controller {
     });
   }
 
-  loadFooters(required, design = 'default') {
+  loadInlineSVGs(required, category:string, themeSlug?: string | null) {
+    const theme = themeSlug || this.state.theme;
     required.keys().map((path: string) => {
-      const footer = path.split('/')[1].toLowerCase();
-      const { default: SvgFooter } = required(path);
-      const svg = SvgFooter({});
-      const paths = svg.querySelectorAll('path, rect, circle');
+      const [svgName] = path.split('/')[1].toLowerCase().split('.tsx');
+      const { default: SvgAsset } = required(path);
+      const svg = SvgAsset({});
+      const children = svg.querySelectorAll('path, rect, circle');
       const [,, width, height] = svg.getAttribute('viewBox').split(' ');
       const dimension = [parseFloat(width), parseFloat(height)];
-      this.assets[design].footers[footer] = {
+      this.assets[theme][category][svgName] = {
         svg,
-        paths,
+        children: children,
         dimension
       };
     });
   }
 
-  getCharacter(id: string, variationIndex = 0, themeSlug = 'default') {
-    return this.assets[themeSlug].characters[id][variationIndex];
+  getCharacter(id: string, variationIndex = 0, themeSlug?: string | null): Character {
+    const theme = themeSlug || this.state.theme;
+    return this.assets[theme].characters[id][variationIndex];
   }
 
-  getFooter(id: string, themeSlug = 'default') {
-    return this.assets[themeSlug].footers[id];
+  getAsset(type: string, id: string, themeSlug?: string | null): InlineSVG {
+    const theme = themeSlug || this.state.theme;
+    const typePlural = ['footer', 'icon', 'logo'].indexOf(type) >= 0 ? type + 's' : type;
+    const asset: InlineSVG = this.assets[theme][typePlural][id];
+    if (!asset) {
+      console.error(`Cannot find asset id "${id}", type "${type}", theme "${themeSlug}"`);
+      return null;
+    }
+    return asset;
+  }
+
+  getFooter(id: string, themeSlug?: string | null): InlineSVG {
+    return this.getAsset('footer', id, themeSlug);
+  }
+
+  getIcon(id: string, themeSlug?: string | null): InlineSVG {
+    return this.getAsset('icon', id, themeSlug);
+  }
+
+  getLogo(id: string, themeSlug?: string | null): InlineSVG {
+    return this.getAsset('logo', id, themeSlug);
+  }
+
+  set theme(id: string) {
+    this.state.theme = id;
+  }
+
+  get theme(): string {
+    return this.state.theme;
   }
 
 }

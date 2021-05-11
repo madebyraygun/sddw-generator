@@ -8,12 +8,18 @@ export interface Characters {
   [character: string]: Array<Character>
 }
 
-export interface Footer {
+export interface InlineSVG {
+  svg: SVGElement | null,
+  children: SVGElement[],
+  dimension: number[]
+}
+
+export interface Icon {
   svg: SVGElement | null,
   paths: SVGPathElement[],
   dimension: number[]
 }
 
-export interface Footers {
-  [footer: string]: Footer
+export interface InlineSVGs {
+  [name: string]: InlineSVG
 }

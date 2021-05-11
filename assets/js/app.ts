@@ -48,11 +48,13 @@ const renderPage = (page: Node | string) => {
 };
 
 const initializeControllers = () => {
-  AssetsController.initialize();
   AnimationController.initialize();
   CursorController.initialize();
   ResizeController.initialize();
 };
+
+// fetch assets
+AssetsController.initialize();
 
 // require all JSX files for proper linting
 requirePages(require.context('../../pages/', true, /\.tsx$/));
