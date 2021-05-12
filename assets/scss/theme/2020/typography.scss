@@ -1,0 +1,74 @@
+@import '../mixins/font-face';
+
+@include font-face('Roboto Mono', '../fonts/RobotoMono-Regular', 200);
+@include font-face('Roboto Mono', '../fonts/RobotoMono-Medium', 400);
+@include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Bold', 800);
+@include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Black', 900);
+
+:root {
+  // font family
+  --font-family-roboto: 'Roboto Mono';
+  --font-family-sharp: 'Sharp Sans Display No.2';
+
+  // font size
+  --font-size-h1: 4.2rem;
+  --font-size-h2: 3.6rem;
+  --font-size-h3: 2.4rem;
+  --font-size-h4: 2rem;
+  --font-size-h5: 2rem;
+  --font-size-h6: 1.6rem;
+
+  --font-size-body: 1.4rem;
+
+  @include mq('desktop') {
+    --font-size-h1: 7.4rem;
+    --font-size-h2: 6.4rem;
+    --font-size-h3: 4.4rem;
+    --font-size-h4: 3.8rem;
+    --font-size-h5: 2.4rem;
+    --font-size-h6: 1.8rem;
+
+    --font-size-body: 1.6rem;
+  }
+
+  // line height
+  --line-height-h1: 1.1;
+  --line-height-h2: 1;
+  --line-height-h3: 1.34;
+  --line-height-h4: 1.2;
+  --line-height-h5: 1.1;
+  --line-height-h6: 1.25;
+
+  --line-height-body: 1.75;
+
+  @include mq('desktop') {
+    --line-height-h1: 1.05;
+    --line-height-h2: 1.05;
+    --line-height-h3: 1.1;
+    --line-height-h4: 1.15;
+    --line-height-h5: 1;
+    --line-height-h6: 1.1;
+
+    --line-height-body: 1.75;
+  }
+
+  // font weight
+  --font-weight-body: 200;
+
+  // letter spacing
+  --letter-spacing-h1: 0.1rem;
+  --letter-spacing-h2: 0.1rem;
+  --letter-spacing-h3: 0.1rem;
+  --letter-spacing-h4: 0.1rem;
+  --letter-spacing-h5: 0.1rem;
+  --letter-spacing-h6: 0.1rem;
+
+  @include mq('desktop') {
+    --letter-spacing-h1: 0.2rem;
+    --letter-spacing-h2: 0.1rem;
+    --letter-spacing-h3: 0.15rem;
+    --letter-spacing-h4: 0.1rem;
+    --letter-spacing-h5: 0.1rem;
+    --letter-spacing-h6: 0.1rem;
+  }
+}

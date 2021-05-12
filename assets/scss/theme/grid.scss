@@ -1,4 +1,4 @@
-@import '../mixins/media-query';
+@import '../mixins/mq';
 
 :root {
   --grid-width: 100vw;
@@ -6,7 +6,7 @@
   --grid-padding: 2rem;
   --grid-gutter: 2rem;
 
-  @include mq('medium') {
+  @include mq('desktop') {
     --grid-column-count: 12;
     --grid-padding: 4rem;
   }

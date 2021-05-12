@@ -1,19 +1,19 @@
 @import './theme/index';
 
 @import
-  './mixins/media-query',
+  './mixins/mq',
   './mixins/typography';
 
 html {
   font-size: 62.5%;
 
-  @include mq('large') {
+  @include mq('desktop-xl') {
     font-size: 0.6945vw;
   }
 }
 
 body {
-  @include body;
+  @include text-p();
   background-color: var(--dark);
   color: var(--bright);
 }

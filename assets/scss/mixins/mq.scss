@@ -1,0 +1,15 @@
+@import '../theme/breakpoints';
+
+@mixin mq($size, $type: min) {
+  @if map_has_key($breakpoints, $size) {
+    $size: map_get($breakpoints, $size);
+
+    @if $type == max {
+      $size: $size - 0.1rem;
+    }
+
+    @media only screen and (#{$type}-width: $size) {
+      @content;
+    }
+  }
+}

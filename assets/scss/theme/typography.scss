@@ -1,8 +1,12 @@
-@import '../mixins/font-face';
+@import
+  '../mixins/font-face',
+  '../mixins/mq',
+  '../mixins/typography';
 
-@include font-face('Roboto Mono', '../fonts/RobotoMono-Regular', 200);
-@include font-face('Roboto Mono', '../fonts/RobotoMono-Medium', 400);
-@include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Bold', 800);
+@include font-face('Roboto Mono', '../fonts/RobotoMono-Regular', 400);
+@include font-face('Roboto Mono', '../fonts/RobotoMono-Medium', 500);
+@include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Bold', 700);
+@include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDispNo2-Extrabold', 800);
 @include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Black', 900);
 
 :root {
@@ -10,7 +14,14 @@
   --font-family-roboto: 'Roboto Mono';
   --font-family-sharp: 'Sharp Sans Display No.2';
 
-  // font size
+  // font weight
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+  --font-weight-black: 900;
+
+  // headings
   --font-size-h1: 4.2rem;
   --font-size-h2: 3.6rem;
   --font-size-h3: 2.4rem;
@@ -18,17 +29,13 @@
   --font-size-h5: 2rem;
   --font-size-h6: 1.6rem;
 
-  --font-size-body: 1.4rem;
-
-  @include mq('medium') {
+  @include mq('desktop') {
     --font-size-h1: 7.4rem;
     --font-size-h2: 6.4rem;
     --font-size-h3: 4.4rem;
     --font-size-h4: 3.8rem;
     --font-size-h5: 2.4rem;
     --font-size-h6: 1.8rem;
-
-    --font-size-body: 1.6rem;
   }
 
   // line height
@@ -39,21 +46,14 @@
   --line-height-h5: 1.1;
   --line-height-h6: 1.25;
 
-  --line-height-body: 1.75;
-
-  @include mq('medium') {
+  @include mq('desktop') {
     --line-height-h1: 1.05;
     --line-height-h2: 1.05;
     --line-height-h3: 1.1;
     --line-height-h4: 1.15;
     --line-height-h5: 1;
     --line-height-h6: 1.1;
-
-    --line-height-body: 1.75;
   }
-
-  // font weight
-  --font-weight-body: 200;
 
   // letter spacing
   --letter-spacing-h1: 0.1rem;
@@ -63,7 +63,7 @@
   --letter-spacing-h5: 0.1rem;
   --letter-spacing-h6: 0.1rem;
 
-  @include mq('medium') {
+  @include mq('desktop') {
     --letter-spacing-h1: 0.2rem;
     --letter-spacing-h2: 0.1rem;
     --letter-spacing-h3: 0.15rem;
@@ -71,4 +71,76 @@
     --letter-spacing-h5: 0.1rem;
     --letter-spacing-h6: 0.1rem;
   }
+
+  // body
+
+  --font-size-p: 1.4rem;
+  --line-height-p: 1.75;
+  --font-weight-p: 200;
+
+  @include mq('desktop') {
+    --font-size-p: 1.6rem;
+    --line-height-p: 1.75;
+  }
+
+  // buttons
+
+  --font-size-button: 1.1rem;
+  --font-family-button: var(--font-family-sharp);
+  --font-weight-button: var(--font-weight-bold);
+
+  @include mq('desktop') {
+    --font-size-button: 1.6rem;
+  }
 }
+
+h1,
+.h1 {
+  @include h1();
+}
+
+h2,
+.h2 {
+  @include h2();
+}
+
+h3,
+.h3 {
+  @include h3();
+}
+
+h4,
+.h4 {
+  @include h4();
+}
+
+h5,
+.h5 {
+  @include h5();
+}
+
+h6,
+.h6 {
+  @include h6();
+}
+
+// body copy (p),
+// generic links
+
+p,
+p > a,
+.text-p,
+.text-p > a {
+  @include text-p();
+  text-decoration: none;
+  color: inherit;
+
+  strong {
+    font-weight: var(--font-weight-extra-bold);
+  }
+}
+
+button {
+  @include text-button();
+}
+

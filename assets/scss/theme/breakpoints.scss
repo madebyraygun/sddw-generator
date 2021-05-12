@@ -1,0 +1,13 @@
+/* stylelint-disable unit-allowed-list */
+
+// used with mixins/mq.scss
+$breakpoints: (
+  'mobile': 1px,
+  'mobile-h': 48px,
+  'tablet': 768px,
+  'desktop': 1024px,
+  'desktop-lg': 1280px,
+  'desktop-xl': 1600px,
+  'desktop-xxl': 1920px,
+  'desktop-xxxl': 2560px,
+);
