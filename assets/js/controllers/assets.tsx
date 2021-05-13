@@ -37,26 +37,29 @@ class AssetsController implements Controller {
     this.loadInlineSVGs(require.context('../../vectors/footers/default/', true, /\.tsx$/), 'footers');
     this.loadInlineSVGs(require.context('../../vectors/icons/default/', true, /\.tsx$/), 'icons');
     this.loadInlineSVGs(require.context('../../vectors/logos/default/', true, /\.tsx$/), 'logos');
+
+    // 2021
     // this.loadInlineSVGs(require.context('../../vectors/logos/2021/', true, /\.tsx$/), 'logos', '2021');
   }
 
   loadCharacters(required, themeSlug?: string | null) {
     const theme = themeSlug || this.state.theme;
     required.keys().map((path: string) => {
-      const character = path.split('/')[1].toLowerCase();
+      const character = decodeURIComponent(path.split('/')[1].toLowerCase());
       const { default: SvgCharacter } = required(path);
       const svg = SvgCharacter({});
-      const paths = svg.querySelectorAll('path');
+      const children = svg.querySelectorAll('path, rect, circle');
       const [,, width, height] = svg.getAttribute('viewBox').split(' ');
       const dimension = [parseFloat(width), parseFloat(height)];
       if (this.allowedCharacters.indexOf(character) === -1) this.allowedCharacters += character;
       if (!this.assets[theme].characters[character]) this.assets[theme].characters[character] = [];
       this.assets[theme].characters[character].push({
         svg,
-        paths,
+        children: children,
         dimension
       });
     });
+    console.log(this.allowedCharacters);
   }
 
   loadInlineSVGs(required, category:string, themeSlug?: string | null) {
@@ -78,7 +81,7 @@ class AssetsController implements Controller {
 
   getCharacter(glyph: string, variationIndex = 0, themeSlug?: string | null): Character | null {
     const theme = themeSlug || this.state.theme;
-    return this.assets[theme].characters[glyph][variationIndex];
+    return this.assets[theme].characters[glyph][Math.min(variationIndex, this.assets[theme].characters[glyph].length - 1)];
   }
 
   getAsset(type: string, id: string, themeSlug?: string | null): InlineSVG {

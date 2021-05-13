@@ -56,7 +56,7 @@ class Design {
       charOffset = wordWidth - newWidth;
       wordCharacters.push(
         <g key={`char${character.variationIndex}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character>
-          {[...svgCharacter.paths].map((path, index) => {
+          {[...svgCharacter.children].map((path, index) => {
             const d = path.getAttribute('d');
             return d ? (
               <path key={index} d={d} fill={!character.variationIndex ? this.theme.colors.dark : character.colors[index]}></path>

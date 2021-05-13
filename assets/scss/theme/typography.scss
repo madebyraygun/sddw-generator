@@ -146,7 +146,6 @@
 
 // body copy
 @mixin text-p() {
-  -webkit-font-smoothing: subpixel-antialiased;
   font-family: var(--font-family-roboto);
   font-size: var(--font-size-p);
   font-weight: var(--font-weight-p);

@@ -215,7 +215,7 @@ class WordState {
       $word.appendChild(
         <figure data-character data-index={$word.children.length} style={{ width: `${PxToRem.convert(width * (phraseHeight / height))}rem`, height: `${PxToRem.convert(phraseHeight)}rem` }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
-            {[...svgCharacter.paths].map((path, index) => {
+            {[...svgCharacter.children].map((path, index) => {
               const d = path.getAttribute('d');
               return d ? (
                 <path key={index} d={d} fill={!character.variationIndex ? this.theme.bright : character.colors[index]}></path>

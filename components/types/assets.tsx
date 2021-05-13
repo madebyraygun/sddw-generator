@@ -1,6 +1,6 @@
 export interface Character {
   svg: SVGElement | null,
-  paths: SVGPathElement[],
+  children: SVGPathElement[],
   dimension: number[]
 }
 
