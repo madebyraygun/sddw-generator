@@ -7,16 +7,22 @@
   justify-content: center;
 
   &__logo {
-    width: 100%;
-    max-width: 60%;
     position: relative;
-
-    &:before {
-      padding-top: 58%;
-      content: '';
-      display: block;
-    }
+    width: 60vh;
+    height: 60vh;
   }
+
+  &__blurb {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    width: 50%;
+    left: 50%;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
   svg-asset,
   figure {
     width: 100%;
@@ -25,12 +31,12 @@
     left: 0;
     top: 0;
   }
+
   p {
-    width: 35%;
-    position: absolute;
-    bottom: 0;
-    left: 60%;
+    position: relative;
+    line-height: 1.5;
   }
+
   &__button {
     margin-top: 10vh;
   }

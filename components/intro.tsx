@@ -7,8 +7,10 @@ const Intro: FC = () => (
   <div className={styles['intro']}>
     <div className={styles['intro__logo']}>
       <figure>
-        <SvgAsset svgId='dsgn-wknd-big' svgType='logo' />
-        <p>Design a poster or generate your logo. Let’s be part of the SDDW community.</p>
+        <SvgAsset svgId='dsgn-wknd-big' svgType='logo' svgTheme='2021' />
+        <div className={styles['intro__blurb']}>
+          <p>Design a poster or generate your logo. Let’s be part of the SDDW community.</p>
+        </div>
       </figure>
     </div>
     <div className={styles['intro__button']}>

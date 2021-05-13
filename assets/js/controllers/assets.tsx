@@ -1,25 +1,24 @@
 import { Character, Characters, InlineSVG, InlineSVGs } from '../../../components/types/assets';
 import Controller from './controller';
 
+interface AssetTheme {
+  [category: string]: AssetCategory
+}
+
+interface AssetCategory {
+  characters: Characters,
+  footers: InlineSVGs,
+  icons: InlineSVGs,
+  logos: InlineSVGs
+}
+
 class AssetsController implements Controller {
 
   allowedCharacters = '';
 
   assets: {
-    [theme: string]: {
-      characters: Characters,
-      footers: InlineSVGs,
-      icons: InlineSVGs,
-      logos: InlineSVGs
-    }
-  } = {
-    default: {
-      characters: {},
-      footers: {},
-      icons: {},
-      logos: {}
-    }
-  };
+    [theme: string]: AssetTheme
+  } = {};
 
   state: {
     theme: string
@@ -39,11 +38,29 @@ class AssetsController implements Controller {
     this.loadInlineSVGs(require.context('../../vectors/logos/default/', true, /\.tsx$/), 'logos');
 
     // 2021
-    // this.loadInlineSVGs(require.context('../../vectors/logos/2021/', true, /\.tsx$/), 'logos', '2021');
+    this.loadInlineSVGs(require.context('../../vectors/logos/2021/', true, /\.tsx$/), 'logos', '2021');
+  }
+
+  checkAssets(category, themeSlug?: string | null) {
+    const theme = themeSlug || this.state.theme;
+
+    if (!this.assets[theme]) {
+      this.assets[theme] = {};
+    }
+
+    if (!this.assets[theme][category]) {
+      this.assets[theme][category] = {
+        characters: {},
+        footers: {},
+        icons: {},
+        logos: {}
+      };
+    }
   }
 
   loadCharacters(required, themeSlug?: string | null) {
     const theme = themeSlug || this.state.theme;
+    this.checkAssets('characters', themeSlug);
     required.keys().map((path: string) => {
       const character = decodeURIComponent(path.split('/')[1].toLowerCase());
       const { default: SvgCharacter } = required(path);
@@ -64,6 +81,7 @@ class AssetsController implements Controller {
 
   loadInlineSVGs(required, category:string, themeSlug?: string | null) {
     const theme = themeSlug || this.state.theme;
+    this.checkAssets(category, themeSlug);
     required.keys().map((path: string) => {
       const [svgName] = path.split('/')[1].toLowerCase().split('.tsx');
       const { default: SvgAsset } = required(path);
