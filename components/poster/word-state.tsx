@@ -66,12 +66,11 @@ class WordState {
       const character: CharacterState = characters[i];
       if (this?.characters[i] && this.characters[i].glyph !== character.glyph) {
         this.changeCharacter(character, character.variationIndex, character.glyph);
-      } else {
+      } else if (!this?.characters[i]) {
         this.addCharacter(character);
       }
     }
-
-    this.characters = [...characters];
+    this.characters.splice(characters.length);
   }
 
   // change character's symbol, colors
