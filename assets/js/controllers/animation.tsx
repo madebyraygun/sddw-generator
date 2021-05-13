@@ -103,8 +103,8 @@ class AnimationController implements Controller {
   // subscribe new object for only one tick cycle
 
   one = (subscriber: AnimationSubscriber) => {
-    const index = this.set(subscriber);
-    this.subscribers[index].die = true;
+    this.set(subscriber);
+    subscriber.die = true;
   }
 
   renderOne = (callback: () => void) => {

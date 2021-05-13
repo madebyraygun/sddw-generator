@@ -3,6 +3,8 @@ import Controller from './controller';
 
 class AssetsController implements Controller {
 
+  allowedCharacters = '';
+
   assets: {
     [theme: string]: {
       characters: Characters,
@@ -47,6 +49,7 @@ class AssetsController implements Controller {
       const paths = svg.querySelectorAll('path');
       const [,, width, height] = svg.getAttribute('viewBox').split(' ');
       const dimension = [parseFloat(width), parseFloat(height)];
+      if (this.allowedCharacters.indexOf(character) === -1) this.allowedCharacters += character;
       if (!this.assets[theme].characters[character]) this.assets[theme].characters[character] = [];
       this.assets[theme].characters[character].push({
         svg,
@@ -73,9 +76,9 @@ class AssetsController implements Controller {
     });
   }
 
-  getCharacter(id: string, variationIndex = 0, themeSlug?: string | null): Character {
+  getCharacter(glyph: string, variationIndex = 0, themeSlug?: string | null): Character | null {
     const theme = themeSlug || this.state.theme;
-    return this.assets[theme].characters[id][variationIndex];
+    return this.assets[theme].characters[glyph][variationIndex];
   }
 
   getAsset(type: string, id: string, themeSlug?: string | null): InlineSVG {

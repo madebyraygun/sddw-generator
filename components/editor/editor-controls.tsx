@@ -1,5 +1,7 @@
 
 import Editor, { CharacterCallback } from '../../assets/js/controllers/editor';
+import AssetsController from '../../assets/js/controllers/assets';
+import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
 import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
@@ -11,18 +13,26 @@ import WordState from '../poster/word-state';
 import EditorView from './editor-view';
 
 interface Reference {
+  inputBox?: HTMLElement | null,
+  inputPlaceholder?: HTMLElement | null,
+  inputPlaceholderSpan?: HTMLElement | null,
+  inputRendered?: HTMLElement | null,
+  shuffle?: HTMLInputElement | null,
   generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
-  inputPlaceholder?: HTMLElement | null,
-  inputRendered?: HTMLElement | null,
   randomizeColors?: HTMLInputElement | null,
   randomizeEachWord?: HTMLInputElement | null,
-  shuffle?: HTMLInputElement | null,
+}
+
+interface Controllers {
+  resize?: ResizeSubscriber
 }
 
 export class EditorControlsElement extends HTMLElement {
 
   static selector = 'editor-controls-element';
+
+  controllers:Controllers = {};
 
   ref: Reference = {};
 
@@ -35,12 +45,20 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   cleanValue(value: string) {
-    return value.replace(/[^A-Za-z&@#']/g, '').toLowerCase();
+    let cleanValue = '';
+    for (let i = 0; i < value.length; i++) {
+      const glyph = value[i].toLowerCase();
+      if (AssetsController.allowedCharacters.indexOf(glyph) >= 0) {
+        cleanValue += glyph;
+      }
+    }
+    return cleanValue;
   }
 
   renderInputCharacters = () => {
     if (this.ref.inputRendered) {
       Editor.renderWord(this.inputWord, this.ref.inputRendered, this.addPhraseListeners);
+      this.resizeInputBox();
     }
   }
 
@@ -148,7 +166,10 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.input.addEventListener('click', this.#onInputClick);
     }
 
-    this.ref.inputPlaceholder = this.querySelector<HTMLInputElement>('[data-input-placeholder]');
+    this.ref.inputBox = this.querySelector<HTMLElement>('[data-input-box]');
+
+    this.ref.inputPlaceholder = this.querySelector<HTMLElement>('[data-input-placeholder]');
+    this.ref.inputPlaceholderSpan = this.ref.inputPlaceholder?.children[0] as HTMLElement;
 
     this.ref.inputRendered = this.querySelector<HTMLInputElement>('[data-input-rendered]');
     if (this.ref.inputRendered) {
@@ -174,6 +195,31 @@ export class EditorControlsElement extends HTMLElement {
     if (this.ref.shuffle) {
       this.ref.shuffle.addEventListener('click', this.#onShuffleClick);
     }
+
+    this.controllers.resize = ResizeController.set({
+      update: this.#onResizeUpdate,
+      render: this.#onResizeRender
+    });
+  }
+
+  #onResizeUpdate = ():boolean => {
+    console.log('resize update');
+    return true;
+  }
+
+  #onResizeRender = () => {
+    console.log('resize render');
+    this.resizeInputBox();
+  }
+
+  resizeInputBox = () => {
+    if (this.ref.inputBox) {
+      const boxWidth = Math.max(this.ref.inputPlaceholderSpan?.offsetWidth ?? 0, this.ref.inputRendered?.offsetWidth ?? 0);
+      const boxPadding = ResizeController.isDesktop ? 60 : 30;
+      const boxTotalWidth = boxWidth + boxPadding * 2;
+      this.ref.inputBox.style.width = `${boxTotalWidth}px`;
+      this.ref.inputBox.style.left = `calc(50% - ${boxTotalWidth / 2}px)`;
+    }
   }
 
 }
@@ -196,7 +242,7 @@ const EditorControls: FC = () => (
         <div className={styles['editor-controls__input-placeholder-text']} data-input-placeholder>
           <span className='heading-display'>Your Name</span>
         </div>
-        <figure className={styles['editor-controls__input-placeholder-box']}></figure>
+        <figure className={styles['editor-controls__input-placeholder-box']} data-input-box></figure>
         <div className={styles['editor-controls__input-rendered']} data-input-rendered></div>
       </div>
       <div className={styles['editor-controls__buttons-wrapper']}>

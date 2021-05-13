@@ -43,9 +43,9 @@ interface States {
   platform: Platform,
 }
 
-interface Subscriber {
-  updated: boolean,
-  die: boolean,
+export interface ResizeSubscriber {
+  die?: boolean,
+  willRender?: boolean,
   update(): boolean,
   render(): void
 }
@@ -79,7 +79,7 @@ class ResizeController implements Controller {
     platform: Platform.DESKTOP,
   };
 
-  subscribers: Subscriber[] = [];
+  subscribers: ResizeSubscriber[] = [];
 
   initialize() {
     this.throttled.measure = lodash.throttle(
@@ -157,21 +157,31 @@ class ResizeController implements Controller {
 
   // add / remove subscribers
 
-  set(subscriber: Subscriber): number {
-    subscriber.updated = false;
+  set = (subscriber: ResizeSubscriber): ResizeSubscriber => {
+    subscriber.willRender = false;
     this.subscribers.push(subscriber);
-    return this.subscribers.length - 1;
+    return subscriber;
   }
 
-  clear(index: number) {
+  clear = (subscriber: ResizeSubscriber) => {
+    for (let i = 0; i < this.subscribers.length; i++) {
+      const curSubscriber = this.subscribers[i];
+      if (subscriber === curSubscriber) {
+        this.subscribers.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  clearByIndex = (index: number) => {
     this.subscribers.splice(index, 1);
   }
 
   // subscribe new object for only one tick cycle
 
-  one(subscriber: Subscriber) {
-    const index = this.set(subscriber);
-    this.subscribers[index].die = true;
+  one(subscriber: ResizeSubscriber) {
+    this.set(subscriber);
+    subscriber.die = true;
   }
 
   // update (read cycle)
@@ -182,20 +192,20 @@ class ResizeController implements Controller {
 
     for (let i = 0, l = this.subscribers.length; i < l; ++i) {
       const subscriber = this.subscribers[i];
-      if (subscriber && subscriber.update()) subscriber.updated = true;
+      if (subscriber && subscriber.update()) subscriber.willRender = true;
     }
   }
 
   // render (write cycle)
 
   render() {
-    const deadList: Subscriber[] = [];
+    const deadList: ResizeSubscriber[] = [];
 
     for (let i = 0, l = this.subscribers.length; i < l; ++i) {
       const subscriber = this.subscribers[i];
       // will only fire if subscriber has returned true from previous update() cycle
-      if (subscriber && subscriber.updated) {
-        subscriber.updated = false;
+      if (subscriber && subscriber.willRender) {
+        subscriber.willRender = false;
         subscriber.render();
         if (subscriber.die) deadList.push(subscriber);
       }
@@ -203,9 +213,9 @@ class ResizeController implements Controller {
 
     // remove dead subscribers from array
     for (let i = 0; i < deadList.length; i++) {
-      const subscriber: Subscriber = deadList[i];
+      const subscriber: ResizeSubscriber = deadList[i];
       const index: number = this.subscribers.indexOf(subscriber);
-      this.clear(index);
+      this.clearByIndex(index);
     }
   }
 
@@ -214,11 +224,11 @@ class ResizeController implements Controller {
   get platform() {
     let platform = Platform.DESKTOP;
 
-    if (mq.media('4xl') || mq.media('xxxl')) {
+    if (mq.media('desktop-lg') || mq.media('desktop-xxxl')) {
       platform = Platform.DESKTOP_XL;
-    } else if (mq.media('xxl') || mq.media('xl') || mq.media('lg')) {
+    } else if (mq.media('desktop-xl') || mq.media('desktop-lg') || mq.media('desktop')) {
       platform = Platform.DESKTOP;
-    } else if (mq.media('md') || mq.media('sm')) {
+    } else if (mq.media('tablet') || mq.media('mobile-h')) {
       platform = Platform.TABLET;
     } else {
       platform = Platform.MOBILE;
