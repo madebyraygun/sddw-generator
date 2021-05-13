@@ -153,6 +153,14 @@
   line-height: var(--line-height-p);
 }
 
+@mixin text-p-small() {
+  font-family: var(--font-family-roboto);
+  font-size: var(--font-size-p-small);
+  font-weight: var(--font-weight-p-small);
+  letter-spacing: var(--letter-spacing-p-small);
+  line-height: var(--line-height-p-small);
+}
+
 // buttons
 @mixin text-button() {
   font-family: var(--font-family-button);
@@ -219,12 +227,32 @@
   .text-p,
   .text-p > a {
     @include text-p();
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
 
     strong {
       font-weight: var(--font-weight-extra-bold);
     }
+  }
+
+  p > a,
+  .text-p > a {
+    text-decoration: underline;
+  }
+
+  .text-p-sm,
+  .text-p-sm > a {
+    @include text-p-small();
+    text-decoration: none;
+    color: inherit;
+
+    strong {
+      font-weight: var(--font-weight-p-small);
+    }
+  }
+
+  .text-p-sm > a {
+    text-decoration: underline;
   }
 
   button {
