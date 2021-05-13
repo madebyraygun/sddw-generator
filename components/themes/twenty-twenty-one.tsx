@@ -30,6 +30,11 @@ class TwentyTwentyOne extends Theme {
     isWordWrap: true,
   };
 
+  constructor() {
+    super();
+    this.config.inputRenderedHeight = 117;
+  }
+
   get isLineClamped():boolean {
     return this.flags.isLineClamped;
   }

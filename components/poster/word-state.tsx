@@ -212,7 +212,7 @@ class WordState {
     for (const character of this.characters) {
       const svgCharacter = AssetsController.getCharacter(character.glyph, character.variationIndex);
       const [width, height] = svgCharacter.dimension;
-      const phraseHeight = 100;
+      const phraseHeight = this.theme.inputRenderedHeight;
       $word.appendChild(
         <figure data-character data-index={$word.children.length} style={{ width: `${PxToRem.convert(width * (phraseHeight / height))}rem`, height: `${PxToRem.convert(phraseHeight)}rem` }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>

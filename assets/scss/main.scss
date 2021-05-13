@@ -1,8 +1,8 @@
-@import './theme/index';
-
 @import
-  './mixins/mq',
-  './mixins/typography';
+  './theme/index',
+  './theme/typography';
+
+@import './mixins/mq';
 
 html {
   font-size: 62.5%;

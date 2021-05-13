@@ -9,12 +9,12 @@ import RangeSlider from '../controls/range-slider';
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
 import EditorView from './editor-view';
-import SvgAsset from '../media/svg-asset';
 
 interface Reference {
   generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
-  output?: HTMLElement | null,
+  inputPlaceholder?: HTMLElement | null,
+  inputRendered?: HTMLElement | null,
   randomizeColors?: HTMLInputElement | null,
   randomizeEachWord?: HTMLInputElement | null,
   shuffle?: HTMLInputElement | null,
@@ -39,8 +39,8 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   renderInputCharacters = () => {
-    if (this.ref.output) {
-      Editor.renderWord(this.inputWord, this.ref.output, this.addPhraseListeners);
+    if (this.ref.inputRendered) {
+      Editor.renderWord(this.inputWord, this.ref.inputRendered, this.addPhraseListeners);
     }
   }
 
@@ -61,7 +61,7 @@ export class EditorControlsElement extends HTMLElement {
   #onCharacterClick = (e: MouseEvent) => {
     const $target: HTMLElement = e.currentTarget as HTMLElement;
     if ($target) {
-      Editor.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.output, this.#onCharacterEdit);
+      Editor.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.inputRendered, this.#onCharacterEdit);
     }
   }
 
@@ -77,6 +77,12 @@ export class EditorControlsElement extends HTMLElement {
     const target = e.currentTarget as HTMLInputElement;
     const value = this.cleanValue(target.value);
     target.value = value;
+
+    if (value && this.ref.inputPlaceholder) {
+      this.ref.inputPlaceholder.setAttribute('data-hidden', '');
+    } else {
+      this.ref.inputPlaceholder?.removeAttribute('data-hidden');
+    }
 
     this.inputWord.feed(value);
     this.renderInputCharacters();
@@ -122,8 +128,8 @@ export class EditorControlsElement extends HTMLElement {
   // shuffle button: shuffle phrase design
   #onShuffleClick = () => {
     if (this.ref.generate) {
-      Editor.shuffleWord(this.inputWord, this.ref.output, (value) => {
-        const $phrase: HTMLElement | null = this.ref.output?.querySelector('[data-phrase]') as HTMLElement;
+      Editor.shuffleWord(this.inputWord, this.ref.inputRendered, (value) => {
+        const $phrase: HTMLElement | null = this.ref.inputRendered?.querySelector('[data-phrase]') as HTMLElement;
         if ($phrase) {
           this.addPhraseListeners($phrase);
         }
@@ -142,9 +148,11 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.input.addEventListener('click', this.#onInputClick);
     }
 
-    this.ref.output = this.querySelector<HTMLInputElement>('[data-output]');
-    if (this.ref.output) {
-      this.ref.output.addEventListener('click', this.#onOutputClick);
+    this.ref.inputPlaceholder = this.querySelector<HTMLInputElement>('[data-input-placeholder]');
+
+    this.ref.inputRendered = this.querySelector<HTMLInputElement>('[data-input-rendered]');
+    if (this.ref.inputRendered) {
+      this.ref.inputRendered.addEventListener('click', this.#onOutputClick);
     }
 
     this.ref.generate = this.querySelector<HTMLInputElement>('[data-generate]');
@@ -182,15 +190,15 @@ const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
     <EditorView className={styles['editor-controls__view-inputs-primary']}>
       <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
-      <div className={styles['editor-controls__logo']}>
-        <SvgAsset svgId="dsgn-wknd" svgType="logo" />
-      </div>
       <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
       <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
-      <div className={styles['editor-controls__input-placeholder']} data-input-placeholder>
-        <span className="h1">Your Name</span>
+      <div className={styles['editor-controls__input-placeholder']}>
+        <div className={styles['editor-controls__input-placeholder-text']} data-input-placeholder>
+          <span className='heading-display'>Your Name</span>
+        </div>
+        <figure className={styles['editor-controls__input-placeholder-box']}></figure>
+        <div className={styles['editor-controls__input-rendered']} data-input-rendered></div>
       </div>
-      <div className={styles['editor-controls__output']} data-output></div>
       <div className={styles['editor-controls__buttons-wrapper']}>
         <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
       </div>

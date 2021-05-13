@@ -1,7 +1,6 @@
 @import
   '../mixins/font-face',
-  '../mixins/mq',
-  '../mixins/typography';
+  '../mixins/mq';
 
 @include font-face('Roboto Mono', '../fonts/RobotoMono-Regular', 400);
 @include font-face('Roboto Mono', '../fonts/RobotoMono-Medium', 500);
@@ -21,9 +20,20 @@
   --font-weight-extra-bold: 800;
   --font-weight-black: 900;
 
-  // headings
+  // xl display heading
+  --font-size-heading-display: 5rem;
+  --font-family-heading-display: var(--font-family-sharp);
+  --font-weight-heading-display: var(--font-weight-black);
+  --letter-spacing-heading-display: 0.05em;
+  --line-height-heading-display: 1;
+
+  @include mq('desktop') {
+    --font-size-heading-display: 16rem;
+  }
+
+  // h1-h6 headings
   --font-size-h1: 4.2rem;
-  --font-size-h2: 3.6rem;
+  --font-size-h2: 2.8rem;
   --font-size-h3: 2.4rem;
   --font-size-h4: 2rem;
   --font-size-h5: 2rem;
@@ -31,7 +41,7 @@
 
   @include mq('desktop') {
     --font-size-h1: 7.4rem;
-    --font-size-h2: 6.4rem;
+    --font-size-h2: 4.8rem;
     --font-size-h3: 4.4rem;
     --font-size-h4: 3.8rem;
     --font-size-h5: 2.4rem;
@@ -39,108 +49,191 @@
   }
 
   // line height
-  --line-height-h1: 1.1;
+  --line-height-h1: 1;
   --line-height-h2: 1;
-  --line-height-h3: 1.34;
-  --line-height-h4: 1.2;
-  --line-height-h5: 1.1;
-  --line-height-h6: 1.25;
-
-  @include mq('desktop') {
-    --line-height-h1: 1.05;
-    --line-height-h2: 1.05;
-    --line-height-h3: 1.1;
-    --line-height-h4: 1.15;
-    --line-height-h5: 1;
-    --line-height-h6: 1.1;
-  }
+  --line-height-h3: 1;
+  --line-height-h4: 1;
+  --line-height-h5: 1;
+  --line-height-h6: 1;
 
   // letter spacing
-  --letter-spacing-h1: 0.1rem;
-  --letter-spacing-h2: 0.1rem;
-  --letter-spacing-h3: 0.1rem;
-  --letter-spacing-h4: 0.1rem;
-  --letter-spacing-h5: 0.1rem;
-  --letter-spacing-h6: 0.1rem;
-
-  @include mq('desktop') {
-    --letter-spacing-h1: 0.2rem;
-    --letter-spacing-h2: 0.1rem;
-    --letter-spacing-h3: 0.15rem;
-    --letter-spacing-h4: 0.1rem;
-    --letter-spacing-h5: 0.1rem;
-    --letter-spacing-h6: 0.1rem;
-  }
+  --letter-spacing-h1: 0.05em;
+  --letter-spacing-h2: 0.05em;
+  --letter-spacing-h3: 0.05em;
+  --letter-spacing-h4: 0.05em;
+  --letter-spacing-h5: 0.05em;
+  --letter-spacing-h6: 0.05em;
 
   // body
+  --font-size-p: 1.2rem;
+  --font-size-p-small: 1.1rem;
 
-  --font-size-p: 1.4rem;
-  --line-height-p: 1.75;
-  --font-weight-p: 200;
+  --font-family-p: var(--font-family-roboto);
+  --font-family-p-small: var(--font-family-roboto);
+
+  --font-weight-p: var(--font-weight-regular);
+  --font-weight-p-small: var(--font-weight-regular);
+
+  --letter-spacing-p: 0.05em;
+  --letter-spacing-p-small: 0.05em;
+
+  --line-height-p: 2;
+  --line-height-p-small: 2;
 
   @include mq('desktop') {
-    --font-size-p: 1.6rem;
-    --line-height-p: 1.75;
+    --font-size-p: 1.4rem;
   }
 
-  // buttons
+  // label
+  --font-size-label: 1.3rem;
+  --font-family-label: var(--font-family-sharp);
+  --font-weight-label: var(--font-weight-extra-bold);
+  --letter-spacing-label: 0.1em;
+  --line-height-label: 1;
 
+  // buttons
   --font-size-button: 1.1rem;
   --font-family-button: var(--font-family-sharp);
-  --font-weight-button: var(--font-weight-bold);
+  --font-weight-button: var(--font-weight-extra-bold);
+  --letter-spacing-button: 0.1em;
+  --line-height-button: 1;
 
   @include mq('desktop') {
     --font-size-button: 1.6rem;
   }
 }
 
-h1,
-.h1 {
-  @include h1();
+// <==[------------------------------->
+// MIXINS
+
+// heading display
+@mixin heading-display() {
+  font-size: var(--font-size-heading-display);
+  font-weight: var(--font-weight-heading-display);
+  letter-spacing: var(--letter-spacing-heading-display);
+  line-height: var(--line-height-heading-display);
+  font-family: var(--font-family-sharp);
+  text-transform: uppercase;
 }
 
-h2,
-.h2 {
-  @include h2();
+// h1-h6 headings
+@mixin heading($i) {
+  font-family: var(--font-family-sharp);
+  font-size: var(--font-size-h#{$i});
+  font-weight: var(--font-weight-extra-bold);
+  letter-spacing: var(--letter-spacing-h#{$i});
+  line-height: var(--line-height-h#{$i});
+  text-transform: uppercase;
+}
+@mixin h1() {
+  @include heading(1);
+}
+@mixin h2() {
+  @include heading(2);
+}
+@mixin h3() {
+  @include heading(3);
+}
+@mixin h4() {
+  @include heading(4);
+}
+@mixin h5() {
+  @include heading(5);
+}
+@mixin h6() {
+  @include heading(6);
 }
 
-h3,
-.h3 {
-  @include h3();
+// body copy
+@mixin text-p() {
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-family: var(--font-family-roboto);
+  font-size: var(--font-size-p);
+  font-weight: var(--font-weight-p);
+  letter-spacing: var(--letter-spacing-p);
+  line-height: var(--line-height-p);
 }
 
-h4,
-.h4 {
-  @include h4();
+// buttons
+@mixin text-button() {
+  font-family: var(--font-family-button);
+  font-size: var(--font-size-button);
+  font-weight: var(--font-weight-button);
+  letter-spacing: var(--letter-spacing-button);
+  line-height: var(--line-height-button);
+  text-transform: uppercase;
 }
 
-h5,
-.h5 {
-  @include h5();
+// labels
+@mixin text-label() {
+  font-family: var(--font-family-label);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-label);
+  letter-spacing: var(--letter-spacing-label);
+  line-height: var(--line-height-label);
+  text-transform: uppercase;
 }
 
-h6,
-.h6 {
-  @include h6();
-}
+// <==[------------------------------->
+// ASSOCIATE MIXINS WITH CLASSES
 
-// body copy (p),
-// generic links
-
-p,
-p > a,
-.text-p,
-.text-p > a {
-  @include text-p();
-  text-decoration: none;
-  color: inherit;
-
-  strong {
-    font-weight: var(--font-weight-extra-bold);
+:global {
+  .heading-display {
+    @include heading-display();
   }
-}
 
-button {
-  @include text-button();
+  h1,
+  .h1 {
+    @include h1();
+  }
+
+  h2,
+  .h2 {
+    @include h2();
+  }
+
+  h3,
+  .h3 {
+    @include h3();
+  }
+
+  h4,
+  .h4 {
+    @include h4();
+  }
+
+  h5,
+  .h5 {
+    @include h5();
+  }
+
+  h6,
+  .h6 {
+    @include h6();
+  }
+
+  // body copy (p),
+  // generic links
+
+  p,
+  p > a,
+  .text-p,
+  .text-p > a {
+    @include text-p();
+    text-decoration: none;
+    color: inherit;
+
+    strong {
+      font-weight: var(--font-weight-extra-bold);
+    }
+  }
+
+  button {
+    @include text-button();
+  }
+
+  label {
+    @include text-label();
+  }
 }
 

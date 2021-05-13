@@ -1,7 +1,6 @@
 html {
   box-sizing: border-box;
   -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: subpixel-antialiased;
   -ms-text-size-adjust: 100%;
 }
 *,
@@ -100,6 +99,7 @@ textarea {
   font: inherit;
   font-size: 100%;
   vertical-align: baseline;
+  -webkit-font-smoothing: antialiased;
 }
 article,
 aside,

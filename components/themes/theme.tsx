@@ -23,8 +23,10 @@ class Theme {
 
   config: {
     characterVariationsTotal: number,
+    inputRenderedHeight: number,
   } = {
     characterVariationsTotal: 3,
+    inputRenderedHeight: 100,
   }
 
   getShuffledColors() {
@@ -47,6 +49,10 @@ class Theme {
   // configurations
   get characterVariationsTotal():number {
     return this.config.characterVariationsTotal;
+  }
+
+  get inputRenderedHeight():number {
+    return this.config.inputRenderedHeight;
   }
 
 }
