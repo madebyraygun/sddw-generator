@@ -3,7 +3,8 @@ import { CustomProps } from '../types/props';
 import styles from './toggle.module.scss';
 
 interface Reference {
-  button?: HTMLButtonElement | null,
+  el?: HTMLElement,
+  button?: HTMLButtonElement,
 }
 
 export class ButtonCloseElement extends HTMLElement {
@@ -19,26 +20,16 @@ export class ButtonCloseElement extends HTMLElement {
   };
 
   connectedCallback() {
-    this.ref.button = this;
+    this.ref.el = this;
+
+    this.ref.button = this.ref.el?.children[0] as HTMLButtonElement;
     if (this.ref.button) {
       this.ref.button.addEventListener('click', this.#onButtonClick);
-      this.toggleButton(this.state.isToggled);
-    }
-  }
-
-  toggleButton(isToggled = false) {
-    this.state.isToggled = isToggled;
-    if (this.state.isToggled) {
-      this.ref.button?.setAttribute('data-active', true);
-      this.ref.button?.setAttribute('data-color', Math.round(Math.random() * 5 + 1).toString());
-    } else {
-      this.ref.button?.removeAttribute('data-active');
-      this.ref.button?.removeAttribute('data-color');
     }
   }
 
   #onButtonClick = () => {
-    this.toggleButton(!this.state.isToggled);
+    console.log('close');
   }
 
 }

@@ -1,7 +1,5 @@
 .range-slider {
-  display: flex;
   position: relative;
-  flex-flow: row nowrap;
 
   // c---[======================>
   // states
@@ -46,14 +44,16 @@
   // elements
 
   label {
-
+    display: block;
+    position: relative;
+    text-align: center;
   }
 
   &__combo-wrapper {
     display: flex;
     position: relative;
-    width: 20rem;
-    margin-left: 3.5rem;
+    width: 100%;
+    margin-top: 2.1rem;
     flex-flow: row nowrap;
     align-items: center;
 

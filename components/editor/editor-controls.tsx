@@ -249,7 +249,7 @@ const EditorControls: FC = () => (
         <figure className={styles['editor-controls__input-placeholder-box']} data-input-box></figure>
         <div className={styles['editor-controls__input-rendered']} data-input-rendered></div>
       </div>
-      <div className={styles['editor-controls__buttons-wrapper']}>
+      <div className={styles['editor-controls__primary-buttons-wrapper']}>
         <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
       </div>
     </EditorView>
@@ -268,12 +268,7 @@ const EditorControls: FC = () => (
         </div>
 
         <div className={styles['editor-controls__radio-background-wrapper']}>
-          <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['test', 'test2']}>Background Color</RadioSelector>
-        </div>
-
-        <div className={styles['editor-controls__buttons-wrapper']}>
-          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
-          <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+          <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['F8F9FA', '1B1C1E']}>Background Color</RadioSelector>
         </div>
 
         <div className={styles['editor-controls__options-wrapper']}>
@@ -281,7 +276,11 @@ const EditorControls: FC = () => (
           <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
         </div>
 
-        <Button className={styles['editor-controls__button-finish']}>Finish</Button>
+        <div className={styles['editor-controls__buttons-wrapper']}>
+          <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
+        </div>
+
       </div>
 
     </EditorView>

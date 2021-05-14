@@ -69,17 +69,19 @@ const RadioSelector: FC<RadioSelectorProps> = ({
     } = {};
     if (i === 0) props.checked = true;
 
+    const styleProps = `background: #${value}`;
+
     radios.push((
       <li className={styles['radio-selector__control-item']}>
         <input type="radio" id={value} name={name} value={value} {...props}></input>
-        <label htmlFor={value}>{value}</label>
+        <label htmlFor={value} style={styleProps}>{value}</label>
       </li>
     ));
   }
 
   return (
     <div element='radio-selector' className={`${className ?? ''} ${styles['radio-selector']}`} {...dataName}>
-      <label>{children}</label>
+      <span className="text-label">{children}</span>
       <div className={styles['radio-selector__controls-wrapper']}>
         <ul>
           {radios}

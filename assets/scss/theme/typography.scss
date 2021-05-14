@@ -255,11 +255,13 @@
     text-decoration: underline;
   }
 
-  button {
+  button,
+  .text-button {
     @include text-button();
   }
 
-  label {
+  label,
+  .text-label {
     @include text-label();
   }
 }

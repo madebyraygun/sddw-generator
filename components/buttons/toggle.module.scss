@@ -1,7 +1,6 @@
 .button-toggle {
   $this: &;
   width: auto;
-  height: 5rem;
   background-color: var(--dark);
   background-clip: padding-box;
   border: none;
@@ -14,10 +13,15 @@
     position: relative;
     padding-left: 6.2rem;
     line-height: 5rem;
+    text-align: left;
 
     &:focus {
       outline: 0;
     }
+  }
+
+  span {
+    line-height: 1;
   }
 
   // c---[======================>

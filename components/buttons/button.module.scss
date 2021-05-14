@@ -10,6 +10,24 @@
   display: inline-block;
   position: relative;
   font-size: 1.2rem;
+  white-space: nowrap;
+
+  // states ---------------------------------------------------------------- //
+
+  &[data-big='true'] {
+    min-width: 24rem;
+    height: 7rem;
+    padding: 0 3rem;
+    border-radius: 3.5rem;
+    border: solid 0.2rem transparent;
+    font-size: 1.6rem;
+
+    &:before {
+      margin: -0.2rem;
+    }
+  }
+
+  // elements -------------------------------------------------------------- //
 
   &:focus {
     outline: 0;
@@ -26,20 +44,5 @@
     bottom: 0;
     left: 0;
     z-index: -1;
-  }
-
-  // states
-
-  &[data-big='true'] {
-    min-width: 28rem;
-    height: 7rem;
-    padding: 0 2rem;
-    border-radius: 3.5rem;
-    border: solid 0.2rem transparent;
-    font-size: 1.6rem;
-
-    &:before {
-      margin: -0.2rem;
-    }
   }
 }

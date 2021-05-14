@@ -43,6 +43,72 @@
     flex-flow: row nowrap;
   }
 
+  // poster inputs (second)
+
+  &__button-close {
+    position: absolute;
+    top: 5rem;
+    left: auto;
+    right: 5rem;
+  }
+
+  &__controls-wrapper {
+    width: 25vw;
+    margin-left: 8.3vw;
+    border-radius: 2rem;
+    padding: 5.5rem;
+    box-shadow: inset 0rem 0rem 0rem 0.2rem var(--bright);
+
+    > * {
+      display: block;
+      margin-top: 5rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  &__ranges-wrapper {
+    range-slider {
+      display: block;
+    }
+
+    range-slider + range-slider {
+      margin-top: 3.5rem;
+    }
+  }
+
+  &__radio-background-wrapper {
+    display: block;
+    margin-top: 3.5rem;
+  }  
+
+  &__buttons-wrapper,
+  &__options-wrapper {
+    display: flex;
+    position: relative;
+    z-index: 5;
+    flex-flow: row wrap;
+    justify-content: center;
+
+    > * + * {
+      margin-top: 3.5rem;
+    }
+  }
+
+  &__options-wrapper {
+    justify-content: flex-start;
+
+    > * + * {
+      margin-top: 3.5rem;
+    }
+  }
+
+  &__button-finish {
+
+  }
+
   // primary input view (first)
 
   &__view-inputs-primary {
@@ -140,30 +206,13 @@
     }
   }
 
-  &__buttons-wrapper,
-  &__options-wrapper {
+  &__primary-buttons-wrapper {
     display: flex;
     position: relative;
-    flex-flow: row nowrap;
     z-index: 5;
-
-    > * + * {
-      margin-left: 1rem;
-    }
-  }
-
-  &__buttons-wrapper {
+    flex-flow: row wrap;
+    justify-content: center;
     margin-top: 5rem;
-  }
-
-  &__buttons-wrapper + &__options-wrapper {
-    margin-top: 2rem;
-  }
-
-  &__options-wrapper {
-    > * + * {
-      margin-left: 2.4rem;
-    }
   }
 
   &__generate,
@@ -196,7 +245,6 @@
     position: relative;
     min-width: 52rem;
     width: 33vw;
-    margin: 0 5vw;
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;

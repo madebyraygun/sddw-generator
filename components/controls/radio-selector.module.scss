@@ -1,5 +1,20 @@
 .radio-selector {
   position: relative;
+  width: 100%;
+  text-align: center;
+
+  // states -------------------------------------------------------------- //
+
+  input:checked + label {
+
+  }
+
+  // elements -------------------------------------------------------------- //
+
+  > span {
+    display: block;
+    text-align: center;
+  }
 
   &__control-item {
     position: relative;
@@ -10,14 +25,6 @@
     &:first-child {
       margin-left: 0;
     }
-
-    // states -------------------------------------------------------------- //
-
-    input:checked + label {
-      background: var(--bright-alpha-100);
-    }
-
-    // elements -------------------------------------------------------------- //
 
     input,
     label {
@@ -31,14 +38,25 @@
 
     label {
       opacity: 1;
-      background: var(--bright-alpha-0);
       border-radius: 50%;
-      box-shadow: inset 0rem 0rem 0rem 0.1rem var(--bright);
       color: transparent;
+      box-shadow: inset 0rem 0rem 0rem 0.2rem var(--bright);
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0rem;
+        left: 0rem;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
   }
 
   &__controls-wrapper {
+    margin-top: 1.9rem;
+
     ul {
       display: flex;
       flex-flow: row nowrap;
