@@ -250,23 +250,35 @@ const EditorControls: FC = () => (
       </div>
     </EditorView>
     <EditorView className= {styles['editor-controls__view-inputs-poster']}>
-      <Button className={styles['editor-controls__button-restart']}>Restart</Button>
       <div className={styles['editor-controls__poster-column']}>
         <div className={styles['editor-controls__poster']} data-poster><svg viewBox="0 0 1350 1800"></svg></div>
-        <RangeSlider className={styles['editor_controls__slider']} name='poster-scale'>Adjust</RangeSlider>
       </div>
-      <Button className={styles['editor-controls__button-finish']}>Finish</Button>
+
+      <Button className={styles['editor-controls__button-close']}></Button>
 
       {/* controls */}
-      <div className={styles['editor-controls__buttons-wrapper']}>
-        <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
-        <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+      <div className={styles['editor-controls__controls-wrapper']}>
+        <div className={styles['editor-controls__ranges-wrapper']}>
+          <RangeSlider dataName={{ 'data-range-size': '' }} data-value='50'>Size</RangeSlider>
+          <RangeSlider dataName={{ 'data-range-rotate': '' }} data-value="50">Rotate</RangeSlider>
+        </div>
+
+        <div className={styles['editor-controls__radio-background-wrapper']}>
+          <RangeSlider dataName={{ 'data-background-color': '' }} data-value='50'>Background Color</RangeSlider>
+        </div>
+
+        <div className={styles['editor-controls__buttons-wrapper']}>
+          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
+          <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+        </div>
+
+        <div className={styles['editor-controls__options-wrapper']}>
+          <ButtonToggle dataName={{ 'data-randomize-each-word': '' }}>Randomize Each Word</ButtonToggle>
+          <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
+        </div>
+
+        <Button className={styles['editor-controls__button-finish']}>Finish</Button>
       </div>
-      <div className={styles['editor-controls__options-wrapper']}>
-        <ButtonToggle dataName={{ 'data-randomize-each-word': '' }}>Randomize Each Word</ButtonToggle>
-        <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
-      </div>
-      <button className={styles['editor-controls__clear']}>Clear</button>
 
     </EditorView>
   </div>

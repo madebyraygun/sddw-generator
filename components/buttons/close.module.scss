@@ -1,4 +1,4 @@
-.button-toggle {
+.button-close {
   $this: &;
   width: auto;
   height: 5rem;
@@ -8,16 +8,12 @@
   text-transform: uppercase;
   display: inline-block;
   position: relative;
+  padding-left: 6.2rem;
+  line-height: 5rem;
   cursor: pointer;
 
-  button {
-    position: relative;
-    padding-left: 6.2rem;
-    line-height: 5rem;
-
-    &:focus {
-      outline: 0;
-    }
+  &:focus {
+    outline: 0;
   }
 
   // c---[======================>
@@ -36,19 +32,27 @@
 
     [data-active] &,
     [data-color='1'] & {
-      background: var(--candy-corn);
+      background: linear-gradient(to right, var(--astral) 33%, var(--victoria));
     }
 
     [data-color='2'] & {
-      background: var(--mint-green);
+      background: linear-gradient(to right, var(--zuccini) 33%, var(--rose-bud));
     }
 
     [data-color='3'] & {
-      background: var(--malibu);
+      background: linear-gradient(to right, var(--yellow-orange) 33%, var(--vermilion));
     }
 
     [data-color='4'] & {
-      background: var(--cinnabar);
+      background: linear-gradient(to right, var(--victoria) 33%, var(--astral));
+    }
+
+    [data-color='5'] & {
+      background: linear-gradient(to right, var(--rose-bud) 33%, var(--zuccini));
+    }
+
+    [data-color='6'] & {
+      background: linear-gradient(to right, var(--vermilion) 33%, var(--yellow-orange));
     }
   }
 
