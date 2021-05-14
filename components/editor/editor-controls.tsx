@@ -13,10 +13,13 @@ import WordState from '../poster/word-state';
 import EditorView from './editor-view';
 
 interface Reference {
+  el?: HTMLElement | null,
   inputBox?: HTMLElement | null,
   inputPlaceholder?: HTMLElement | null,
   inputPlaceholderSpan?: HTMLElement | null,
   inputRendered?: HTMLElement | null,
+  poster?: HTMLElement | null,
+  viewEdit?: HTMLElement | null,
   shuffle?: HTMLInputElement | null,
   generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
@@ -128,7 +131,10 @@ export class EditorControlsElement extends HTMLElement {
 
   // generate button: render current design into posters
   #onGenerateClick = () => {
-    Editor.renderPosters();
+    if (this.ref.poster) {
+      Editor.renderCurrentPosterToElement(this.ref.poster);
+      window.scrollTo(0, this.ref.viewEdit?.offsetTop ?? 0);
+    }
   }
 
   // randomize colors
@@ -156,13 +162,25 @@ export class EditorControlsElement extends HTMLElement {
           this.addPhraseListeners($phrase);
         }
       });
-      Editor.renderPosters();
+      if (this.ref.poster) {
+        Editor.shuffleAndRenderPosterToElement(this.ref.poster);
+      }
     }
   }
 
   // built in callback once JSX rendered
   connectedCallback() {
-    this.ref.input = this.querySelector('input');
+    this.ref.el = this;
+
+    // html elements
+    this.ref.inputBox = this.ref.el.querySelector<HTMLElement>('[data-input-box]');
+    this.ref.inputPlaceholder = this.ref.el.querySelector<HTMLElement>('[data-input-placeholder]');
+    this.ref.inputPlaceholderSpan = this.ref.inputPlaceholder?.children[0] as HTMLElement;
+    this.ref.poster = this.ref.el?.querySelector<HTMLElement>('[data-poster]');
+    this.ref.viewEdit = this.ref.el?.querySelector<HTMLElement>('[data-view-edit]');
+
+    // input elements
+    this.ref.input = this.ref.el.querySelector('input');
     if (this.ref.input) {
       this.ref.input.focus();
       this.ref.input.addEventListener('input', this.#onInputInput);
@@ -170,32 +188,27 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.input.addEventListener('click', this.#onInputClick);
     }
 
-    this.ref.inputBox = this.querySelector<HTMLElement>('[data-input-box]');
-
-    this.ref.inputPlaceholder = this.querySelector<HTMLElement>('[data-input-placeholder]');
-    this.ref.inputPlaceholderSpan = this.ref.inputPlaceholder?.children[0] as HTMLElement;
-
-    this.ref.inputRendered = this.querySelector<HTMLInputElement>('[data-input-rendered]');
+    this.ref.inputRendered = this.ref.el.querySelector<HTMLInputElement>('[data-input-rendered]');
     if (this.ref.inputRendered) {
       this.ref.inputRendered.addEventListener('click', this.#onOutputClick);
     }
 
-    this.ref.generate = this.querySelector<HTMLInputElement>('[data-generate]');
+    this.ref.generate = this.ref.el.querySelector<HTMLInputElement>('[data-generate]');
     if (this.ref.generate) {
       this.ref.generate.addEventListener('click', this.#onGenerateClick);
     }
 
-    this.ref.randomizeColors = this.querySelector<HTMLInputElement>('[data-randomize-colors]');
+    this.ref.randomizeColors = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-colors]');
     if (this.ref.randomizeColors) {
       this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColors);
     }
 
-    this.ref.randomizeEachWord = this.querySelector<HTMLInputElement>('[data-randomize-each-word]');
+    this.ref.randomizeEachWord = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-each-word]');
     if (this.ref.randomizeEachWord) {
       this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWord);
     }
 
-    this.ref.shuffle = this.querySelector<HTMLInputElement>('[data-shuffle]');
+    this.ref.shuffle = this.ref.el.querySelector<HTMLInputElement>('[data-shuffle]');
     if (this.ref.shuffle) {
       this.ref.shuffle.addEventListener('click', this.#onShuffleClick);
     }
@@ -238,7 +251,7 @@ if (!window.customElements.get(EditorControlsElement.selector)) {
 
 const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
-    <EditorView className={styles['editor-controls__view-inputs-primary']}>
+    <EditorView className={styles['editor-controls__view-inputs-primary']} dataName={{ 'data-view-intro': '' }}>
       <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
       <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
       <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
@@ -253,7 +266,7 @@ const EditorControls: FC = () => (
         <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
       </div>
     </EditorView>
-    <EditorView className= {styles['editor-controls__view-inputs-poster']}>
+    <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName= {{ 'data-view-edit': '' }}>
       <div className={styles['editor-controls__poster-column']}>
         <div className={styles['editor-controls__poster']} data-poster><svg viewBox="0 0 1350 1800"></svg></div>
       </div>

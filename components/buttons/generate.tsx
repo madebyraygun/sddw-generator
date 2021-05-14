@@ -1,39 +1,31 @@
-import Editor from '../../assets/js/controllers/editor';
-
 import styles from './generate.module.scss';
 
 interface Reference {
-  button?: HTMLButtonElement | null
+  el?: HTMLElement,
+  button?: HTMLButtonElement,
 }
 
-export class InputElement extends HTMLElement {
+export class ButtonGenerateElement extends HTMLElement {
 
   static selector = 'generate-element';
 
   ref: Reference = {};
 
-  #onButtonClick = (e: MouseEvent) => {
-    e.preventDefault();
-    Editor.renderPosters();
-  }
-
   connectedCallback() {
-    this.ref.button = this.querySelector('button');
-    if (this.ref.button) {
-      this.ref.button.addEventListener('click', this.#onButtonClick);
-    }
+    this.ref.el = this;
+    this.ref.button = this.ref.el.querySelector('button') as HTMLButtonElement;
   }
 
 }
 
-if (!window.customElements.get(InputElement.selector)) {
-  window.customElements.define(InputElement.selector, InputElement);
+if (!window.customElements.get(ButtonGenerateElement.selector)) {
+  window.customElements.define(ButtonGenerateElement.selector, ButtonGenerateElement);
 }
 
-const Generate: FC = () => (
-  <div element={InputElement.selector} className={styles['generate']}>
+const ButtonGenerate: FC = () => (
+  <div element={ButtonGenerateElement.selector} className={styles['generate']}>
     <button>Generate my poster</button>
   </div>
 );
 
-export default Generate;
+export default ButtonGenerate;

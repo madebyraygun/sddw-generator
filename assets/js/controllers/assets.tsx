@@ -38,6 +38,7 @@ class AssetsController implements Controller {
     this.loadInlineSVGs(require.context('../../vectors/logos/default/', true, /\.tsx$/), 'logos');
 
     // 2021
+    this.loadInlineSVGs(require.context('../../vectors/footers/2021/', true, /\.tsx$/), 'footers', '2021');
     this.loadInlineSVGs(require.context('../../vectors/logos/2021/', true, /\.tsx$/), 'logos', '2021');
   }
 

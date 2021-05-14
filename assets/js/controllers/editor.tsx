@@ -126,23 +126,38 @@ class Editor {
 
   // render poster to container
 
-  renderPoster(poster: PosterState, $container?: HTMLElement | null) {
+  renderPoster(poster: PosterState, target?: HTMLElement | null) {
     const $output: HTMLElement = poster.render() as HTMLElement;
 
-    if ($container) {
-      $container.innerHTML = $output.outerHTML;
+    if (target) {
+      target.innerHTML = $output.outerHTML;
     }
 
     return $output;
   }
 
-  renderPosters($container: HTMLElement = document.body) {
+  renderCurrentPosterToContainer($container: HTMLElement = document.body) {
     if ($container) {
       const $posterWrappers: NodeList = $container.querySelectorAll('[data-poster]');
       for (const $posterWrapper of $posterWrappers) {
         this.currentPoster.shuffle();
         this.renderPoster(this.currentPoster, $posterWrapper as HTMLElement);
       }
+    }
+  }
+
+  renderCurrentPosterToElement($target: HTMLElement, poster?: PosterState) {
+    const posterState = poster ?? this.currentPoster;
+    if ($target) {
+      this.renderPoster(posterState, $target);
+    }
+  }
+
+  shuffleAndRenderPosterToElement($target: HTMLElement, poster?: PosterState) {
+    const posterState = poster ?? this.currentPoster;
+    if ($target) {
+      posterState.shuffle();
+      this.renderCurrentPosterToElement($target, posterState);
     }
   }
 
