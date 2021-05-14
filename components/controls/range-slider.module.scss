@@ -3,6 +3,48 @@
   position: relative;
   flex-flow: row nowrap;
 
+  // c---[======================>
+  // states
+
+  &__knob {
+    opacity: 0;
+
+    [data-initialized] & {
+      opacity: 1;
+    }
+  }
+
+  &__progress {
+    [data-color-index='0'] & {
+      background: var(--mandy);
+    }
+
+    [data-color-index='1'] & {
+      background: var(--mint-green);
+    }
+
+    [data-color-index='2'] & {
+      background: var(--candy-corn);
+    }
+  }
+
+  &__track {
+    [data-color-index='0'] & {
+      background: var(--cornflower-blue);
+    }
+
+    [data-color-index='1'] & {
+      background: var(--royal-purple);
+    }
+
+    [data-color-index='2'] & {
+      background: var(--cinnabar);
+    }
+  }
+
+  // c---[======================>
+  // elements
+
   label {
 
   }
@@ -57,11 +99,13 @@
 
   &__progress {
     z-index: 2;
-    background: var(--gradient-rainbow);
+    background: var(--mandy);
+    transform-origin: 0% 50%;
   }
 
   &__track {
     z-index: 1;
+    background: var(--cornflower-blue);
   }
 
   &__progress,

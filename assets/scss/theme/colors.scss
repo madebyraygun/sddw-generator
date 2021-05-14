@@ -12,8 +12,10 @@
   --mandy: #E94568; //
   --candy-corn: #F9F15A; //
 
+  --bright-alpha-0: rgba(248, 249, 250, 0);
   --bright-alpha-20: rgba(248, 249, 250, 0.2);
   --bright-alpha-40: rgba(248, 249, 250, 0.4);
+  --bright-alpha-100: rgba(248, 249, 250, 1);
 
   --gradient-rainbow: linear-gradient(to right, var(--royal-purple), var(--cornflower-blue), var(--malibu), var(--mint-green), var(--candy-corn), var(--cinnabar), var(--mandy));
 }

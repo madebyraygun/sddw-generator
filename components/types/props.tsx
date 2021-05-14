@@ -3,4 +3,5 @@ export interface CustomProps {
   dataName?: {
     [key: string]: any
   },
+  index?: string,
 }

@@ -1,4 +1,3 @@
-
 import Editor, { CharacterCallback } from '../../assets/js/controllers/editor';
 import AssetsController from '../../assets/js/controllers/assets';
 import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
@@ -6,6 +5,7 @@ import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
 import ButtonToggle from '../buttons/toggle';
+import RadioSelector from '../controls/radio-selector';
 import RangeSlider from '../controls/range-slider';
 
 import styles from './editor-controls.module.scss';
@@ -40,6 +40,8 @@ export class EditorControlsElement extends HTMLElement {
 
   constructor() {
     super();
+    const Filter = require('bad-words');
+    this.filter = new Filter({ exclude: ['fart', 'poop'] });
     this.inputWord = new WordState('', ThemeController.theme);
     Editor.attachWord(this.inputWord);
   }
@@ -102,7 +104,9 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.inputPlaceholder?.removeAttribute('data-hidden');
     }
 
-    this.inputWord.feed(value);
+    const filteredValue = value ? this.filter.clean(value) : '';
+
+    this.inputWord.feed(filteredValue);
     this.renderInputCharacters();
   }
 
@@ -259,12 +263,12 @@ const EditorControls: FC = () => (
       {/* controls */}
       <div className={styles['editor-controls__controls-wrapper']}>
         <div className={styles['editor-controls__ranges-wrapper']}>
-          <RangeSlider dataName={{ 'data-range-size': '' }} data-value='50'>Size</RangeSlider>
-          <RangeSlider dataName={{ 'data-range-rotate': '' }} data-value="50">Rotate</RangeSlider>
+          <RangeSlider dataName={{ 'data-range-size': '' }} name='size' value='50' index='0'>Size</RangeSlider>
+          <RangeSlider dataName={{ 'data-range-rotate': '' }} name='rotate' value="50" index='1'>Rotate</RangeSlider>
         </div>
 
         <div className={styles['editor-controls__radio-background-wrapper']}>
-          <RangeSlider dataName={{ 'data-background-color': '' }} data-value='50'>Background Color</RangeSlider>
+          <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['test', 'test2']}>Background Color</RadioSelector>
         </div>
 
         <div className={styles['editor-controls__buttons-wrapper']}>

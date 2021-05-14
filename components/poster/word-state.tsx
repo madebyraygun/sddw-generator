@@ -65,7 +65,7 @@ class WordState {
     for (let i = 0; i < characters.length; i++) {
       const character: CharacterState = characters[i];
       if (this?.characters[i] && this.characters[i].glyph !== character.glyph) {
-        this.changeCharacter(character, character.variationIndex, character.glyph);
+        this.changeCharacter(this.characters[i], character.variationIndex, character.glyph);
       } else if (!this?.characters[i]) {
         this.addCharacter(character);
       }
