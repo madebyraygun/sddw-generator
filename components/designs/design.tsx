@@ -30,12 +30,31 @@ interface LineGenerated {
 
 class Design {
 
+  config: {
+    scaleMin: number,
+    scaleMax: number,
+  } = {
+    scaleMin: 0.4,
+    scaleMax: 3,
+  };
+
+  state: {
+    lines: LineGenerated[]
+  }
+
   poster: PosterState;
   theme: Theme;
 
   constructor(poster: PosterState) {
     this.poster = poster;
     this.theme = poster.theme;
+  }
+
+  rebuild() {
+    // build lines filled with maximum number of words
+    // display number of words that will appear on screen with render function
+    // will need separate checks from render to decide what shows up
+    // word wrap will be its own problem later
   }
 
   generateWord(word: WordState, fontSize = 100):WordGenerated {
@@ -119,7 +138,9 @@ class Design {
     };
   }
 
-  renderPoster(): Node {
+  renderPoster(rebuild = false): Node {
+    if (rebuild) this.rebuild();
+
     // put lines together to fill poster
 
     const lines = [];
@@ -186,6 +207,16 @@ class Design {
         </svg>
       </figure>
     );
+  }
+
+  // getters
+
+  get scaleMin(): number {
+    return this.config.scaleMin;
+  }
+
+  get scaleMax(): number {
+    return this.config.scaleMax;
   }
 
 }

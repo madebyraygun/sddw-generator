@@ -60,10 +60,16 @@ class PosterState {
     this.word.attachPoster(this);
   }
 
+  // rebuild entire poster of words
+
+  rebuild() {
+    this.design.rebuild();
+  }
+
   // fun
 
   shuffle() {
-    this.adjustments.scale = 0.4 + Math.round(Math.random() * 10) / 3;
+    this.adjustments.scale = this.design.scaleMin + Math.round(Math.random() * this.design.scaleMax);
   }
 
   // return rendered output
