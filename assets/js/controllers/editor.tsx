@@ -101,6 +101,16 @@ class Editor {
     this.currentPoster.isRandomWords = isActive;
   }
 
+  // set scale
+
+  setRotation(value: number) {
+    this.currentPoster.scale = value;
+  }
+
+  setScale(value: number) {
+    this.currentPoster.scale = value;
+  }
+
   // connect primary input (or database stored) word object
 
   attachWord(word: WordState) {

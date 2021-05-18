@@ -1,12 +1,13 @@
 import Editor, { CharacterCallback } from '../../assets/js/controllers/editor';
 import AssetsController from '../../assets/js/controllers/assets';
+import EventController from '../../assets/js/controllers/event';
 import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
 import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
 import ButtonToggle from '../buttons/toggle';
 import RadioSelector from '../controls/radio-selector';
-import RangeSlider from '../controls/range-slider';
+import RangeSlider, { RangeSliderElement } from '../controls/range-slider';
 
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
@@ -14,10 +15,13 @@ import EditorView from './editor-view';
 
 interface Reference {
   el?: HTMLElement | null,
+  inputBackgroundColor?: HTMLElement| null,
   inputBox?: HTMLElement | null,
   inputPlaceholder?: HTMLElement | null,
   inputPlaceholderSpan?: HTMLElement | null,
   inputRendered?: HTMLElement | null,
+  inputRotation?: RangeSliderElement| null,
+  inputScale?: RangeSliderElement | null,
   poster?: HTMLElement | null,
   viewEdit?: HTMLElement | null,
   shuffle?: HTMLInputElement | null,
@@ -142,6 +146,9 @@ export class EditorControlsElement extends HTMLElement {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
       Editor.randomizeColors($target.dataset.active === 'true');
+      if (this.ref.poster) {
+        Editor.renderCurrentPosterToElement(this.ref.poster);
+      }
     }
   }
 
@@ -150,6 +157,9 @@ export class EditorControlsElement extends HTMLElement {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
       Editor.randomizeEachWord($target.dataset.active === 'true');
+      if (this.ref.poster) {
+        Editor.renderCurrentPosterToElement(this.ref.poster);
+      }
     }
   }
 
@@ -165,6 +175,17 @@ export class EditorControlsElement extends HTMLElement {
       if (this.ref.poster) {
         Editor.shuffleAndRenderPosterToElement(this.ref.poster);
       }
+    }
+  }
+
+  #onRotationChange = (e) => {
+    console.log(e.state.valueLerped);
+  }
+
+  #onScaleChange = (e) => {
+    Editor.setScale(e.state.valueLerped / 100 * 2 + 0.5);
+    if (this.ref.poster) {
+      Editor.renderCurrentPosterToElement(this.ref.poster);
     }
   }
 
@@ -186,6 +207,16 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.input.addEventListener('input', this.#onInputInput);
       this.ref.input.addEventListener('keydown', this.#onInputKeydown);
       this.ref.input.addEventListener('click', this.#onInputClick);
+    }
+
+    this.ref.inputRotation = this.ref.el.querySelector<RangeSliderElement>('[data-range-rotation]');
+    if (this.ref.inputRotation) {
+      this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
+    }
+
+    this.ref.inputScale = this.ref.el.querySelector<RangeSliderElement>('[data-range-scale]');
+    if (this.ref.inputScale) {
+      this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
     }
 
     this.ref.inputRendered = this.ref.el.querySelector<HTMLInputElement>('[data-input-rendered]');
@@ -220,12 +251,10 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   #onResizeUpdate = ():boolean => {
-    console.log('resize update');
     return true;
   }
 
   #onResizeRender = () => {
-    console.log('resize render');
     this.resizeInputBox();
   }
 
@@ -276,8 +305,8 @@ const EditorControls: FC = () => (
       {/* controls */}
       <div className={styles['editor-controls__controls-wrapper']}>
         <div className={styles['editor-controls__ranges-wrapper']}>
-          <RangeSlider dataName={{ 'data-range-size': '' }} name='size' value='50' index='0'>Size</RangeSlider>
-          <RangeSlider dataName={{ 'data-range-rotate': '' }} name='rotate' value="50" index='1'>Rotate</RangeSlider>
+          <RangeSlider dataName={{ 'data-range-scale': '' }} name='scale' value='50' index='0'>Size</RangeSlider>
+          <RangeSlider dataName={{ 'data-range-rotation': '' }} name='rotation' value="50" index='1'>Rotate</RangeSlider>
         </div>
 
         <div className={styles['editor-controls__radio-background-wrapper']}>

@@ -1,5 +1,9 @@
+import EventEmitter from 'events';
+
 import AnimationController from '../../assets/js/controllers/animation';
 import CursorController from '../../assets/js/controllers/cursor';
+import EventController from '../../assets/js/controllers/event';
+import ResizeController from '../../assets/js/controllers/resize';
 
 import { CustomProps } from '../types/props';
 import Number from '../../assets/js/utils/number';
@@ -13,11 +17,13 @@ export interface RangeSliderProps extends CustomProps {
 export interface RangeSliderState {
   lastValue: number,
   x: number,
-  value: number
+  value: number,
+  valueLerped: number,
 }
 
 interface Flags {
-  isAnimating: boolean
+  isAnimating: boolean,
+  isMouseDown: boolean,
 }
 interface Reference {
   el?: HTMLElement,
@@ -27,20 +33,32 @@ interface Reference {
   knob?: HTMLInputElement | null,
 }
 
-class RangeSliderElement extends HTMLElement {
+export class RangeSliderElement extends HTMLElement {
 
   static selector = 'range-slider';
+  static CHANGE = 'range-slider-change';
 
   ref: Reference = {};
+  emitter: EventEmitter = EventController.set({ key: this }).emitter;
 
   flags: Flags = {
-    isAnimating: false
+    isAnimating: false,
+    isMouseDown: false,
   }
 
   state: RangeSliderState= {
     lastValue: -1,
     x: -1,
-    value: 0
+    value: 0,
+    valueLerped: -1,
+  }
+
+  constructor() {
+    super();
+    ResizeController.set({
+      update: () => true,
+      render: this.render
+    });
   }
 
   connectedCallback() {
@@ -55,7 +73,9 @@ class RangeSliderElement extends HTMLElement {
     this.ref.inputRange = this.ref.el.querySelector('input[type="range"]') as HTMLInputElement ?? null;
     if (this.ref.inputRange) {
       this.state.value = parseInt(this.ref.inputRange.value ?? '0');
+      this.state.valueLerped = this.state.value;
       this.ref.inputRange.addEventListener('change', this.#onChange);
+      this.ref.inputRange.addEventListener('mousedown', this.#onMouseDown);
     }
 
     this.ref.track = this.ref.el.querySelector('[data-range-slider-track]') as HTMLInputElement ?? null;
@@ -71,15 +91,22 @@ class RangeSliderElement extends HTMLElement {
     this.ref.el.setAttribute('data-initialized', '');
   }
 
-  #onChange = () => {
+  #onChange = (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
     this.render();
-    if (this.ref?.el) {
-      this.ref.el.dispatchEvent(new CustomEvent('change', { detail: { state: this.state } }));
-    }
+  }
+
+  #onMouseDown = () => {
+    this.flags.isMouseDown = true;
   }
 
   update = () => {
-    return CursorController.isMouseDown || this.flags.isAnimating;
+    if (this.flags.isMouseDown && !CursorController.isMouseDown) {
+      this.flags.isMouseDown = false;
+    }
+
+    return this.flags.isMouseDown || this.flags.isAnimating;
   }
 
   render = () => {
@@ -97,11 +124,14 @@ class RangeSliderElement extends HTMLElement {
 
       this.state.x = x;
       this.state.lastValue = valueLerped;
+      this.state.valueLerped = valueLerped;
 
       if (this.ref.knob) this.ref.knob.style.transform = `translateX(${xLerped}px)`;
       if (this.ref.progress) this.ref.progress.style.transform = `scaleX(${valueLerped / 100})`;
 
       this.flags.isAnimating = Math.abs(value - valueLerped) > 0.01;
+
+      this.emitter.emit(RangeSliderElement.CHANGE, { state: this.state });
     }
   }
 

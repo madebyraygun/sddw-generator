@@ -146,10 +146,10 @@ class WordState {
   }
 
   // shuffle all characters
-  shuffleCharacters() {
+  shuffleCharacters(allowSameVariationIndex = false) {
     for (let i = 0; i < this.characters.length; i++) {
       const character = this.characters[i];
-      character.variationIndex = this.getShuffledVariationIndex(character.variationIndex);
+      character.variationIndex = this.getShuffledVariationIndex(allowSameVariationIndex ? -1 : character.variationIndex);
     }
   }
 

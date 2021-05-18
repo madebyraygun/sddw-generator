@@ -84,12 +84,13 @@ class Design {
     let fontSize = 0;
     let lineHeight = 0;
     let spacing = 0;
+
     do {
       const renderedWord = this.poster.word.clone();
 
       if (!showUserDesign || k) {
         if (this.poster.isRandomColors) renderedWord.shuffleColors();
-        if (this.poster.isRandomWords) renderedWord.shuffleCharacters();
+        if (this.poster.isRandomWords) renderedWord.shuffleCharacters(true);
       }
 
       const wordData: WordGenerated = this.generateWord(renderedWord);

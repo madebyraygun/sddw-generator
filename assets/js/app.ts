@@ -1,6 +1,7 @@
 import AssetsController from './controllers/assets';
 import AnimationController from './controllers/animation';
 import CursorController from './controllers/cursor';
+import EventController from './controllers/event';
 import ResizeController from './controllers/resize';
 
 import Router from './utils/router';
@@ -55,6 +56,7 @@ const initializeControllers = () => {
 
 // fetch assets
 AssetsController.initialize();
+EventController.initialize();
 
 // require all JSX files for proper linting
 requirePages(require.context('../../pages/', true, /\.tsx$/));

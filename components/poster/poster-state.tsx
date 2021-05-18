@@ -17,21 +17,11 @@ class PosterState {
   word: WordState;
 
   adjustments: {
+    rotation: number,
     scale: number,
   } = {
+    rotation: 0,
     scale: 1,
-  };
-
-  flags: {
-    isRandomColors: boolean,
-    isRandomWords: boolean,
-    isLineClamped: boolean,
-    isWordWrap: boolean,
-  } = {
-    isRandomColors: true,
-    isRandomWords: true,
-    isLineClamped: true,
-    isWordWrap: true,
   };
 
   coords: {
@@ -98,6 +88,18 @@ class PosterState {
 
   set isRandomWords(value: boolean) {
     this.flags.isRandomWords = value;
+  }
+
+  set rotation(value: number) {
+    this.adjustments.rotation = value;
+  }
+
+  get rotation(): number {
+    return this.adjustments.rotation;
+  }
+
+  set scale(value: number) {
+    this.adjustments.scale = value;
   }
 
   get scale(): number {
