@@ -8,6 +8,7 @@
     "start": "npm run clean && npm run render --mode=development --watch & webpack serve --mode development",
     "render": "npx babel-node .node/render --extensions '.ts,.tsx' --config-file=./.babelrc",
     "build": "npm run clean && npm run render --mode=production & webpack --mode production --progress",
+    "build-dev": "npm run clean && npm run render --mode=development & webpack --mode development --progress",
     "serve:static": "serve out/",
     "serve:dynamic": "serve out/ --single",
     "lint": "npm run lint:js && npm run lint:css",
