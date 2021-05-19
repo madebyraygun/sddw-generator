@@ -70,6 +70,7 @@ class PosterState {
 
   shuffle() {
     this.adjustments.scale = this.design.scaleMin + Math.round(Math.random() * this.design.scaleMax);
+    this.adjustments.rotation = this.design.rotationMin + Math.round(Math.random() * this.design.rotationMax * 2);
   }
 
   // return rendered output

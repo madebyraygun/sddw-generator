@@ -104,11 +104,13 @@ class Editor {
   // set scale
 
   setRotation(value: number) {
-    this.currentPoster.scale = value;
+    const { design } = this.currentPoster;
+    this.currentPoster.rotation = design.rotationMin + value / 100 * design.rotationMax * 2;
   }
 
   setScale(value: number) {
-    this.currentPoster.scale = value;
+    const { design } = this.currentPoster;
+    this.currentPoster.scale = design.scaleMin + value / 100 * design.scaleMax;
   }
 
   // connect primary input (or database stored) word object

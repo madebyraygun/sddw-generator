@@ -10,30 +10,37 @@ import WordState from '../poster/word-state';
 import Theme from '../themes/theme';
 
 interface WordGenerated {
-  characters: Node[],
-  fontSize: number,
+  characterElements: Node[],
   dimensions: {
     width: number,
     height: number,
     spacing: number
-  }
+  },
+  el: HTMLElement,
+  fontSize: number,
+  state: WordState,
 }
 
 interface LineGenerated {
-  words: Node[],
   fontSize: number,
   dimensions: {
     width: number,
     height: number
-  }
+  },
+  el: HTMLElement,
+  wordsGenerated: WordGenerated[],
 }
 
 class Design {
 
   config: {
+    rotationMin: number,
+    rotationMax: number,
     scaleMin: number,
     scaleMax: number,
   } = {
+    rotationMin: -90,
+    rotationMax: 90,
     scaleMin: 0.4,
     scaleMax: 3,
   };
@@ -60,7 +67,7 @@ class Design {
   generateWord(word: WordState, fontSize = 100):WordGenerated {
     let wordWidth = 0;
 
-    const wordCharacters:Node[] = [];
+    const characterElements:Node[] = [];
     const wordHeight = fontSize * this.poster.scale;
     const charSpacer = 0.12 * wordHeight * this.poster.scale;
     let charOffset = 0;
@@ -68,14 +75,14 @@ class Design {
     for (let i = 0; i < word.characters.length; i++) {
       const character = word.characters[i];
       const svgCharacter = AssetsController.getCharacter(character.glyph, character.variationIndex);
-      const [width, height] = svgCharacter.dimension;
+      const [width, height] = svgCharacter?.dimension ?? [0, 0];
       const factor = wordHeight / height;
       const newWidth = width * factor;
       wordWidth += newWidth + (i > 0 ? charSpacer / factor : 0);
       charOffset = wordWidth - newWidth;
-      wordCharacters.push(
+      characterElements.push(
         <g key={`char${character.variationIndex}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character>
-          {[...svgCharacter.children].map((path, index) => {
+          {[...svgCharacter.children ?? []].map((path, index) => {
             const d = path.getAttribute('d');
             return d ? (
               <path key={index} d={d} fill={!character.variationIndex ? this.theme.colors.dark : character.colors[index]}></path>
@@ -85,19 +92,28 @@ class Design {
       );
     }
 
+    const wordElement = (
+      <g key={`word${Date.now()}`} data-word>
+        {characterElements}
+      </g>
+    ) as HTMLElement;
+
     return {
-      characters: wordCharacters,
-      fontSize: fontSize,
+      characterElements,
       dimensions: {
         width: wordWidth,
         height: wordHeight,
         spacing: charSpacer,
-      }
+      },
+      el: wordElement,
+      fontSize,
+      state: word
     };
   }
 
-  generateLine(showUserDesign = true): LineGenerated {
-    const words = [];
+  generateLine(showUserDesign = true, render = true): LineGenerated {
+    const wordsGenerated: WordGenerated[] = [];
+    const wordsElements: HTMLElement[] = [];
     let k = 0;
     let wordOffset = 0;
     let fontSize = 0;
@@ -105,36 +121,44 @@ class Design {
     let spacing = 0;
 
     do {
-      const renderedWord = this.poster.word.clone();
+      const curWordState = this.poster.word.clone();
 
       if (!showUserDesign || k) {
-        if (this.poster.isRandomColors) renderedWord.shuffleColors();
-        if (this.poster.isRandomWords) renderedWord.shuffleCharacters(true);
+        if (this.poster.isRandomColors) curWordState.shuffleColors();
+        if (this.poster.isRandomWords) curWordState.shuffleCharacters(true);
       }
 
-      const wordData: WordGenerated = this.generateWord(renderedWord);
-      lineHeight = Math.max(lineHeight, wordData.dimensions.height);
-      fontSize = Math.max(fontSize, wordData.fontSize);
-      ({ spacing } = wordData.dimensions);
+      const wordGenerated: WordGenerated = this.generateWord(curWordState);
+      lineHeight = Math.max(lineHeight, wordGenerated.dimensions.height);
+      fontSize = Math.max(fontSize, wordGenerated.fontSize);
+      ({ spacing } = wordGenerated.dimensions);
 
-      words.push((
-        <g key={`word${k}`} transform={`translate(${wordOffset} 0)`} data-word>
-          {wordData.characters}
-        </g>
-      ));
-      wordOffset += wordData.dimensions.width + wordData.dimensions.spacing;
+      if (render) {
+        wordGenerated.el.style.transform = `translate(${wordOffset}px, 0)`;
+      }
+
+      wordsGenerated.push(wordGenerated);
+      wordsElements.push(wordGenerated.el);
+
+      wordOffset += wordGenerated.dimensions.width + wordGenerated.dimensions.spacing;
       k++;
     } while (wordOffset < this.poster.width);
 
     const lineWidth = wordOffset - spacing;
+    const lineElement = (
+      <g key={`line${Date.now()}`} data-line>
+        {wordsElements}
+      </g>
+    ) as HTMLElement;
 
     return {
-      words,
-      fontSize: fontSize,
+      fontSize,
       dimensions: {
         width: lineWidth,
         height: lineHeight,
-      }
+      },
+      el: lineElement,
+      wordsGenerated,
     };
   }
 
@@ -143,25 +167,27 @@ class Design {
 
     // put lines together to fill poster
 
-    const lines = [];
+    const lines: HTMLElement[] = [];
     const lineSpacer = 10 * this.poster.scale;
     let j = 0;
-    let lineOffset = 0;
+    let lineOffsetYNoRotation = 0;
     let wordCount = 0;
 
     do {
-      const lineData = this.generateLine(!wordCount);
-      const { words } = lineData;
-      const lineHeight: number = lineData.dimensions.height;
-      lines.push((
-        <g key={`line${j}`} transform={`translate(0, ${lineOffset})`} data-line>
-          {words}
-        </g>
-      ));
+      const lineGenerated = this.generateLine(!wordCount);
+      const { wordsGenerated } = lineGenerated;
+      const lineHeight = lineGenerated.dimensions.height;
+      const radians = this.poster.rotation / 180 * Math.PI;
+      lineOffsetYNoRotation = lineHeight * j + lineSpacer * j;
+
+      const lineOffsetX = Math.sin(radians) * (0 - lineOffsetYNoRotation);
+      const lineOffsetY = Math.cos(radians) * (lineOffsetYNoRotation);
+      const lineElement: HTMLElement = lineGenerated.el;
+      lineElement.style.transform = `translate(${lineOffsetX}px, ${lineOffsetY}px) rotate(${this.poster.rotation}deg)`;
+      lines.push(lineElement);
       j++;
-      lineOffset = lineHeight * j + lineSpacer * j;
-      wordCount += words.length;
-    } while (lineOffset < this.poster.height);
+      wordCount += wordsGenerated.length;
+    } while (lineOffsetYNoRotation < this.poster.height);
 
     // generate footer
 
@@ -210,6 +236,14 @@ class Design {
   }
 
   // getters
+
+  get rotationMin(): number {
+    return this.config.rotationMin;
+  }
+
+  get rotationMax(): number {
+    return this.config.rotationMax;
+  }
 
   get scaleMin(): number {
     return this.config.scaleMin;

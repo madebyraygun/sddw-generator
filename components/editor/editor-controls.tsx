@@ -1,6 +1,5 @@
 import Editor, { CharacterCallback } from '../../assets/js/controllers/editor';
 import AssetsController from '../../assets/js/controllers/assets';
-import EventController from '../../assets/js/controllers/event';
 import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
 import ThemeController from '../../assets/js/controllers/theme';
 
@@ -8,6 +7,7 @@ import Button from '../buttons/button';
 import ButtonToggle from '../buttons/toggle';
 import RadioSelector from '../controls/radio-selector';
 import RangeSlider, { RangeSliderElement } from '../controls/range-slider';
+import SddwPoster from '../poster/poster';
 
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
@@ -179,11 +179,14 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   #onRotationChange = (e) => {
-    console.log(e.state.valueLerped);
+    Editor.setRotation(e.state.valueLerped);
+    if (this.ref.poster) {
+      Editor.renderCurrentPosterToElement(this.ref.poster);
+    }
   }
 
   #onScaleChange = (e) => {
-    Editor.setScale(e.state.valueLerped / 100 * 2 + 0.5);
+    Editor.setScale(e.state.valueLerped);
     if (this.ref.poster) {
       Editor.renderCurrentPosterToElement(this.ref.poster);
     }
@@ -295,9 +298,9 @@ const EditorControls: FC = () => (
         <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
       </div>
     </EditorView>
-    <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName= {{ 'data-view-edit': '' }}>
+    <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName={{ 'data-view-edit': '' }}>
       <div className={styles['editor-controls__poster-column']}>
-        <div className={styles['editor-controls__poster']} data-poster><svg viewBox="0 0 1350 1800"></svg></div>
+        <SddwPoster className={styles['editor-controls__poster']} dataName={{ 'data-poster': '' }} />
       </div>
 
       <Button className={styles['editor-controls__button-close']}></Button>

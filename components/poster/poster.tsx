@@ -1,4 +1,12 @@
+
 import styles from './poster.module.scss';
+
+import { CustomProps } from '../types/props';
+
+export interface PosterProps extends CustomProps {
+  width?: number,
+  height?: number,
+}
 
 export class PosterElement extends HTMLElement {
 
@@ -14,8 +22,12 @@ if (!window.customElements.get(PosterElement.selector)) {
 
 // JSX template ------------------------------------------------------------ //
 
-const Poster: FC = ({ children }) => (
-  <div element={PosterElement.selector} className={styles['poster']}></div>
+const Poster: FC<PosterProps> = ({
+  className, dataName, children, width = 1350, height = 1800
+}) => (
+  <div element={PosterElement.selector} className={`${className ?? ''} ${styles['sddw-poster']}`} {...dataName}>
+    <svg viewBox={`0 0 ${width} ${height}`}>{children}</svg>
+  </div>
 );
 
 export default Poster;
