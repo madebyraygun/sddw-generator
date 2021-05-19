@@ -1,6 +1,6 @@
 import { CustomProps } from '../types/props';
 
-import styles from './toggle.module.scss';
+import styles from './close.module.scss';
 
 interface Reference {
   el?: HTMLElement,
@@ -12,12 +12,6 @@ export class ButtonCloseElement extends HTMLElement {
   static selector = 'button-close-element';
 
   ref: Reference = {};
-
-  state: {
-    isToggled: boolean,
-  } = {
-    isToggled: true,
-  };
 
   connectedCallback() {
     this.ref.el = this;
@@ -42,12 +36,14 @@ if (!window.customElements.get(ButtonCloseElement.selector)) {
 
 // JSX template ------------------------------------------------------------ //
 
-const ButtonClose: FC<CustomProps> = ({ className, dataName, children }) => (
-  <button element={ButtonCloseElement.selector} className={`${className ?? ''} ${styles['button-toggle']}`} {...dataName}>
-    <figure className={styles['button-toggle__knob']}></figure>
-    <figure className={styles['button-toggle__knob-bg']}></figure>
-    <span>{children}</span>
-  </button>
+const ButtonClose: FC<CustomProps> = ({ className, dataName, children = 'Click to Close' }) => (
+  <div element={ButtonCloseElement.selector} className={`${className ?? ''} ${styles['button-close']}`} {...dataName}>
+    <button>
+      <figure className={styles['button-close__x']}></figure>
+      <figure className={styles['button-close__x']}></figure>
+      <label className='a11y'>{children}</label>
+    </button>
+  </div>
 );
 
 export default ButtonClose;

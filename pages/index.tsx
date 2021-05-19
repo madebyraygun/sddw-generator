@@ -7,7 +7,6 @@ const Index: FC = () => (
   <Page slug="index">
     <Intro />
     <EditorControls />
-    <Feed />
   </Page>
 );
 

@@ -1,0 +1,53 @@
+.button-icon {
+  $this: &;
+  display: block;
+  position: relative;
+  width: 6.2rem;
+  height: 6.2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-shadow: inset 0rem 0rem 0rem 0.2rem var(--mint-green);
+
+  // c---[======================>
+  // states
+
+  button {
+    &:focus {
+      outline: 0;
+    }
+
+    &:hover,
+    &[data-active] {
+      background: var(--mint-green);
+
+      figure {
+        position: relative;
+        color: var(--dark);
+        z-index: 1;
+      }
+    }
+  }
+
+  // c---[======================>
+  // elements
+
+  button {
+    display: flex;
+    position: relative;
+    width: inherit;
+    height: inherit;
+    margin: 0;
+    padding: 0;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__icon {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+  }
+}

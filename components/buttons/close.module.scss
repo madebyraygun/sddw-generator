@@ -1,85 +1,46 @@
 .button-close {
   $this: &;
-  width: auto;
-  height: 5rem;
-  background-color: var(--dark);
-  background-clip: padding-box;
-  border: none;
-  text-transform: uppercase;
-  display: inline-block;
-  position: relative;
-  padding-left: 6.2rem;
-  line-height: 5rem;
-  cursor: pointer;
-
-  &:focus {
-    outline: 0;
-  }
+  position: absolute;
+  width: 5.4rem;
+  height: 5.4rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bright);
+  margin: 0;
+  padding: 0;
 
   // c---[======================>
   // states
 
-  &__knob {
-    [data-active] & {
-      left: 3rem;
+  button {
+    &:focus {
+      outline: 0;
     }
   }
 
-  &__knob-bg {
-    [data-active] & {
-      opacity: 1;
-    }
-
-    [data-active] &,
-    [data-color='1'] & {
-      background: linear-gradient(to right, var(--astral) 33%, var(--victoria));
-    }
-
-    [data-color='2'] & {
-      background: linear-gradient(to right, var(--zuccini) 33%, var(--rose-bud));
-    }
-
-    [data-color='3'] & {
-      background: linear-gradient(to right, var(--yellow-orange) 33%, var(--vermilion));
-    }
-
-    [data-color='4'] & {
-      background: linear-gradient(to right, var(--victoria) 33%, var(--astral));
-    }
-
-    [data-color='5'] & {
-      background: linear-gradient(to right, var(--rose-bud) 33%, var(--zuccini));
-    }
-
-    [data-color='6'] & {
-      background: linear-gradient(to right, var(--vermilion) 33%, var(--yellow-orange));
-    }
-  }
-
-  // c---[::::::::::::::::::::::>
+  // c---[======================>
   // elements
 
-  &__knob,
-  &__knob-bg {
-    position: absolute;
-    top: calc(50% - 1rem);
-    left: 0rem;
-    width: 5rem;
-    height: 2rem;
-    border-radius: 1rem;
-    overflow: hidden;
+  button {
+    position: relative;
+    width: inherit;
+    height: inherit;
+    margin: 0;
+    padding: 0;
   }
 
-  &__knob {
+  &__x {
     position: absolute;
-    width: 2rem;
-    background: var(--bright);
-    z-index: 1;
-  }
+    top: calc(50% - 1.7rem);
+    left: calc(50% - 0.2rem);
+    width: 0.3rem;
+    height: 3.5rem;
+    background: var(--dark);
+    transform: rotate(45deg);
+    transform-origin: 50% 50%;
 
-  &__knob-bg {
-    background: var(--bright);
-    opacity: 0.2;
-    z-index: 0;
+    &:first-child {
+      transform: rotate(-45deg);
+    }
   }
 }

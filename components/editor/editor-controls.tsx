@@ -4,6 +4,7 @@ import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/
 import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
+import ButtonClose from '../buttons/close';
 import ButtonToggle from '../buttons/toggle';
 import RadioSelector from '../controls/radio-selector';
 import RangeSlider, { RangeSliderElement } from '../controls/range-slider';
@@ -12,6 +13,7 @@ import SddwPoster from '../poster/poster';
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
 import EditorView from './editor-view';
+import ButtonIcon from '../buttons/icon';
 
 interface Reference {
   el?: HTMLElement | null,
@@ -203,7 +205,7 @@ export class EditorControlsElement extends HTMLElement {
     this.ref.poster = this.ref.el?.querySelector<HTMLElement>('[data-poster]');
     this.ref.viewEdit = this.ref.el?.querySelector<HTMLElement>('[data-view-edit]');
 
-    // input elements
+    // primary input element
     this.ref.input = this.ref.el.querySelector('input');
     if (this.ref.input) {
       this.ref.input.focus();
@@ -212,41 +214,49 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.input.addEventListener('click', this.#onInputClick);
     }
 
-    this.ref.inputRotation = this.ref.el.querySelector<RangeSliderElement>('[data-range-rotation]');
-    if (this.ref.inputRotation) {
-      this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
-    }
-
-    this.ref.inputScale = this.ref.el.querySelector<RangeSliderElement>('[data-range-scale]');
-    if (this.ref.inputScale) {
-      this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
-    }
-
+    // rendered input text (using special characters)
     this.ref.inputRendered = this.ref.el.querySelector<HTMLInputElement>('[data-input-rendered]');
     if (this.ref.inputRendered) {
       this.ref.inputRendered.addEventListener('click', this.#onOutputClick);
     }
 
+    // range selector - rotation
+    this.ref.inputRotation = this.ref.el.querySelector<RangeSliderElement>('[data-range-rotation]');
+    if (this.ref.inputRotation) {
+      this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
+    }
+
+    // range selector - input
+    this.ref.inputScale = this.ref.el.querySelector<RangeSliderElement>('[data-range-scale]');
+    if (this.ref.inputScale) {
+      this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
+    }
+
+    // generate button
     this.ref.generate = this.ref.el.querySelector<HTMLInputElement>('[data-generate]');
     if (this.ref.generate) {
       this.ref.generate.addEventListener('click', this.#onGenerateClick);
     }
 
+    // randomize color toggle
     this.ref.randomizeColors = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-colors]');
     if (this.ref.randomizeColors) {
       this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColors);
     }
 
+    // randomize word characters toggle
     this.ref.randomizeEachWord = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-each-word]');
     if (this.ref.randomizeEachWord) {
       this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWord);
     }
 
+    // shuffle button
     this.ref.shuffle = this.ref.el.querySelector<HTMLInputElement>('[data-shuffle]');
     if (this.ref.shuffle) {
       this.ref.shuffle.addEventListener('click', this.#onShuffleClick);
     }
 
+    // listen for page resize
     this.controllers.resize = ResizeController.set({
       update: this.#onResizeUpdate,
       render: this.#onResizeRender
@@ -284,9 +294,12 @@ if (!window.customElements.get(EditorControlsElement.selector)) {
 const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
     <EditorView className={styles['editor-controls__view-inputs-primary']} dataName={{ 'data-view-intro': '' }}>
+      {/* heading information */}
       <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
       <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
       <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
+
+      {/* main input field */}
       <div className={styles['editor-controls__input-placeholder']}>
         <div className={styles['editor-controls__input-placeholder-text']} data-input-placeholder>
           <span className='heading-display'>Your Name</span>
@@ -294,39 +307,73 @@ const EditorControls: FC = () => (
         <figure className={styles['editor-controls__input-placeholder-box']} data-input-box></figure>
         <div className={styles['editor-controls__input-rendered']} data-input-rendered></div>
       </div>
+
+      {/* generate button */}
       <div className={styles['editor-controls__primary-buttons-wrapper']}>
         <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
       </div>
     </EditorView>
+
     <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName={{ 'data-view-edit': '' }}>
+      {/* poster preview */}
       <div className={styles['editor-controls__poster-column']}>
         <SddwPoster className={styles['editor-controls__poster']} dataName={{ 'data-poster': '' }} />
       </div>
 
-      <Button className={styles['editor-controls__button-close']}></Button>
+      <div className={styles['editor-controls__controls-column']}>
+        {/* editing controls */}
+        <div className={styles['editor-controls__controls-wrapper']}>
+          <div className={styles['editor-controls__ranges-wrapper']}>
+            <RangeSlider dataName={{ 'data-range-scale': '' }} name='scale' value='50' index='0'>Size</RangeSlider>
+            <RangeSlider dataName={{ 'data-range-rotation': '' }} name='rotation' value="50" index='1'>Rotate</RangeSlider>
+          </div>
 
-      {/* controls */}
-      <div className={styles['editor-controls__controls-wrapper']}>
-        <div className={styles['editor-controls__ranges-wrapper']}>
-          <RangeSlider dataName={{ 'data-range-scale': '' }} name='scale' value='50' index='0'>Size</RangeSlider>
-          <RangeSlider dataName={{ 'data-range-rotation': '' }} name='rotation' value="50" index='1'>Rotate</RangeSlider>
+          <div className={styles['editor-controls__radio-background-wrapper']}>
+            <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['F8F9FA', '1B1C1E']}>Background Color</RadioSelector>
+          </div>
+
+          <div className={styles['editor-controls__options-wrapper']}>
+            <ButtonToggle dataName={{ 'data-randomize-each-word': '' }}>Randomize Each Word</ButtonToggle>
+            <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
+          </div>
+
+          <div className={styles['editor-controls__buttons-wrapper']}>
+            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+            <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
+          </div>
         </div>
 
-        <div className={styles['editor-controls__radio-background-wrapper']}>
-          <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['F8F9FA', '1B1C1E']}>Background Color</RadioSelector>
+        {/* sharing */}
+        <div className={styles['editor-controls__social-wrapper']}>
+          <ol className={styles['editor-controls__social-instructions']}>
+            <li>Download your design</li>
+            <li>Print and share your poster on social media</li>
+            <li>Tag us #SDDESIGNWEEK</li>
+          </ol>
+          <div className={styles['editor-controls__social-download-email-wrapper']}>
+            <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>Download</Button>
+            <Button big={true} className={styles['editor-controls__email']} dataName={{ 'data-email': '' }}>Shuffle</Button>
+          </div>
+          <div className={styles['editor-controls__social-share-icons']}>
+            <span className='text-p'>Share:</span>
+            <ul>
+              <li>
+                <ButtonIcon dataName={{ 'data-social-instagram': '' }}>instagram</ButtonIcon>
+              </li>
+              <li>
+                <ButtonIcon dataName={{ 'data-social-facebook': '' }}>facebook</ButtonIcon>
+              </li>
+              <li>
+                <ButtonIcon dataName={{ 'data-social-twitter': '' }}>twitter</ButtonIcon>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <div className={styles['editor-controls__options-wrapper']}>
-          <ButtonToggle dataName={{ 'data-randomize-each-word': '' }}>Randomize Each Word</ButtonToggle>
-          <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
-        </div>
-
-        <div className={styles['editor-controls__buttons-wrapper']}>
-          <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
-          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
-        </div>
-
       </div>
+
+
+      {/* close */}
+      <ButtonClose className={styles['editor-controls__button-close']} dataName={{ 'data-close': '' }}></ButtonClose>
 
     </EditorView>
   </div>

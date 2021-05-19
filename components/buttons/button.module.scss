@@ -3,7 +3,7 @@
   height: 5rem;
   background-color: var(--dark);
   background-clip: padding-box;
-  border: solid 0.2rem transparent;
+  border: none;
   border-radius: 2.5rem;
   padding: 0 3rem;
   text-transform: uppercase;
@@ -11,6 +11,7 @@
   position: relative;
   font-size: 1.2rem;
   white-space: nowrap;
+  box-shadow: inset 0rem 0rem 0rem 0.2rem var(--mint-green);
 
   // states ---------------------------------------------------------------- //
 
@@ -19,11 +20,19 @@
     height: 7rem;
     padding: 0 3rem;
     border-radius: 3.5rem;
-    border: solid 0.2rem transparent;
     font-size: 1.6rem;
+  }
 
+  &:hover,
+  &[data-active] {
     &:before {
-      margin: -0.2rem;
+      background: var(--mint-green);
+    }
+
+    span {
+      position: relative;
+      color: var(--dark);
+      z-index: 1;
     }
   }
 
@@ -35,14 +44,12 @@
 
   &:before {
     content: '';
-    margin: -0.2rem;
     border-radius: inherit;
-    background: var(--mint-green);
+    background: transparent;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: -1;
   }
 }

@@ -8,6 +8,14 @@
     visibility: hidden;
   }
 
+  // animation ------------------------------------------------------------- //
+
+  &__input-placeholder-box {
+    transition:
+      width var(--sddw_ease-dur-fast) var(--sddw_ease-out-jim-dynamic),
+      left var(--sddw_ease-dur-fast) var(--sddw_ease-out-jim-dynamic);
+  }
+
   // elements -------------------------------------------------------------- //
 
   &__input-text {
@@ -43,7 +51,26 @@
     flex-flow: row nowrap;
   }
 
-  // poster inputs (second)
+  // columns
+
+  &__controls-column,
+  &__poster-column {
+    display: flex;
+    position: relative;
+    min-width: 52rem;
+    width: 33vw;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__controls-column {
+    width: 25vw;
+    min-width: 35rem;
+    margin-left: 8.3vw;
+  }
+
+  // poster controls
 
   &__button-close {
     position: absolute;
@@ -52,9 +79,8 @@
     right: 5rem;
   }
 
-  &__controls-wrapper {
-    width: 25vw;
-    margin-left: 8.3vw;
+  &__controls-wrapper,
+  &__social-wrapper {
     border-radius: 2rem;
     padding: 5.5rem;
     box-shadow: inset 0rem 0rem 0rem 0.2rem var(--bright);
@@ -66,6 +92,10 @@
       &:first-child {
         margin-top: 0;
       }
+    }
+
+    > button-close-element {
+      margin: 0;
     }
   }
 
@@ -82,7 +112,7 @@
   &__radio-background-wrapper {
     display: block;
     margin-top: 3.5rem;
-  }  
+  }
 
   &__buttons-wrapper,
   &__options-wrapper {
@@ -109,7 +139,70 @@
 
   }
 
-  // primary input view (first)
+  // social buttons
+
+  &__social-wrapper {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  &__social-instructions {
+    list-style: none;
+    counter-reset: social-instructions;
+
+    li {
+      counter-increment: social-instructions;
+
+      &:before {
+        content: counter(social-instructions) '. ';
+        color: var(--bright);
+      }
+    }
+
+    li + li {
+      margin-top: 3rem;
+    }
+  }
+
+  &__social-download-email-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    flex-flow: row nowrap;
+
+    button,
+    button[data-big] {
+      min-width: 0rem;
+    }
+
+    button + button {
+      margin-left: 2rem;
+    }
+  }
+
+  &__social-share-icons {
+    > span {
+      display: block;
+      position: relative;
+    }
+
+    > span + ul {
+      margin-top: 1.5rem;
+    }
+
+    ul {
+      display: flex;
+      position: relative;
+      width: 100%;
+      flex-flow: row nowrap;
+
+      > li + li {
+        margin-left: 2.7rem;
+      }
+    }
+  }
+
+  // poster editing controls
 
   &__view-inputs-primary {
     > h2 {
@@ -238,16 +331,6 @@
 
   &__button-finish {
 
-  }
-
-  &__poster-column {
-    display: flex;
-    position: relative;
-    min-width: 52rem;
-    width: 33vw;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
   }
 
   &__poster {
