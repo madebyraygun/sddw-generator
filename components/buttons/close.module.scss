@@ -5,7 +5,6 @@
   height: 5.4rem;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--bright);
   margin: 0;
   padding: 0;
 
@@ -13,6 +12,8 @@
   // states
 
   button {
+    background: var(--bright);
+
     &:focus {
       outline: 0;
     }
@@ -20,6 +21,10 @@
     &:hover,
     &[data-active] {
       background: var(--mint-green);
+
+      figure {
+        background: var(--bright);
+      }
     }
   }
 

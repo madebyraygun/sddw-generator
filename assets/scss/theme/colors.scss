@@ -1,16 +1,21 @@
 :root {
   --black: #000;
-  --dark: #1B1C1E;
   --white: #fff;
-  --bright: #F8F9FA;
+
+  --athens-gray: #F8F9FA;
   --bright-grey: #5D5E60;
-  --cinnabar: #E75334;
-  --malibu: #66DEF4;
-  --cornflower-blue: #4D78F6;
-  --royal-purple: #6A2FA1;
-  --mint-green: #76FA95;
-  --mandy: #E94568;
   --candy-corn: #F9F15A;
+  --cinnabar: #E75334;
+  --cornflower-blue: #4D78F6;
+  --malibu: #66DEF4;
+  --mandy: #E94568;
+  --mint-green: #76FA95;
+  --royal-purple: #6A2FA1;
+  --shark: #1B1C1E;
+
+  // light / dark - can be inverted depending on theme state
+  --dark: #1B1C1E;
+  --bright: #F8F9FA;
 
   --bright-alpha-0: rgba(248, 249, 250, 0);
   --bright-alpha-20: rgba(248, 249, 250, 0.2);
