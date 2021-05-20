@@ -60,12 +60,12 @@
     min-width: 52rem;
     width: 33vw;
     flex-flow: row wrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 
   &__controls-column {
-    width: 25vw;
+    width: 33vw;
     min-width: 35rem;
     margin-left: 8.3vw;
   }
@@ -81,10 +81,6 @@
 
   &__controls-wrapper,
   &__social-wrapper {
-    border-radius: 2rem;
-    padding: 5.5rem;
-    box-shadow: inset 0rem 0rem 0rem 0.2rem var(--bright);
-
     > * {
       display: block;
       margin-top: 5rem;
@@ -97,6 +93,13 @@
     > button-close-element {
       margin: 0;
     }
+  }
+
+  &__controls-wrapper {
+    width: 25vw;
+    border-radius: 2rem;
+    padding: 5.5rem;
+    box-shadow: inset 0rem 0rem 0rem 0.2rem var(--bright);
   }
 
   &__ranges-wrapper {

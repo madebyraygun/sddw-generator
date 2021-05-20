@@ -16,6 +16,11 @@
     &:focus {
       outline: 0;
     }
+
+    &:hover,
+    &[data-active] {
+      background: var(--mint-green);
+    }
   }
 
   // c---[======================>
