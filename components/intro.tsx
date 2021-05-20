@@ -10,7 +10,7 @@ const Intro: FC = () => (
       <figure>
         <SvgAsset svgId='dsgn-wknd-big' svgType='logo' svgTheme='2021' />
         <div className={styles['intro__blurb']}>
-          <p>Design a poster or generate your logo. Let’s be part of the SDDW community.</p>
+          <p>Design a poster using your name for the SDDW community!</p>
         </div>
       </figure>
     </div>
