@@ -1,0 +1,14 @@
+.editor-control-view {
+  position: absolute;
+  left: -9999rem;
+  visibility: hidden;
+
+  // <==[------------------------------->
+  // states
+
+  &[data-active] {
+    position: relative;
+    left: 0rem;
+    visibility: visible;
+  }
+}

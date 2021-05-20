@@ -22,6 +22,10 @@ import BehaviorEditorSectionChange, { EditorSectionChangeEventProps } from '../b
 
 import Editor from '../../assets/js/constants/editor';
 import Section from '../../assets/js/constants/section';
+import BehaviorSectionChange from '../behaviors/section-change';
+import EditorControlView from './editor-control-view';
+import BehaviorEditorControlsChange from '../behaviors/editor-controls-change';
+import InputDate from '../input/date';
 
 interface Controllers {
   resize?: ResizeSubscriber
@@ -29,6 +33,7 @@ interface Controllers {
 
 interface Listeners {
   editor: EventEmitter,
+  controls: EventEmitter,
   section: EventEmitter,
 }
 interface Reference {
@@ -59,13 +64,15 @@ export class EditorControlsElement extends HTMLElement {
   inputWord: WordState;
 
   listeners: Listeners = {
-    section: EventController.getEmitterAlways(Section.SECTION_EMITTER),
+    controls: EventController.getEmitterAlways(Editor.CONTROLS_EMITTER),
     editor: EventController.getEmitterAlways(Editor.SECTION_EMITTER),
+    section: EventController.getEmitterAlways(Section.SECTION_EMITTER),
   };
 
   ref: Reference = {};
 
   sections: HTMLElement[] = [];
+  sectionsControls: HTMLElement[] = [];
 
   constructor() {
     super();
@@ -293,8 +300,15 @@ export class EditorControlsElement extends HTMLElement {
       this.sections.push($section);
     }
 
+    const controls = this.ref.el.querySelectorAll<HTMLElement>('[data-editor-control-section]');
+    for (let i = 0; i < controls.length; i++) {
+      const $section = controls[i];
+      this.sectionsControls.push($section);
+    }
+
     // listen for section changes
     this.listeners.editor.on(Section.ACTIVATE, this.#onSectionActivate);
+    this.listeners.controls.on(Section.ACTIVATE, this.#onControlsActivate);
 
     // listen for page resize
     this.controllers.resize = ResizeController.set({
@@ -314,6 +328,23 @@ export class EditorControlsElement extends HTMLElement {
     if (!$target.hasAttribute('data-active')) {
       for (let i = 0; i < this.sections.length; i++) {
         const $section = this.sections[i];
+        $section.removeAttribute('data-active');
+      }
+      $target.setAttribute('data-active', '');
+    }
+  }
+
+  #onControlsActivate = (e: EditorSectionChangeEventProps) => {
+    const $section = this.ref.el?.querySelector<HTMLElement>(`[data-editor-control-section=${e.id}]`);
+    if ($section) {
+      this.switchControls($section);
+    }
+  }
+
+  switchControls = ($target: HTMLElement) => {
+    if (!$target.hasAttribute('data-active')) {
+      for (let i = 0; i < this.sectionsControls.length; i++) {
+        const $section = this.sectionsControls[i];
         $section.removeAttribute('data-active');
       }
       $target.setAttribute('data-active', '');
@@ -381,7 +412,7 @@ const EditorControls: FC = () => (
 
       <div className={styles['editor-controls__controls-column']}>
         {/* editing controls */}
-        <div className={styles['editor-controls__controls-wrapper']}>
+        <EditorControlView className={styles['editor-controls__controls-wrapper']} dataName={{ 'data-editor-control-section': 'edit', 'data-active': '' }}>
           <div className={styles['editor-controls__ranges-wrapper']}>
             <RangeSlider dataName={{ 'data-range-scale': '' }} name='scale' value='50' index='0'>Size</RangeSlider>
             <RangeSlider dataName={{ 'data-range-rotation': '' }} name='rotation' value="50" index='1'>Rotate</RangeSlider>
@@ -391,19 +422,25 @@ const EditorControls: FC = () => (
             <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['F8F9FA', '1B1C1E']}>Background Color</RadioSelector>
           </div>
 
-          <div className={styles['editor-controls__options-wrapper']}>
+          <div className={styles['editor-controls__options-wrapper']} data-dev-only>
             <ButtonToggle dataName={{ 'data-randomize-each-word': '' }}>Randomize Each Word</ButtonToggle>
             <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
           </div>
 
-          <div className={styles['editor-controls__buttons-wrapper']}>
-            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
-            <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
+          <div className={styles['editor-controls__date-wrapper']} data-speaker-only>
+            <InputDate>Date of Your Talk</InputDate>
           </div>
-        </div>
+
+          <div className={styles['editor-controls__buttons-wrapper']}>
+            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '', 'data-dev-only': '' }}>Shuffle</Button>
+            <BehaviorEditorControlsChange sectionId='social'>
+              <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
+            </BehaviorEditorControlsChange>
+          </div>
+        </EditorControlView>
 
         {/* sharing */}
-        <div className={styles['editor-controls__social-wrapper']}>
+        <EditorControlView className={styles['editor-controls__social-wrapper']} dataName={{ 'data-editor-control-section': 'social' }}>
           <ol className={styles['editor-controls__social-instructions']}>
             <li>Download your design</li>
             <li>Print and share your poster on social media</li>
@@ -427,12 +464,13 @@ const EditorControls: FC = () => (
               </li>
             </ul>
           </div>
-        </div>
+        </EditorControlView>
       </div>
 
-
       {/* close */}
-      <ButtonClose className={styles['editor-controls__button-close']} dataName={{ 'data-close': '' }}></ButtonClose>
+      <BehaviorEditorSectionChange sectionId='intro'>
+        <ButtonClose className={styles['editor-controls__button-close']} dataName={{ 'data-close': '' }}></ButtonClose>
+      </BehaviorEditorSectionChange>
 
     </EditorView>
   </div>

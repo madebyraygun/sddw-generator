@@ -117,7 +117,8 @@
   }
 
   &__buttons-wrapper,
-  &__options-wrapper {
+  &__options-wrapper,
+  &__date-wrapper {
     display: flex;
     position: relative;
     z-index: 5;
@@ -135,6 +136,10 @@
     > * + * {
       margin-top: 3.5rem;
     }
+  }
+
+  &__date-wrapper {
+    
   }
 
   &__button-finish {
