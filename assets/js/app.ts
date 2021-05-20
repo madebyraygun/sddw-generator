@@ -1,8 +1,10 @@
-import AssetsController from './controllers/assets';
 import AnimationController from './controllers/animation';
+import AssetsController from './controllers/assets';
 import CursorController from './controllers/cursor';
+import DebugController from './controllers/debug';
 import EventController from './controllers/event';
 import ResizeController from './controllers/resize';
+import RoleController from './controllers/role';
 
 import Router from './utils/router';
 
@@ -48,14 +50,19 @@ const renderPage = (page: Node | string) => {
   }
 };
 
+// misc controllers
 const initializeControllers = () => {
   AnimationController.initialize();
   CursorController.initialize();
+  DebugController.initialize();
   ResizeController.initialize();
+  RoleController.initialize();
 };
 
 // fetch assets
 AssetsController.initialize();
+
+// node event emitting
 EventController.initialize();
 
 // require all JSX files for proper linting

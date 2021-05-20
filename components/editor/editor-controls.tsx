@@ -431,8 +431,11 @@ const EditorControls: FC = () => (
             <InputDate>Date of Your Talk</InputDate>
           </div>
 
+          <div className={styles['editor-controls__buttons-wrapper']} data-dev-only>
+            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+          </div>
+
           <div className={styles['editor-controls__buttons-wrapper']}>
-            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '', 'data-dev-only': '' }}>Shuffle</Button>
             <BehaviorEditorControlsChange sectionId='social'>
               <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
             </BehaviorEditorControlsChange>
@@ -448,7 +451,7 @@ const EditorControls: FC = () => (
           </ol>
           <div className={styles['editor-controls__social-download-email-wrapper']}>
             <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>Download</Button>
-            <Button big={true} className={styles['editor-controls__email']} dataName={{ 'data-email': '' }}>Shuffle</Button>
+            <Button big={true} className={styles['editor-controls__email']} dataName={{ 'data-email': '' }}>Email It</Button>
           </div>
           <div className={styles['editor-controls__social-share-icons']}>
             <span className='text-p'>Share:</span>

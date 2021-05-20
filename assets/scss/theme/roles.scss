@@ -1,0 +1,12 @@
+:global {
+  body:not(.is-developer) {
+    [data-dev-only] {
+      display: none;
+    }
+  }
+  body:not(.is-speaker) {
+    [data-speaker-only] {
+      display: none;
+    }
+  }
+}
