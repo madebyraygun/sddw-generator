@@ -1,3 +1,4 @@
+import BehaviorSectionChange from './behaviors/section-change';
 import Button from './buttons/button';
 
 import styles from './intro.module.scss';
@@ -14,7 +15,9 @@ const Intro: FC = () => (
       </figure>
     </div>
     <div className={styles['intro__button']}>
-      <Button big={true}>Get started</Button>
+      <BehaviorSectionChange sectionId='editor'>
+        <Button big={true}>Get started</Button>
+      </BehaviorSectionChange>
     </div>
     <div className={styles['intro__footnote']}>
       <span className='text-p-sm'>Please be respectful. <a href='https://sddesignweek.org/code-of-conduct' target='_blank' rel="noreferrer">SDDW Code of Conduct</a> community guidelines apply.</span>

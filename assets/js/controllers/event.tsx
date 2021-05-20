@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 
 import Controller from './controller';
+import DebugController from './debug';
 
 
 export interface EmitterSubscriber {
@@ -20,14 +21,14 @@ class EventController implements Controller {
   // add / remove subscribers
 
   set = (key: any): EmitterSubscriber => {
-    let emitter: EmitterSubscriber | null = this.get(key);
+    let emitter: EmitterSubscriber | null = this.getSubscriber(key);
     if (!emitter) {
       emitter = {
         key,
         emitter: new EventEmitter()
       };
       this.emitters.push(emitter);
-    } else {
+    } else if (DebugController.isActive) {
       console.warn(`EventController: Matching key ${key}. Attempt to set subscriber failed.`);
     }
     return emitter;
@@ -56,7 +57,7 @@ class EventController implements Controller {
 
   // find a subscriber by its key
 
-  get = (key: any): EmitterSubscriber | null => {
+  getSubscriber = (key: any): EmitterSubscriber | null => {
     for (let i = 0; i < this.emitters.length; i++) {
       const curEmitter = this.emitters[i];
       if (curEmitter.key === key) {
@@ -64,6 +65,16 @@ class EventController implements Controller {
       }
     }
     return null;
+  }
+
+  getEmitter = (key: any): EventEmitter | null => {
+    return this.getSubscriber(key)?.emitter ?? null;
+  }
+
+  // return an emitter no matter what - if it doesn't exist, create it
+
+  getEmitterAlways = (key: any): EventEmitter => {
+    return this.set(key).emitter;
   }
 
 }

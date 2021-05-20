@@ -1,6 +1,9 @@
-import Editor, { CharacterCallback } from '../../assets/js/controllers/editor';
+import EventEmitter from 'events';
+
+import EditorController, { CharacterCallback } from '../../assets/js/controllers/editor';
 import AssetsController from '../../assets/js/controllers/assets';
 import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
+import EventController from '../../assets/js/controllers/event';
 import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
@@ -15,8 +18,24 @@ import WordState from '../poster/word-state';
 import EditorView from './editor-view';
 import ButtonIcon from '../buttons/icon';
 
+import BehaviorEditorSectionChange, { EditorSectionChangeEventProps } from '../behaviors/editor-section-change';
+
+import Editor from '../../assets/js/constants/editor';
+import Section from '../../assets/js/constants/section';
+
+interface Controllers {
+  resize?: ResizeSubscriber
+}
+
+interface Listeners {
+  editor: EventEmitter,
+  section: EventEmitter,
+}
 interface Reference {
   el?: HTMLElement | null,
+  close?: HTMLElement| null,
+  generate?: HTMLInputElement | null,
+  input?: HTMLInputElement | null,
   inputBackgroundColor?: HTMLElement| null,
   inputBox?: HTMLElement | null,
   inputPlaceholder?: HTMLElement | null,
@@ -25,16 +44,10 @@ interface Reference {
   inputRotation?: RangeSliderElement| null,
   inputScale?: RangeSliderElement | null,
   poster?: HTMLElement | null,
-  viewEdit?: HTMLElement | null,
-  shuffle?: HTMLInputElement | null,
-  generate?: HTMLInputElement | null,
-  input?: HTMLInputElement | null,
   randomizeColors?: HTMLInputElement | null,
   randomizeEachWord?: HTMLInputElement | null,
-}
-
-interface Controllers {
-  resize?: ResizeSubscriber
+  shuffle?: HTMLInputElement | null,
+  viewEdit?: HTMLElement | null,
 }
 
 export class EditorControlsElement extends HTMLElement {
@@ -43,16 +56,23 @@ export class EditorControlsElement extends HTMLElement {
 
   controllers:Controllers = {};
 
+  inputWord: WordState;
+
+  listeners: Listeners = {
+    section: EventController.getEmitterAlways(Section.SECTION_EMITTER),
+    editor: EventController.getEmitterAlways(Editor.SECTION_EMITTER),
+  };
+
   ref: Reference = {};
 
-  inputWord: WordState;
+  sections: HTMLElement[] = [];
 
   constructor() {
     super();
     const Filter = require('bad-words');
     this.filter = new Filter({ exclude: ['fart', 'poop'] });
     this.inputWord = new WordState('', ThemeController.theme);
-    Editor.attachWord(this.inputWord);
+    EditorController.attachWord(this.inputWord);
   }
 
   cleanValue(value: string) {
@@ -68,7 +88,7 @@ export class EditorControlsElement extends HTMLElement {
 
   renderInputCharacters = () => {
     if (this.ref.inputRendered) {
-      Editor.renderWord(this.inputWord, this.ref.inputRendered, this.addPhraseListeners);
+      EditorController.renderWord(this.inputWord, this.ref.inputRendered, this.addPhraseListeners);
       this.resizeInputBox();
     }
   }
@@ -90,7 +110,7 @@ export class EditorControlsElement extends HTMLElement {
   #onCharacterClick = (e: MouseEvent) => {
     const $target: HTMLElement = e.currentTarget as HTMLElement;
     if ($target) {
-      Editor.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.inputRendered, this.#onCharacterEdit);
+      EditorController.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.inputRendered, this.#onCharacterEdit);
     }
   }
 
@@ -138,7 +158,7 @@ export class EditorControlsElement extends HTMLElement {
   // generate button: render current design into posters
   #onGenerateClick = () => {
     if (this.ref.poster) {
-      Editor.renderCurrentPosterToElement(this.ref.poster);
+      EditorController.renderCurrentPosterToElement(this.ref.poster);
       window.scrollTo(0, this.ref.viewEdit?.offsetTop ?? 0);
     }
   }
@@ -147,9 +167,9 @@ export class EditorControlsElement extends HTMLElement {
   #onRandomizeColors = (e: MouseEvent) => {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
-      Editor.randomizeColors($target.dataset.active === 'true');
+      EditorController.randomizeColors($target.dataset.active === 'true');
       if (this.ref.poster) {
-        Editor.renderCurrentPosterToElement(this.ref.poster);
+        EditorController.renderCurrentPosterToElement(this.ref.poster);
       }
     }
   }
@@ -158,9 +178,9 @@ export class EditorControlsElement extends HTMLElement {
   #onRandomizeEachWord = (e: MouseEvent) => {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
-      Editor.randomizeEachWord($target.dataset.active === 'true');
+      EditorController.randomizeEachWord($target.dataset.active === 'true');
       if (this.ref.poster) {
-        Editor.renderCurrentPosterToElement(this.ref.poster);
+        EditorController.renderCurrentPosterToElement(this.ref.poster);
       }
     }
   }
@@ -168,30 +188,35 @@ export class EditorControlsElement extends HTMLElement {
   // shuffle button: shuffle phrase design
   #onShuffleClick = () => {
     if (this.ref.generate) {
-      Editor.shuffleWord(this.inputWord, this.ref.inputRendered, (value) => {
+      EditorController.shuffleWord(this.inputWord, this.ref.inputRendered, (value) => {
         const $phrase: HTMLElement | null = this.ref.inputRendered?.querySelector('[data-phrase]') as HTMLElement;
         if ($phrase) {
           this.addPhraseListeners($phrase);
         }
       });
       if (this.ref.poster) {
-        Editor.shuffleAndRenderPosterToElement(this.ref.poster);
+        EditorController.shuffleAndRenderPosterToElement(this.ref.poster);
       }
     }
   }
 
   #onRotationChange = (e) => {
-    Editor.setRotation(e.state.valueLerped);
+    EditorController.setRotation(e.state.valueLerped);
     if (this.ref.poster) {
-      Editor.renderCurrentPosterToElement(this.ref.poster);
+      EditorController.renderCurrentPosterToElement(this.ref.poster);
     }
   }
 
   #onScaleChange = (e) => {
-    Editor.setScale(e.state.valueLerped);
+    EditorController.setScale(e.state.valueLerped);
     if (this.ref.poster) {
-      Editor.renderCurrentPosterToElement(this.ref.poster);
+      EditorController.renderCurrentPosterToElement(this.ref.poster);
     }
+  }
+
+  #onCloseClick = (e) => {
+    const $section = e.currentTarget.closest('[page-section-view]');
+    this.listeners.section.emit(Section.DEACTIVATE, $section);
   }
 
   // built in callback once JSX rendered
@@ -203,7 +228,7 @@ export class EditorControlsElement extends HTMLElement {
     this.ref.inputPlaceholder = this.ref.el.querySelector<HTMLElement>('[data-input-placeholder]');
     this.ref.inputPlaceholderSpan = this.ref.inputPlaceholder?.children[0] as HTMLElement;
     this.ref.poster = this.ref.el?.querySelector<HTMLElement>('[data-poster]');
-    this.ref.viewEdit = this.ref.el?.querySelector<HTMLElement>('[data-view-edit]');
+    this.ref.viewEdit = this.ref.el?.querySelector<HTMLElement>('[data-editor-section=edit]');
 
     // primary input element
     this.ref.input = this.ref.el.querySelector('input');
@@ -256,11 +281,43 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.shuffle.addEventListener('click', this.#onShuffleClick);
     }
 
+    // close button
+    this.ref.close = this.ref.el.querySelector<HTMLElement>('[data-close]');
+    if (this.ref.close) {
+      this.ref.close.addEventListener('click', this.#onCloseClick);
+    }
+
+    const sections = this.ref.el.querySelectorAll<HTMLElement>('[data-editor-section]');
+    for (let i = 0; i < sections.length; i++) {
+      const $section = sections[i];
+      this.sections.push($section);
+    }
+
+    // listen for section changes
+    this.listeners.editor.on(Section.ACTIVATE, this.#onSectionActivate);
+
     // listen for page resize
     this.controllers.resize = ResizeController.set({
       update: this.#onResizeUpdate,
       render: this.#onResizeRender
     });
+  }
+
+  #onSectionActivate = (e: EditorSectionChangeEventProps) => {
+    const $section = this.ref.el?.querySelector<HTMLElement>(`[data-editor-section=${e.id}]`);
+    if ($section) {
+      this.switchSection($section);
+    }
+  }
+
+  switchSection = ($target: HTMLElement) => {
+    if (!$target.hasAttribute('data-active')) {
+      for (let i = 0; i < this.sections.length; i++) {
+        const $section = this.sections[i];
+        $section.removeAttribute('data-active');
+      }
+      $target.setAttribute('data-active', '');
+    }
   }
 
   #onResizeUpdate = ():boolean => {
@@ -293,7 +350,7 @@ if (!window.customElements.get(EditorControlsElement.selector)) {
 
 const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
-    <EditorView className={styles['editor-controls__view-inputs-primary']} dataName={{ 'data-view-intro': '' }}>
+    <EditorView className={styles['editor-controls__view-inputs-primary']} dataName={{ 'data-editor-section': 'intro', 'data-active': '' }}>
       {/* heading information */}
       <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
       <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
@@ -310,11 +367,13 @@ const EditorControls: FC = () => (
 
       {/* generate button */}
       <div className={styles['editor-controls__primary-buttons-wrapper']}>
-        <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
+        <BehaviorEditorSectionChange sectionId='edit'>
+          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
+        </BehaviorEditorSectionChange>
       </div>
     </EditorView>
 
-    <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName={{ 'data-view-edit': '' }}>
+    <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName={{ 'data-editor-section': 'edit' }}>
       {/* poster preview */}
       <div className={styles['editor-controls__poster-column']}>
         <SddwPoster className={styles['editor-controls__poster']} dataName={{ 'data-poster': '' }} />
