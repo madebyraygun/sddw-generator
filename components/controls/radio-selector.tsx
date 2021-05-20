@@ -1,15 +1,18 @@
 import { CustomProps } from '../types/props';
+import { EventEmitter } from 'events';
+
+import EventController from '../../assets/js/controllers/event';
+
 import styles from './radio-selector.module.scss';
 
 export interface RadioSelectorProps extends CustomProps {
   name: string,
-  values?: string[]
+  values: string[]
 }
 
 export interface RadioSelectorState {
-  lastX: number,
-  x: number,
-  values: string[]
+  target?: HTMLElement | null,
+  value: string
 }
 
 interface Flags {
@@ -17,37 +20,50 @@ interface Flags {
 }
 interface Reference {
   el?: HTMLElement,
-  inputRange?: HTMLInputElement | null,
-  track?: HTMLInputElement | null,
-  progress?: HTMLInputElement | null,
-  knob?: HTMLInputElement | null,
+  radios?: NodeListOf<Element>,
 }
 
-class RadioSelectorElement extends HTMLElement {
+export class RadioSelectorElement extends HTMLElement {
 
   static selector = 'radio-selector';
+  static CHANGE = 'range-slider-change';
 
   ref: Reference = {};
+  emitter: EventEmitter = EventController.set({ key: this }).emitter;
 
   flags: Flags = {
     isMouseDown: false
   }
 
-  state: RadioSelectorState= {
-    lastX: -1,
-    x: -1,
-    value: 0
+  state: RadioSelectorState = {
+    target: null,
+    value: ''
   }
 
   connectedCallback() {
     this.ref.el = this;
+    this.ref.radios = this.ref.el.querySelectorAll('input[type=radio]');
+
+    for (let i = 0; i < this.ref.radios.length; i++) {
+      const $radio = this.ref.radios[i] as HTMLInputElement;
+      $radio.addEventListener('change', this.#onChange);
+      if (!this.state.target) {
+        if ($radio.hasAttribute('checked') || $radio.checked) {
+          this.state.target = $radio;
+        }
+      } else {
+        $radio.removeAttribute('checked');
+      }
+    }
   }
 
-  #onChange = () => {
-    this.render();
-    if (this.ref?.el) {
-      this.ref.el.dispatchEvent(new CustomEvent('change', { detail: { state: this.state } }));
+  #onChange = (e) => {
+    const $target = e.currentTarget as HTMLInputElement;
+    if ($target.checked) {
+      this.state.target = $target;
+      this.state.value = $target.value;
     }
+    this.emitter.emit(RadioSelectorElement.CHANGE, { state: this.state });
   }
 
 }
@@ -69,12 +85,10 @@ const RadioSelector: FC<RadioSelectorProps> = ({
     } = {};
     if (i === 0) props.checked = true;
 
-    const styleProps = `background: #${value}`;
-
     radios.push((
       <li className={styles['radio-selector__control-item']}>
         <input type="radio" id={value} name={name} value={value} {...props}></input>
-        <label htmlFor={value} style={styleProps}>{value}</label>
+        <label htmlFor={value} style={`background: #${value}`}>{value}</label>
       </li>
     ));
   }

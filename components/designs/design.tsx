@@ -81,11 +81,16 @@ class Design {
       wordWidth += newWidth + (i > 0 ? charSpacer / factor : 0);
       charOffset = wordWidth - newWidth;
       characterElements.push(
-        <g key={`char${character.variationIndex}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character>
+        <g key={`char${character.variationIndex}`} transform={`translate(${charOffset} 0) scale(${factor})`} data-character={character.variationIndex ? '' : 'currentColor'}>
           {[...svgCharacter.children ?? []].map((path, index) => {
             const d = path.getAttribute('d');
+            if (character.variationIndex) {
+              return d ? (
+                <path key={index} d={d} fill={character.colors[index]}></path>
+              ) : null;
+            }
             return d ? (
-              <path key={index} d={d} fill={!character.variationIndex ? this.theme.colors.dark : character.colors[index]}></path>
+              <path key={index} d={d}></path>
             ) : null;
           })}
         </g>
@@ -227,7 +232,7 @@ class Design {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${this.poster.width} ${this.poster.height}`} style={{
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
-          <rect width="1350" height="1800" fill={this.theme.colors.bright} />
+          <rect width="1350" height="1800" />
           {lines}
           {footer}
         </svg>

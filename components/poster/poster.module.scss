@@ -4,4 +4,25 @@
       transform-origin: 50% 50%;
     }
   }
+
+  *[data-fill-bright] {
+    * {
+      fill: var(--bright);
+    }
+  }
+
+  *[fill='#F8F9FA'] {
+    fill: var(--bright) !important;
+  }
+
+  *[fill='#1B1C1E'] {
+    fill: var(--dark) !important;
+  }
+
+  *[data-fill-dark],
+  *[data-character='currentColor'] {
+    * {
+      fill: var(--dark);
+    }
+  }
 }

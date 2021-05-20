@@ -1,4 +1,4 @@
-import { CustomProps } from '../types/props';
+import { CustomProps } from '../../types/props';
 
 import styles from './editor-view.module.scss';
 

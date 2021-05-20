@@ -48,6 +48,8 @@
 
   &__view-inputs-poster {
     flex-flow: row nowrap;
+    justify-content: flex-start;
+    padding-left: 16.67vw;
   }
 
   // columns
@@ -64,7 +66,8 @@
   }
 
   &__controls-column {
-    width: 33vw;
+    width: 100%;
+    max-width: 33vw;
     min-width: 35rem;
     margin-left: 8.3vw;
   }
@@ -304,6 +307,14 @@
         }
       }
     }
+
+    *[fill='#F8F9FA'] {
+      fill: var(--bright) !important;
+    }
+
+    *[fill='#1B1C1E'] {
+      fill: var(--dark) !important;
+    }
   }
 
   &__primary-buttons-wrapper {
@@ -343,7 +354,6 @@
   &__poster {
     position: relative;
     width: 100%;
-    background: red;
   }
 
   &__range-slider {

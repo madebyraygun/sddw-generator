@@ -9,21 +9,20 @@ import ThemeController from '../../assets/js/controllers/theme';
 import Button from '../buttons/button';
 import ButtonClose from '../buttons/close';
 import ButtonToggle from '../buttons/toggle';
-import RadioSelector from '../controls/radio-selector';
+import RadioSelector, { RadioSelectorElement } from '../controls/radio-selector';
 import RangeSlider, { RangeSliderElement } from '../controls/range-slider';
 import SddwPoster from '../poster/poster';
 
 import styles from './editor-controls.module.scss';
 import WordState from '../poster/word-state';
-import EditorView from './editor-view';
+import EditorView from './views/editor-view';
 import ButtonIcon from '../buttons/icon';
 
 import BehaviorEditorSectionChange, { EditorSectionChangeEventProps } from '../behaviors/editor-section-change';
 
 import Editor from '../../assets/js/constants/editor';
 import Section from '../../assets/js/constants/section';
-import BehaviorSectionChange from '../behaviors/section-change';
-import EditorControlView from './editor-control-view';
+import EditorControlView from './controls/editor-control-view';
 import BehaviorEditorControlsChange from '../behaviors/editor-controls-change';
 import InputDate from '../input/date';
 
@@ -41,7 +40,7 @@ interface Reference {
   close?: HTMLElement| null,
   generate?: HTMLInputElement | null,
   input?: HTMLInputElement | null,
-  inputBackgroundColor?: HTMLElement| null,
+  inputBackgroundColor?: RadioSelectorElement| null,
   inputBox?: HTMLElement | null,
   inputPlaceholder?: HTMLElement | null,
   inputPlaceholderSpan?: HTMLElement | null,
@@ -73,6 +72,8 @@ export class EditorControlsElement extends HTMLElement {
 
   sections: HTMLElement[] = [];
   sectionsControls: HTMLElement[] = [];
+
+  filter: any;
 
   constructor() {
     super();
@@ -226,6 +227,20 @@ export class EditorControlsElement extends HTMLElement {
     this.listeners.section.emit(Section.DEACTIVATE, $section);
   }
 
+  #onBackgroundColorChange = (e) => {
+    if (e && e.state) {
+      if (parseInt(`0x${e.state.value}`, 16) < parseInt('0x888888', 16)) {
+        // is dark mode
+        document.body.classList.add('is-dark');
+        document.body.classList.remove('is-light');
+      } else {
+        // is light mode
+        document.body.classList.add('is-light');
+        document.body.classList.remove('is-dark');
+      }
+    }
+  }
+
   // built in callback once JSX rendered
   connectedCallback() {
     this.ref.el = this;
@@ -262,6 +277,12 @@ export class EditorControlsElement extends HTMLElement {
     this.ref.inputScale = this.ref.el.querySelector<RangeSliderElement>('[data-range-scale]');
     if (this.ref.inputScale) {
       this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
+    }
+
+    // background color selector
+    this.ref.inputBackgroundColor = this.ref.el.querySelector<RadioSelectorElement>('[data-background-color]');
+    if (this.ref.inputBackgroundColor) {
+      this.ref.inputBackgroundColor.emitter.on(RadioSelectorElement.CHANGE, this.#onBackgroundColorChange);
     }
 
     // generate button

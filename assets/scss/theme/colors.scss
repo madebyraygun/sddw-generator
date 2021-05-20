@@ -19,3 +19,15 @@
 
   --gradient-rainbow: linear-gradient(to right, var(--royal-purple), var(--cornflower-blue), var(--malibu), var(--mint-green), var(--candy-corn), var(--cinnabar), var(--mandy));
 }
+
+:global {
+  body.is-light {
+    --dark: #F8F9FA;
+    --bright: #1B1C1E;
+
+    --bright-alpha-0: rgba(27, 28, 30, 0);
+    --bright-alpha-20: rgba(27, 28, 30, 0.2);
+    --bright-alpha-40: rgba(27, 28, 30, 0.4);
+    --bright-alpha-100: rgba(27, 28, 30, 1);
+  }
+}
