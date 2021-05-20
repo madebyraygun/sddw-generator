@@ -23,7 +23,7 @@ export class ButtonToggleElement extends HTMLElement {
     isToggled: boolean,
     lastColorVariation: number
   } = {
-    isToggled: true,
+    isToggled: false,
     lastColorVariation: -1
   };
 
@@ -56,7 +56,7 @@ export class ButtonToggleElement extends HTMLElement {
     return index;
   }
 
-  #onButtonClick = (e) => {
+  #onButtonClick = () => {
     this.toggleButton(!this.state.isToggled);
   }
 

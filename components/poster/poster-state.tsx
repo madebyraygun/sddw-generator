@@ -38,8 +38,8 @@ class PosterState {
     isLineClamped: boolean,
     isWordWrap: boolean,
   } = {
-    isRandomColors: true,
-    isRandomWords: true,
+    isRandomColors: false,
+    isRandomWords: false,
     isLineClamped: true,
     isWordWrap: true,
   };

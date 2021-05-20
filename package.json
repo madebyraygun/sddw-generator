@@ -70,6 +70,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "gsap": "file:gsap-bonus.tgz"
+    "gsap": "file:gsap-bonus.tgz",
+    "@types/month-days": "^3.0.0"
   }
 }

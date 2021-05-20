@@ -263,57 +263,39 @@ export class EditorControlsElement extends HTMLElement {
 
     // rendered input text (using special characters)
     this.ref.inputRendered = this.ref.el.querySelector<HTMLInputElement>('[data-input-rendered]');
-    if (this.ref.inputRendered) {
-      this.ref.inputRendered.addEventListener('click', this.#onOutputClick);
-    }
+    if (this.ref.inputRendered) this.ref.inputRendered.addEventListener('click', this.#onOutputClick);
 
     // range selector - rotation
     this.ref.inputRotation = this.ref.el.querySelector<RangeSliderElement>('[data-range-rotation]');
-    if (this.ref.inputRotation) {
-      this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
-    }
+    if (this.ref.inputRotation) this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
 
     // range selector - input
     this.ref.inputScale = this.ref.el.querySelector<RangeSliderElement>('[data-range-scale]');
-    if (this.ref.inputScale) {
-      this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
-    }
+    if (this.ref.inputScale) this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
 
     // background color selector
     this.ref.inputBackgroundColor = this.ref.el.querySelector<RadioSelectorElement>('[data-background-color]');
-    if (this.ref.inputBackgroundColor) {
-      this.ref.inputBackgroundColor.emitter.on(RadioSelectorElement.CHANGE, this.#onBackgroundColorChange);
-    }
+    if (this.ref.inputBackgroundColor) this.ref.inputBackgroundColor.emitter.on(RadioSelectorElement.CHANGE, this.#onBackgroundColorChange);
 
     // generate button
     this.ref.generate = this.ref.el.querySelector<HTMLInputElement>('[data-generate]');
-    if (this.ref.generate) {
-      this.ref.generate.addEventListener('click', this.#onGenerateClick);
-    }
+    if (this.ref.generate) this.ref.generate.addEventListener('click', this.#onGenerateClick);
 
     // randomize color toggle
     this.ref.randomizeColors = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-colors]');
-    if (this.ref.randomizeColors) {
-      this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColors);
-    }
+    if (this.ref.randomizeColors) this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColors);
 
     // randomize word characters toggle
     this.ref.randomizeEachWord = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-each-word]');
-    if (this.ref.randomizeEachWord) {
-      this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWord);
-    }
+    if (this.ref.randomizeEachWord) this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWord);
 
     // shuffle button
     this.ref.shuffle = this.ref.el.querySelector<HTMLInputElement>('[data-shuffle]');
-    if (this.ref.shuffle) {
-      this.ref.shuffle.addEventListener('click', this.#onShuffleClick);
-    }
+    if (this.ref.shuffle) this.ref.shuffle.addEventListener('click', this.#onShuffleClick);
 
     // close button
     this.ref.close = this.ref.el.querySelector<HTMLElement>('[data-close]');
-    if (this.ref.close) {
-      this.ref.close.addEventListener('click', this.#onCloseClick);
-    }
+    if (this.ref.close) this.ref.close.addEventListener('click', this.#onCloseClick);
 
     const sections = this.ref.el.querySelectorAll<HTMLElement>('[data-editor-section]');
     for (let i = 0; i < sections.length; i++) {
