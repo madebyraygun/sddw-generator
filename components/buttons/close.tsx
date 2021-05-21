@@ -15,15 +15,7 @@ export class ButtonCloseElement extends HTMLElement {
 
   connectedCallback() {
     this.ref.el = this;
-
     this.ref.button = this.ref.el?.children[0] as HTMLButtonElement;
-    if (this.ref.button) {
-      this.ref.button.addEventListener('click', this.#onButtonClick);
-    }
-  }
-
-  #onButtonClick = () => {
-    console.log('close');
   }
 
 }

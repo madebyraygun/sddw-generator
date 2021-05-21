@@ -1,5 +1,6 @@
 import EventEmitter from 'events';
 
+import AnimationController from '../../assets/js/controllers/animation';
 import AssetsController from '../../assets/js/controllers/assets';
 import EditorController, { CharacterCallback } from '../../assets/js/controllers/editor';
 import EventController from '../../assets/js/controllers/event';
@@ -349,37 +350,57 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   #onSectionActivate = (e: EditorSectionChangeEventProps) => {
-    const $section = this.ref.el?.querySelector<HTMLElement>(`[data-editor-section=${e.id}]`);
-    if ($section) {
-      this.switchSection($section);
+    if (e.id) {
+      this.switchSection(e.id);
     }
   }
 
-  switchSection = ($target: HTMLElement) => {
-    if (!$target.hasAttribute('data-active')) {
+  switchSection = (id: string) => {
+    const $target = this.ref.el?.querySelector<HTMLElement>(`[data-editor-section=${id}]`);
+
+    if ($target && !$target.hasAttribute('data-active')) {
       for (let i = 0; i < this.sections.length; i++) {
         const $section = this.sections[i];
         $section.removeAttribute('data-active');
       }
+
+      if (id === 'intro') {
+        this.resetControls();
+
+        // wait one frame (until click is complete) then focus on main input
+        AnimationController.one({
+          update: () => true,
+          render: () => {
+            if (this.ref.input) {
+              this.ref.input.focus();
+            }
+          }
+        });
+      }
+
       $target.setAttribute('data-active', '');
     }
   }
 
   #onControlsActivate = (e: EditorSectionChangeEventProps) => {
-    const $section = this.ref.el?.querySelector<HTMLElement>(`[data-editor-control-section=${e.id}]`);
-    if ($section) {
-      this.switchControls($section);
+    if (e.id) {
+      this.switchControls(e.id);
     }
   }
 
-  switchControls = ($target: HTMLElement) => {
-    if (!$target.hasAttribute('data-active')) {
+  switchControls = (id: string) => {
+    const $target = this.ref.el?.querySelector<HTMLElement>(`[data-editor-control-section=${id}]`);
+    if ($target && !$target.hasAttribute('data-active')) {
       for (let i = 0; i < this.sectionsControls.length; i++) {
         const $section = this.sectionsControls[i];
         $section.removeAttribute('data-active');
       }
       $target.setAttribute('data-active', '');
     }
+  }
+
+  resetControls = () => {
+    this.switchControls('edit');
   }
 
   #onResizeUpdate = ():boolean => {

@@ -32,7 +32,6 @@ export class BehaviorEditorSectionChangeElement extends HTMLElement {
   #onButtonClick = () => {
     if (this.ref.el) {
       const id = this.ref.el.dataset.editorSectionChangeId as string;
-      console.log(id);
       this.emitter.emit(Editor.ACTIVATE, { id });
     }
   }

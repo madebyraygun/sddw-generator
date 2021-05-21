@@ -2,6 +2,10 @@ import ThemeController from './theme';
 
 import PosterState from '../../../components/poster/poster-state';
 import WordState from '../../../components/poster/word-state';
+import Controller from './controller';
+import EventController from './event';
+import { EventEmitter } from 'events';
+import Editor from '../constants/editor';
 
 export interface CharacterCallback {
   word: WordState,
@@ -15,17 +19,28 @@ export interface WordCallback {
   container?: HTMLElement | null,
 }
 
-class EditorController {
+class EditorController implements Controller {
 
   posters: Array<PosterState>;
   currentPoster: PosterState;
   currentWord: WordState;
+  sectionEmitter: EventEmitter;
+
+  flags: {
+    isInitialized: boolean
+  } = {
+    isInitialized: false
+  }
 
   constructor() {
-    try {
+    this.initialize();
+  }
+
+  initialize() {
+    if (!this.flags.isInitialized) {
+      this.flags.isInitialized = true;
       this.currentPoster = new PosterState(ThemeController.theme);
-    } catch (e) {
-      console.warn(e);
+      this.sectionEmitter = EventController.getEmitterAlways(Editor.SECTION_EMITTER);
     }
   }
 
