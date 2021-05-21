@@ -205,25 +205,30 @@ class WordState {
   // NOTE: this is different from rendering based on design
   // REASON: design may have additional rendering requirements, like breaking apart words
 
-  render(): HTMLElement {
+  renderInput(renderedHeight = this.theme.inputRenderedHeight): HTMLElement {
     const $word: HTMLElement = document.createElement('figure');
+    let i = 0;
 
     for (const character of this.characters) {
       const svgCharacter = AssetsController.getCharacter(character.glyph, character.variationIndex);
-      const [width, height] = svgCharacter.dimension;
-      const phraseHeight = this.theme.inputRenderedHeight;
-      $word.appendChild(
-        <figure data-character data-index={$word.children.length} style={{ width: `${PxToRem.convert(width * (phraseHeight / height))}rem`, height: `${PxToRem.convert(phraseHeight)}rem` }}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
-            {[...svgCharacter.children].map((path, index) => {
-              const d = path.getAttribute('d');
-              return d ? (
-                <path key={index} d={d} fill={!character.variationIndex ? this.theme.bright : character.colors[index]}></path>
-              ) : null;
-            })}
-          </svg>
-        </figure>
-      );
+      if (svgCharacter) {
+        const [width, height] = svgCharacter.dimension;
+        const renderedWidth = width * (renderedHeight / height);
+        const letterSpacing = renderedHeight / this.theme.inputRenderedHeight * this.theme.inputRenderedLetterSpacing;
+        $word.appendChild(
+          <figure data-character data-index={$word.children.length} style={{ width: `${PxToRem.convert(renderedWidth)}rem`, height: `${PxToRem.convert(renderedHeight)}rem`, marginLeft: `${PxToRem.convert(letterSpacing)}rem` }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
+              {[...svgCharacter.children].map((path, index) => {
+                const d = path.getAttribute('d');
+                return d ? (
+                  <path key={index} d={d} fill={!character.variationIndex ? this.theme.bright : character.colors[index]}></path>
+                ) : null;
+              })}
+            </svg>
+          </figure>
+        );
+        i++;
+      }
     }
 
     return $word;

@@ -1,9 +1,10 @@
 import EventEmitter from 'events';
 
-import EditorController, { CharacterCallback } from '../../assets/js/controllers/editor';
 import AssetsController from '../../assets/js/controllers/assets';
-import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
+import EditorController, { CharacterCallback } from '../../assets/js/controllers/editor';
 import EventController from '../../assets/js/controllers/event';
+import ResizeController, { ResizeSubscriber } from '../../assets/js/controllers/resize';
+import RoleController from '../../assets/js/controllers/role';
 import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
@@ -25,6 +26,9 @@ import Section from '../../assets/js/constants/section';
 import EditorControlView from './controls/editor-control-view';
 import BehaviorEditorControlsChange from '../behaviors/editor-controls-change';
 import InputDate from '../input/date';
+import Role from '../../assets/js/constants/role';
+
+import PxToRem from '../../assets/js/utils/pxToRem';
 
 interface Controllers {
   resize?: ResizeSubscriber
@@ -96,7 +100,26 @@ export class EditorControlsElement extends HTMLElement {
 
   renderInputCharacters = () => {
     if (this.ref.inputRendered) {
-      EditorController.renderWord(this.inputWord, this.ref.inputRendered, this.addPhraseListeners);
+      let $inputWord = EditorController.renderWord(this.inputWord, this.ref.inputRendered);
+
+      // check word size, shrink if necessary
+      const placeholderWidth = this.ref.inputPlaceholderSpan?.offsetWidth ?? 0;
+      const inputRenderedWidth = this.ref.inputRendered?.offsetWidth ?? 0;
+
+      if (placeholderWidth && inputRenderedWidth) {
+        const scaleDifference = Math.round(placeholderWidth / inputRenderedWidth * 4) / 4;
+        if (scaleDifference < 1) {
+          // if input is too big, rerender and scale down
+          const scaledHeight = this.inputWord.theme.inputRenderedHeight * scaleDifference;
+          $inputWord = EditorController.renderWord(this.inputWord, this.ref.inputRendered, scaledHeight);
+
+          this.ref.inputRendered.style.height = `${PxToRem.convert(scaledHeight)}rem`;
+        } else {
+          this.ref.inputRendered.style.height = '';
+        }
+      }
+
+      this.addPhraseListeners($inputWord);
       this.resizeInputBox();
     }
   }
@@ -141,7 +164,12 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.inputPlaceholder?.removeAttribute('data-hidden');
     }
 
-    const filteredValue = value ? this.filter.clean(value) : '';
+    let filteredValue:string;
+    if (RoleController.role === Role.SPEAKER) {
+      filteredValue = value || '';
+    } else {
+      filteredValue = !value ? '' : this.filter.clean(value);
+    }
 
     this.inputWord.feed(filteredValue);
     this.renderInputCharacters();
@@ -386,7 +414,7 @@ const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
     <EditorView className={styles['editor-controls__view-inputs-primary']} dataName={{ 'data-editor-section': 'intro', 'data-active': '' }}>
       {/* heading information */}
-      <input className={styles['editor-controls__input-text']} type="text" maxLength={16} />
+      <input className={styles['editor-controls__input-text']} type="text" maxLength={21} />
       <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
       <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
 

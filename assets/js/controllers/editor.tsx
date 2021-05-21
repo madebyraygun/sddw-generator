@@ -1,5 +1,3 @@
-// import swearjar from 'swearjar';
-
 import ThemeController from './theme';
 
 import PosterState from '../../../components/poster/poster-state';
@@ -17,7 +15,7 @@ export interface WordCallback {
   container?: HTMLElement | null,
 }
 
-class Editor {
+class EditorController {
 
   posters: Array<PosterState>;
   currentPoster: PosterState;
@@ -122,16 +120,14 @@ class Editor {
 
   // render word to container
 
-  renderWord(word: WordState, $container?: HTMLElement | null, callback?: (value: HTMLElement) => void) {
-    const $word:HTMLElement = word.render();
+  renderWord(word: WordState, $container?: HTMLElement | null, renderedHeight = this.currentWord.theme.inputRenderedHeight) {
+    const $word:HTMLElement = word.renderInput(renderedHeight);
 
     if ($container) {
       $word.setAttribute('data-phrase', '');
       $container.innerHTML = '';
       $container.appendChild($word);
     }
-
-    if (callback) callback($word);
 
     return $word;
   }
@@ -175,4 +171,4 @@ class Editor {
 
 }
 
-export default new Editor();
+export default new EditorController();

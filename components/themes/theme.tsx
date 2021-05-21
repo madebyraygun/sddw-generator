@@ -24,9 +24,11 @@ class Theme {
   config: {
     characterVariationsTotal: number,
     inputRenderedHeight: number,
+    inputRenderedLetterSpacing: number,
   } = {
     characterVariationsTotal: 3,
     inputRenderedHeight: 100,
+    inputRenderedLetterSpacing: 10,
   }
 
   getShuffledColors() {
@@ -53,6 +55,10 @@ class Theme {
 
   get inputRenderedHeight():number {
     return this.config.inputRenderedHeight;
+  }
+
+  get inputRenderedLetterSpacing():number {
+    return this.config.inputRenderedLetterSpacing;
   }
 
 }
