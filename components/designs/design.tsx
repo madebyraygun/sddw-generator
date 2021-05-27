@@ -41,7 +41,7 @@ class Design {
   } = {
     rotationMin: -90,
     rotationMax: 90,
-    scaleMin: 0.4,
+    scaleMin: 0.6,
     scaleMax: 3,
   };
 
@@ -116,7 +116,7 @@ class Design {
     };
   }
 
-  generateLine(showUserDesign = true, render = true): LineGenerated {
+  generateLine(showUserDesign = true, render = true, bleed = 0): LineGenerated {
     const wordsGenerated: WordGenerated[] = [];
     const wordsElements: HTMLElement[] = [];
     let k = 0;
@@ -147,7 +147,7 @@ class Design {
 
       wordOffset += wordGenerated.dimensions.width + wordGenerated.dimensions.spacing;
       k++;
-    } while (wordOffset < this.poster.width);
+    } while (wordOffset < this.poster.width + bleed);
 
     const lineWidth = wordOffset - spacing;
     const lineElement = (
@@ -178,21 +178,60 @@ class Design {
     let lineOffsetYNoRotation = 0;
     let wordCount = 0;
 
-    do {
-      const lineGenerated = this.generateLine(!wordCount);
-      const { wordsGenerated } = lineGenerated;
-      const lineHeight = lineGenerated.dimensions.height;
-      const radians = this.poster.rotation / 180 * Math.PI;
-      lineOffsetYNoRotation = lineHeight * j + lineSpacer * j;
+    // calculate bounding box
+    const rotationRadians = this.poster.rotation * Math.PI / 180;
+    const boundingWidth = this.poster.height * Math.abs(Math.sin(rotationRadians)) + this.poster.width * Math.abs(Math.cos(rotationRadians));
+    const boundingHeight = this.poster.width * Math.abs(Math.sin(rotationRadians)) + this.poster.height * Math.abs(Math.cos(rotationRadians));
+    const bleedHoriz = Math.abs(boundingWidth - this.poster.width);
+    const bleedVert = Math.abs(boundingHeight - this.poster.height);
 
-      const lineOffsetX = Math.sin(radians) * (0 - lineOffsetYNoRotation);
-      const lineOffsetY = Math.cos(radians) * (lineOffsetYNoRotation);
+    // create bleed area for worst possible rotation
+    const worstRotationRadians = 45 * Math.PI / 180;
+    const worstBoundingWidth = this.poster.height * Math.abs(Math.sin(worstRotationRadians)) + this.poster.width * Math.abs(Math.cos(worstRotationRadians));
+    const worstBoundingHeight = this.poster.width * Math.abs(Math.sin(worstRotationRadians)) + this.poster.height * Math.abs(Math.cos(worstRotationRadians));
+    const worstBleedHoriz = Math.abs(worstBoundingWidth - this.poster.width);
+    const worstBleedVert = Math.abs(worstBoundingHeight - this.poster.height);
+
+    // create bleed lines outside normal viewport
+    const lineFirstGenerated = this.generateLine(!wordCount, true, worstBleedHoriz);
+    const lineHeight = lineFirstGenerated.dimensions.height;
+
+    const bleedLineCountH = Math.ceil(worstBleedVert / lineHeight / 2);
+    const bleedLineHeight = bleedLineCountH * lineHeight * 2;
+    const bleedLinesUp = bleedLineCountH;
+
+    do {
+      const lineGenerated = !j ? lineFirstGenerated : this.generateLine(!wordCount, true, worstBleedHoriz);
+      const { wordsGenerated } = lineGenerated;
+
+      // calculate words offscreen for each line
+      // this will be different for each line if the words leading in are different from each other
+
+      const bleedWidth = 0;
+
+      // position line
+
+      lineOffsetYNoRotation = (lineHeight + lineSpacer) * (j - bleedLinesUp);
+
+      const lineOffsetX = 0 - bleedWidth;
+      const lineOffsetY = lineOffsetYNoRotation;
       const lineElement: HTMLElement = lineGenerated.el;
-      lineElement.style.transform = `translate(${lineOffsetX}px, ${lineOffsetY}px) rotate(${this.poster.rotation}deg)`;
+
+      lineElement.style.transform = `translate(${lineOffsetX}px, ${lineOffsetY}px)`;
       lines.push(lineElement);
       j++;
       wordCount += wordsGenerated.length;
-    } while (lineOffsetYNoRotation < this.poster.height);
+    } while (lineOffsetYNoRotation < this.poster.height + bleedLineHeight / 2);
+
+    const $linesWrapper = (
+      <g>
+        <rect x='0' y='0' width={this.poster.width} height={this.poster.height} fill='#cc0000'></rect>
+        { lines }
+      </g>
+    ) as SVGElement;
+
+    $linesWrapper.style.transformOrigin = `${(this.poster.width) / 2}px ${(this.poster.height) / 2}px`;
+    $linesWrapper.style.transform = `rotate(${this.poster.rotation}deg)`;
 
     // generate footer
 
@@ -233,7 +272,7 @@ class Design {
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
           <rect width="1350" height="1800" />
-          {lines}
+          {$linesWrapper}
           {footer}
         </svg>
       </figure>

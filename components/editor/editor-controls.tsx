@@ -31,6 +31,8 @@ import Role from '../../assets/js/constants/role';
 
 import PxToRem from '../../assets/js/utils/pxToRem';
 
+import Filter from 'badwords';
+
 interface Controllers {
   resize?: ResizeSubscriber
 }
@@ -82,7 +84,6 @@ export class EditorControlsElement extends HTMLElement {
 
   constructor() {
     super();
-    const Filter = require('bad-words');
     this.filter = new Filter({ exclude: ['fart', 'poop'] });
     this.inputWord = new WordState('', ThemeController.theme);
     EditorController.attachWord(this.inputWord);
@@ -142,7 +143,9 @@ export class EditorControlsElement extends HTMLElement {
   #onCharacterClick = (e: MouseEvent) => {
     const $target: HTMLElement = e.currentTarget as HTMLElement;
     if ($target) {
-      EditorController.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.inputRendered, this.#onCharacterEdit);
+      // EditorController.nextCharacter(this.inputWord, parseInt($target.dataset.index || '0'), this.ref.inputRendered, this.#onCharacterEdit);
+      this.inputWord.nextCharacterByIndex(parseInt($target.dataset.index || '0'));
+      this.renderInputCharacters();
     }
   }
 
@@ -165,10 +168,9 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.inputPlaceholder?.removeAttribute('data-hidden');
     }
 
-    let filteredValue:string;
-    if (RoleController.role === Role.SPEAKER) {
-      filteredValue = value || '';
-    } else {
+    let filteredValue = !value ? '' : value;
+    if (RoleController.role !== Role.SPEAKER) {
+      // filter for bad words
       filteredValue = !value ? '' : this.filter.clean(value);
     }
 
