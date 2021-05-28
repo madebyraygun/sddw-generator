@@ -124,6 +124,7 @@ class Design {
     let fontSize = 0;
     let lineHeight = 0;
     let spacing = 0;
+    let bleedLeftOffset = 0;
 
     do {
       const curWordState = this.poster.word.clone();
@@ -138,6 +139,13 @@ class Design {
       fontSize = Math.max(fontSize, wordGenerated.fontSize);
       ({ spacing } = wordGenerated.dimensions);
 
+      if (bleedLeftOffset > 0 - bleed / 2) {
+        bleedLeftOffset -= (wordGenerated.dimensions.width + wordGenerated.dimensions.spacing);
+        wordOffset = bleedLeftOffset;
+      } else {
+        wordOffset = Math.max(0, wordOffset);
+      }
+
       if (render) {
         wordGenerated.el.style.transform = `translate(${wordOffset}px, 0)`;
       }
@@ -145,9 +153,12 @@ class Design {
       wordsGenerated.push(wordGenerated);
       wordsElements.push(wordGenerated.el);
 
-      wordOffset += wordGenerated.dimensions.width + wordGenerated.dimensions.spacing;
+      // offset has done enough
+      if (bleedLeftOffset <= 0 - bleed / 2) {
+        wordOffset += wordGenerated.dimensions.width + wordGenerated.dimensions.spacing;
+      }
       k++;
-    } while (wordOffset < this.poster.width + bleed);
+    } while (wordOffset < this.poster.width + bleed / 2);
 
     const lineWidth = wordOffset - spacing;
     const lineElement = (
@@ -175,8 +186,8 @@ class Design {
     const lines: HTMLElement[] = [];
     const lineSpacer = 10 * this.poster.scale;
     let j = 0;
-    let lineOffsetYNoRotation = 0;
     let wordCount = 0;
+    let lineOffsetYNoRotation = 0;
 
     // calculate bounding box
     const rotationRadians = this.poster.rotation * Math.PI / 180;
@@ -225,7 +236,6 @@ class Design {
 
     const $linesWrapper = (
       <g>
-        <rect x='0' y='0' width={this.poster.width} height={this.poster.height} fill='#cc0000'></rect>
         { lines }
       </g>
     ) as SVGElement;
