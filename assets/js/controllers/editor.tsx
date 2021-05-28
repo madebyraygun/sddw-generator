@@ -186,7 +186,7 @@ class EditorController implements Controller {
 
   // download poster
 
-  download($target: HTMLElement) {
+  download($target: HTMLElement, scale = 1) {
     const $svgElement:SVGElement | null = $target.querySelector<SVGElement>('svg');
     if ($svgElement) {
       // current state is affected by CSS variables
@@ -205,7 +205,6 @@ class EditorController implements Controller {
         const $character = $currentColorCharacters[i];
         const $clonedCharacter = $clonedCurrentColorCharacters[i];
         $clonedCharacter.setAttribute('fill', getComputedStyle($character).fill);
-        console.log($clonedCharacter, getComputedStyle($character).fill);
       }
 
       // export current state to HTML
@@ -219,15 +218,15 @@ class EditorController implements Controller {
       // generate image with canvas data (to convert to PNG and other formats)
       const image = new Image();
       const canvas = document.createElement('canvas');
-      canvas.width = this.currentPoster.width;
-      canvas.height = this.currentPoster.height;
+      canvas.width = this.currentPoster.width * scale;
+      canvas.height = this.currentPoster.height * scale;
       const context = canvas.getContext('2d');
       let png: string;
 
       // wait for image to load
       image.onload = () => {
         if (context) {
-          context.drawImage(image, 0, 0, this.currentPoster.width, this.currentPoster.height);
+          context.drawImage(image, 0, 0, this.currentPoster.width * scale, this.currentPoster.height * scale);
           png = canvas.toDataURL();
 
           // trigger download
