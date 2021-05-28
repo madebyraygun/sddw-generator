@@ -54,6 +54,11 @@ interface Reference {
   inputRendered?: HTMLElement | null,
   inputRotation?: RangeSliderElement| null,
   inputScale?: RangeSliderElement | null,
+  shareDownload?: HTMLInputElement | null,
+  shareEmail?: HTMLInputElement | null,
+  shareSocialFacebook?: HTMLInputElement | null,
+  shareSocialInstagram?: HTMLInputElement | null,
+  shareSocialTwitter?: HTMLInputElement | null,
   poster?: HTMLElement | null,
   randomizeColors?: HTMLInputElement | null,
   randomizeEachWord?: HTMLInputElement | null,
@@ -203,7 +208,7 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   // randomize colors
-  #onRandomizeColors = (e: MouseEvent) => {
+  #onRandomizeColorsClick = (e: MouseEvent) => {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
       EditorController.randomizeColors($target.dataset.active === 'true');
@@ -214,7 +219,7 @@ export class EditorControlsElement extends HTMLElement {
   }
 
   // randomize each word
-  #onRandomizeEachWord = (e: MouseEvent) => {
+  #onRandomizeEachWordClick = (e: MouseEvent) => {
     const $target = e.currentTarget as HTMLElement;
     if ($target) {
       EditorController.randomizeEachWord($target.dataset.active === 'true');
@@ -237,6 +242,10 @@ export class EditorControlsElement extends HTMLElement {
         EditorController.shuffleAndRenderPosterToElement(this.ref.poster);
       }
     }
+  }
+
+  #onDownloadClick = () => {
+    EditorController.download(this.ref.poster);
   }
 
   #onRotationChange = (e) => {
@@ -312,13 +321,19 @@ export class EditorControlsElement extends HTMLElement {
     this.ref.generate = this.ref.el.querySelector<HTMLInputElement>('[data-generate]');
     if (this.ref.generate) this.ref.generate.addEventListener('click', this.#onGenerateClick);
 
+    // sharing options
+
+    // download button
+    this.ref.shareDownload = this.ref.el.querySelector<HTMLInputElement>('[data-download]');
+    if (this.ref.shareDownload) this.ref.shareDownload.addEventListener('click', this.#onDownloadClick);
+
     // randomize color toggle
     this.ref.randomizeColors = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-colors]');
-    if (this.ref.randomizeColors) this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColors);
+    if (this.ref.randomizeColors) this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColorsClick);
 
     // randomize word characters toggle
     this.ref.randomizeEachWord = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-each-word]');
-    if (this.ref.randomizeEachWord) this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWord);
+    if (this.ref.randomizeEachWord) this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWordClick);
 
     // shuffle button
     this.ref.shuffle = this.ref.el.querySelector<HTMLInputElement>('[data-shuffle]');

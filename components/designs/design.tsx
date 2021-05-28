@@ -278,12 +278,14 @@ class Design {
       <figure style={{
         position: 'relative', width: '100%', height: 'auto', paddingTop: '133.33%'
       }}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${this.poster.width} ${this.poster.height}`} style={{
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox={`0 0 ${this.poster.width} ${this.poster.height}`} style={{
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
-          <rect width="1350" height="1800" />
-          {$linesWrapper}
-          {footer}
+          <rect data-background width={this.poster.width} height={this.poster.height} />
+          <g data-inner-wrapper>
+            {$linesWrapper}
+            {footer}
+          </g>
         </svg>
       </figure>
     );

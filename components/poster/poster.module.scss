@@ -3,6 +3,10 @@
     [data-line] {
       transform-origin: 0 0;
     }
+
+    [data-background] {
+      fill: var(--bright);
+    }
   }
 
   *[data-fill-bright] {
@@ -12,17 +16,15 @@
   }
 
   *[fill='#F8F9FA'] {
-    fill: var(--bright) !important;
+    fill: var(--bright);
   }
 
   *[fill='#1B1C1E'] {
-    fill: var(--dark) !important;
+    fill: var(--dark);
   }
 
   *[data-fill-dark],
   *[data-character='currentColor'] {
-    * {
-      fill: var(--dark);
-    }
+    fill: var(--dark);
   }
 }

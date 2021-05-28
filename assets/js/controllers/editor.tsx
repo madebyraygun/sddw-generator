@@ -184,6 +184,69 @@ class EditorController implements Controller {
     }
   }
 
+  // download poster
+
+  download($target: HTMLElement) {
+    const $svgElement:SVGElement | null = $target.querySelector<SVGElement>('svg');
+    if ($svgElement) {
+      // current state is affected by CSS variables
+      const $background = $svgElement.querySelector('[data-background]') as SVGGraphicsElement;
+      const $currentColorCharacters = $svgElement.querySelectorAll('[data-character="currentColor"]');
+
+      // cloned state is unmodified
+      const $clonedSvgElement = $svgElement.cloneNode(true) as SVGElement;
+      const $clonedBackground = $clonedSvgElement.querySelector('[data-background]') as SVGGraphicsElement;
+
+      // make any tweaks to colors (such as replacing css variables with calculated values)
+      $clonedBackground.setAttribute('fill', getComputedStyle($background).fill);
+
+      const $clonedCurrentColorCharacters = $clonedSvgElement.querySelectorAll('[data-character="currentColor"]');
+      for (let i = 0; i < $clonedCurrentColorCharacters.length; i++) {
+        const $character = $currentColorCharacters[i];
+        const $clonedCharacter = $clonedCurrentColorCharacters[i];
+        $clonedCharacter.setAttribute('fill', getComputedStyle($character).fill);
+        console.log($clonedCharacter, getComputedStyle($character).fill);
+      }
+
+      // export current state to HTML
+      const { outerHTML } = $clonedSvgElement;
+
+      // generate blob with base64 data of image
+      const blob = new Blob([outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+      const URL = window.URL || window.webkitURL || window;
+      const blobURL = URL.createObjectURL(blob);
+
+      // generate image with canvas data (to convert to PNG and other formats)
+      const image = new Image();
+      const canvas = document.createElement('canvas');
+      canvas.width = this.currentPoster.width;
+      canvas.height = this.currentPoster.height;
+      const context = canvas.getContext('2d');
+      let png: string;
+
+      // wait for image to load
+      image.onload = () => {
+        if (context) {
+          context.drawImage(image, 0, 0, this.currentPoster.width, this.currentPoster.height);
+          png = canvas.toDataURL();
+
+          // trigger download
+          const download = function (href, name) {
+            const link = document.createElement('a');
+            link.download = name;
+            link.style.opacity = '0';
+            document.body.append(link);
+            link.href = href;
+            link.click();
+            link.remove();
+          };
+          download(png, 'sddw-poster.png');
+        }
+      };
+      image.src = blobURL;
+    }
+  }
+
 }
 
 export default new EditorController();
