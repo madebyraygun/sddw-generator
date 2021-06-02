@@ -198,7 +198,7 @@ class Design {
     const el = (
       <g id='circle-sticker' className={styles['design__circle']} {...{ transform: `translate(${edgeXY} ${edgeXY}) scale(${scale})` }}>
         <circle cx='0' cy='0' r={r} fill={colorBg}/>
-        <g transform='rotate(-15)' className='font-sharp'>
+        <g transform='rotate(-15)'>
           <text transform={`translate(0 ${0 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
             <tspan x='0' y='38.669'>HOSTED BY</tspan>
             <tspan x='0' y='83.669'>{phrase.toUpperCase()}</tspan>
@@ -323,13 +323,11 @@ class Design {
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
           <defs>
-            <style>
-              { `@font-face {
-                  font-family:'Sharp Sans Display No.2';
-                  src:url(data:application/font-woff;base64,${SharpSansDisplayNo2};
-                  font-weight:900;
-                  font-style:normal;
-              }` }
+            <style type="text/css">
+              {`@font-face {
+                font-family: SharpSansNo3;
+                src: url('data:application/font-woff;charset=utf-8;base64,${SharpSansDisplayNo2}')
+              }`}
             </style>
           </defs>
 

@@ -6,10 +6,7 @@
 @include font-face('Roboto Mono', '../fonts/RobotoMono-Medium', 500);
 @include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Bold', 700);
 @include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDispNo2-Extrabold', 800);
-// @include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Black', 900);
-
-@import
-  './fonts-base64';
+@include font-face('Sharp Sans Display No.2', '../fonts/SharpSansDisplayNo2-Black', 900);
 
 :root {
   // font family
