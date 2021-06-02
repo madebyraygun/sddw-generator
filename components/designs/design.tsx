@@ -323,11 +323,13 @@ class Design {
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
           <defs>
-            <style type="text/css">
-              {`@font-face {
-                font-family: SharpSansNo3;
-                src: url('data:application/font-woff;charset=utf-8;base64,${SharpSansDisplayNo2}')
-              }`}
+            <style type='text/css'>
+              { `@font-face {
+                  font-family: SharpSansNo3;
+                  font-weight: 900;
+                  font-style: normal;
+                  src: url(data:application/font-woff;charset=utf-8;base64,${SharpSansDisplayNo2});
+              }` }
             </style>
           </defs>
 
