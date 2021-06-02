@@ -1,0 +1,26 @@
+.design {
+  &__circle {
+    g > text {
+      font-family: var(--font-family-sharp);
+      color: var(--shark);
+      letter-spacing: 0.05em;
+      font-weight: var(--font-weight-black);
+      text-transform: uppercase;
+
+      &:nth-child(1),
+      &:nth-child(3), {
+        font-size: 46px; /* stylelint-disable-line unit-allowed-list */
+        letter-spacing: 0.04em;
+      }
+
+      &:nth-child(2) {
+        font-size: 93px; /* stylelint-disable-line unit-allowed-list */
+        letter-spacing: 0.04em;
+      }
+
+      &:nth-child(3) {
+        letter-spacing: 0.1em;
+      }
+    }
+  }
+}

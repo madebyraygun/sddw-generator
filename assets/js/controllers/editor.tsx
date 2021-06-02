@@ -189,17 +189,14 @@ class EditorController implements Controller {
   download($target: HTMLElement, scale = 1) {
     const $svgElement:SVGElement | null = $target.querySelector<SVGElement>('svg');
     if ($svgElement) {
-      // current state is affected by CSS variables
-      const $background = $svgElement.querySelector('[data-background]') as SVGGraphicsElement;
-      const $currentColorCharacters = $svgElement.querySelectorAll('[data-character="currentColor"]');
-
-      // cloned state is unmodified
       const $clonedSvgElement = $svgElement.cloneNode(true) as SVGElement;
-      const $clonedBackground = $clonedSvgElement.querySelector('[data-background]') as SVGGraphicsElement;
 
       // make any tweaks to colors (such as replacing css variables with calculated values)
+      const $background = $svgElement.querySelector('[data-background]') as SVGGraphicsElement;
+      const $clonedBackground = $clonedSvgElement.querySelector('[data-background]') as SVGGraphicsElement;
       $clonedBackground.setAttribute('fill', getComputedStyle($background).fill);
 
+      const $currentColorCharacters = $svgElement.querySelectorAll('[data-character="currentColor"]');
       const $clonedCurrentColorCharacters = $clonedSvgElement.querySelectorAll('[data-character="currentColor"]');
       for (let i = 0; i < $clonedCurrentColorCharacters.length; i++) {
         const $character = $currentColorCharacters[i];
@@ -207,16 +204,39 @@ class EditorController implements Controller {
         $clonedCharacter.setAttribute('fill', getComputedStyle($character).fill);
       }
 
+      const $textElements = $svgElement.querySelectorAll('text');
+      const $clonedTextElements = $clonedSvgElement.querySelectorAll('text');
+      for (let i = 0; i < $clonedTextElements.length; i++) {
+        const $textElement = $textElements[i];
+        const $clonedTextElement = $clonedTextElements[i];
+        const computedStyles = getComputedStyle($textElement);
+        const attributes = {
+          color: computedStyles.color,
+          fill: computedStyles.color,
+          'font-family': 'Sharp Sans Display No.2',
+          'font-size': computedStyles.fontSize,
+          'font-weight': computedStyles.fontWeight,
+          'letter-spacing': computedStyles.letterSpacing
+        };
+        for (const key in attributes) {
+          const value = key ? attributes[key] : '';
+          if (value) {
+            $clonedTextElement.setAttribute(key, value);
+          }
+        }
+      }
+
       // export current state to HTML
-      const { outerHTML } = $clonedSvgElement;
+      const data = new XMLSerializer().serializeToString($clonedSvgElement);
 
       // generate blob with base64 data of image
-      const blob = new Blob([outerHTML], { type: 'image/svg+xml;charset=utf-8' });
+      const blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
       const URL = window.URL || window.webkitURL || window;
       const blobURL = URL.createObjectURL(blob);
 
       // generate image with canvas data (to convert to PNG and other formats)
       const image = new Image();
+      document.body.appendChild(image);
       const canvas = document.createElement('canvas');
       canvas.width = this.currentPoster.width * scale;
       canvas.height = this.currentPoster.height * scale;

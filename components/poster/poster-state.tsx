@@ -28,7 +28,7 @@ class PosterState {
     width: number,
     height: number,
   } = {
-    width: 1350,
+    width: 1440,
     height: 1800,
   };
 

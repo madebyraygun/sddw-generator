@@ -4,10 +4,16 @@
     Design is a template to translate Poster data into a specific look.
 */
 
+import Role from '../../assets/js/constants/role';
 import AssetsController from '../../assets/js/controllers/assets';
+import RoleController from '../../assets/js/controllers/role';
 import PosterState from '../poster/poster-state';
 import WordState from '../poster/word-state';
 import Theme from '../themes/theme';
+
+import { SharpSansDisplayNo2 } from '../../assets/fonts/SharpSansDisplayNo2-Black-Base64';
+
+import styles from './design.module.scss';
 
 interface WordGenerated {
   characterElements: Node[],
@@ -29,6 +35,10 @@ interface LineGenerated {
   },
   el: HTMLElement,
   wordsGenerated: WordGenerated[],
+}
+
+interface CircleGenerated {
+  el: HTMLElement
 }
 
 class Design {
@@ -178,6 +188,36 @@ class Design {
     };
   }
 
+  generateCircle(phrase: string, scale = 1.5): CircleGenerated {
+    const colorBg = '#F9F15A';
+    const r = 191.5;
+    const textVertCenterY = r / 2 + 15;
+    const edgeGutter = (231.451 - r);
+    const edgeXY = r * scale + edgeGutter;
+
+    const el = (
+      <g id='circle-sticker' className={styles['design__circle']} {...{ transform: `translate(${edgeXY} ${edgeXY}) scale(${scale})` }}>
+        <circle cx='0' cy='0' r={r} fill={colorBg}/>
+        <g transform='rotate(-15)' className='font-sharp'>
+          <text transform={`translate(0 ${0 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
+            <tspan x='0' y='38.669'>HOSTED BY</tspan>
+            <tspan x='0' y='83.669'>{phrase.toUpperCase()}</tspan>
+          </text>
+          <text transform={`translate(0 ${100 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
+            <tspan x='0' y='71.6895'>SEP. 07</tspan>
+          </text>
+          <text transform={`translate(0 ${184 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
+            <tspan x='0' y='38.669'>4:00 PM PT</tspan>
+          </text>
+        </g>
+      </g>
+    ) as HTMLElement;
+
+    return {
+      el
+    };
+  }
+
   renderPoster(rebuild = false): Node {
     if (rebuild) this.rebuild();
 
@@ -188,13 +228,6 @@ class Design {
     let j = 0;
     let wordCount = 0;
     let lineOffsetYNoRotation = 0;
-
-    // calculate bounding box
-    const rotationRadians = this.poster.rotation * Math.PI / 180;
-    const boundingWidth = this.poster.height * Math.abs(Math.sin(rotationRadians)) + this.poster.width * Math.abs(Math.cos(rotationRadians));
-    const boundingHeight = this.poster.width * Math.abs(Math.sin(rotationRadians)) + this.poster.height * Math.abs(Math.cos(rotationRadians));
-    const bleedHoriz = Math.abs(boundingWidth - this.poster.width);
-    const bleedVert = Math.abs(boundingHeight - this.poster.height);
 
     // create bleed area for worst possible rotation
     const worstRotationRadians = 45 * Math.PI / 180;
@@ -243,6 +276,14 @@ class Design {
     $linesWrapper.style.transformOrigin = `${(this.poster.width) / 2}px ${(this.poster.height) / 2}px`;
     $linesWrapper.style.transform = `rotate(${this.poster.rotation}deg)`;
 
+    // if speaker, generate circle
+
+    let $circle = (<g id='circle-sticker'></g>);
+
+    if (RoleController.role !== Role.PUBLIC) {
+      $circle = this.generateCircle('Balboa Park').el;
+    }
+
     // generate footer
 
     const data = AssetsController.getFooter('light', '2021');
@@ -251,7 +292,7 @@ class Design {
     const factor = footerWidth / width;
     const footerHeight = factor * height;
 
-    const footer = (
+    const $footer = (
       <g transform={`translate(0 ${this.poster.height - footerHeight}) scale(${factor})`} data-footer>
         {[...data.children].map((path, index) => {
           const pathD = path.getAttribute('d');
@@ -276,15 +317,27 @@ class Design {
 
     return (
       <figure style={{
-        position: 'relative', width: '100%', height: 'auto', paddingTop: '133.33%'
+        position: 'relative', width: '100%', height: 'auto', paddingTop: `${this.poster.height / this.poster.width * 100}%`
       }}>
         <svg xmlns='http://www.w3.org/2000/svg' viewBox={`0 0 ${this.poster.width} ${this.poster.height}`} style={{
           position: 'absolute', top: '0', left: '0', width: '100%', height: '100%'
         }}>
+          <defs>
+            <style>
+              { `@font-face {
+                  font-family:'Sharp Sans Display No.2';
+                  src:url(data:application/font-woff;base64,${SharpSansDisplayNo2};
+                  font-weight:900;
+                  font-style:normal;
+              }` }
+            </style>
+          </defs>
+
           <rect data-background width={this.poster.width} height={this.poster.height} />
           <g data-inner-wrapper>
             {$linesWrapper}
-            {footer}
+            {$circle}
+            {$footer}
           </g>
         </svg>
       </figure>

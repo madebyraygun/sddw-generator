@@ -23,7 +23,7 @@ if (!window.customElements.get(PosterElement.selector)) {
 // JSX template ------------------------------------------------------------ //
 
 const Poster: FC<PosterProps> = ({
-  className, dataName, children, width = 1350, height = 1800
+  className, dataName, children, width = 1440, height = 1800
 }) => (
   <div element={PosterElement.selector} className={`${className ?? ''} ${styles['sddw-poster']}`} {...dataName}>
     <svg viewBox={`0 0 ${width} ${height}`}>{children}</svg>
