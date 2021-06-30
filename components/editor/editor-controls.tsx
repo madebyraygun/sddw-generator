@@ -35,43 +35,45 @@ import PxToRem from '../../assets/js/utils/pxToRem';
 import Filter from 'badwords';
 
 interface Controllers {
-  resize?: ResizeSubscriber
+  resize?: ResizeSubscriber;
 }
 
 interface Listeners {
-  editor: EventEmitter,
-  controls: EventEmitter,
-  section: EventEmitter,
+  editor: EventEmitter;
+  controls: EventEmitter;
+  section: EventEmitter;
 }
 interface Reference {
-  el?: HTMLElement | null,
-  close?: HTMLElement| null,
-  generate?: HTMLInputElement | null,
-  input?: HTMLInputElement | null,
-  inputBackgroundColor?: RadioSelectorElement| null,
-  inputBox?: HTMLElement | null,
-  inputPlaceholder?: HTMLElement | null,
-  inputPlaceholderSpan?: HTMLElement | null,
-  inputRendered?: HTMLElement | null,
-  inputRotation?: RangeSliderElement| null,
-  inputScale?: RangeSliderElement | null,
-  shareDownload?: HTMLInputElement | null,
-  shareEmail?: HTMLInputElement | null,
-  shareSocialFacebook?: HTMLInputElement | null,
-  shareSocialInstagram?: HTMLInputElement | null,
-  shareSocialTwitter?: HTMLInputElement | null,
-  poster?: HTMLElement | null,
-  randomizeColors?: HTMLInputElement | null,
-  randomizeEachWord?: HTMLInputElement | null,
-  shuffle?: HTMLInputElement | null,
-  viewEdit?: HTMLElement | null,
+  el?: HTMLElement | null;
+  close?: HTMLElement | null;
+  generate?: HTMLInputElement | null;
+  input?: HTMLInputElement | null;
+  inputBackgroundColor?: RadioSelectorElement | null;
+  inputBox?: HTMLElement | null;
+  inputDate?: HTMLInputElement | null;
+  inputHost?: HTMLInputElement | null;
+  inputPlaceholder?: HTMLElement | null;
+  inputPlaceholderSpan?: HTMLElement | null;
+  inputRendered?: HTMLElement | null;
+  inputRotation?: RangeSliderElement | null;
+  inputScale?: RangeSliderElement | null;
+  shareDownload?: HTMLInputElement | null;
+  shareEmail?: HTMLInputElement | null;
+  shareSocialFacebook?: HTMLInputElement | null;
+  shareSocialInstagram?: HTMLInputElement | null;
+  shareSocialTwitter?: HTMLInputElement | null;
+  poster?: HTMLElement | null;
+  randomizeColors?: HTMLInputElement | null;
+  randomizeEachWord?: HTMLInputElement | null;
+  shuffle?: HTMLInputElement | null;
+  viewEdit?: HTMLElement | null;
 }
 
 export class EditorControlsElement extends HTMLElement {
 
   static selector = 'editor-controls-element';
 
-  controllers:Controllers = {};
+  controllers: Controllers = {};
 
   inputWord: WordState;
 
@@ -115,7 +117,7 @@ export class EditorControlsElement extends HTMLElement {
       const inputRenderedWidth = this.ref.inputRendered?.offsetWidth ?? 0;
 
       if (placeholderWidth && inputRenderedWidth) {
-        const scaleDifference = Math.round(placeholderWidth / inputRenderedWidth * 4) / 4;
+        const scaleDifference = Math.round((placeholderWidth / inputRenderedWidth) * 4) / 4;
         if (scaleDifference < 1) {
           // if input is too big, rerender and scale down
           const scaledHeight = this.inputWord.theme.inputRenderedHeight * scaleDifference;
@@ -130,7 +132,7 @@ export class EditorControlsElement extends HTMLElement {
       this.addPhraseListeners($inputWord);
       this.resizeInputBox();
     }
-  }
+  };
 
   // add / remove listeners ------------------------------------------------ //
 
@@ -141,7 +143,7 @@ export class EditorControlsElement extends HTMLElement {
       $character.removeEventListener('click', this.#onCharacterClick);
       $character.addEventListener('click', this.#onCharacterClick);
     }
-  }
+  };
 
   // listener methods ------------------------------------------------------ //
 
@@ -153,13 +155,13 @@ export class EditorControlsElement extends HTMLElement {
       this.inputWord.nextCharacterByIndex(parseInt($target.dataset.index || '0'));
       this.renderInputCharacters();
     }
-  }
+  };
 
-  #onCharacterEdit = (e:CharacterCallback) => {
+  #onCharacterEdit = (e: CharacterCallback) => {
     if (e.target) {
       this.addPhraseListeners(e.target);
     }
-  }
+  };
 
   // when typing, re-render new characters
   #onInputInput = (e: MouseEvent) => {
@@ -182,7 +184,7 @@ export class EditorControlsElement extends HTMLElement {
 
     this.inputWord.feed(filteredValue);
     this.renderInputCharacters();
-  }
+  };
 
   // when clicking input, emulate focus state (cursor is fake)
   #onInputClick = (e: MouseEvent) => {
@@ -190,15 +192,15 @@ export class EditorControlsElement extends HTMLElement {
     const value = this.cleanValue(target.value);
     const { length } = value;
     target.setSelectionRange(length, length);
-  }
+  };
 
   #onInputKeydown = (e: KeyboardEvent) => {
     if (e.keyCode === 37 || e.keyCode === 39) e.preventDefault();
-  }
+  };
 
   #onOutputClick = () => {
     if (this.ref.input) this.ref.input.focus();
-  }
+  };
 
   // generate button: render current design into posters
   #onGenerateClick = () => {
@@ -206,7 +208,7 @@ export class EditorControlsElement extends HTMLElement {
       EditorController.renderCurrentPosterToElement(this.ref.poster);
       window.scrollTo(0, this.ref.viewEdit?.offsetTop ?? 0);
     }
-  }
+  };
 
   // randomize colors
   #onRandomizeColorsClick = (e: MouseEvent) => {
@@ -217,7 +219,7 @@ export class EditorControlsElement extends HTMLElement {
         EditorController.renderCurrentPosterToElement(this.ref.poster);
       }
     }
-  }
+  };
 
   // randomize each word
   #onRandomizeEachWordClick = (e: MouseEvent) => {
@@ -228,7 +230,7 @@ export class EditorControlsElement extends HTMLElement {
         EditorController.renderCurrentPosterToElement(this.ref.poster);
       }
     }
-  }
+  };
 
   // shuffle button: shuffle phrase design
   #onShuffleClick = () => {
@@ -243,30 +245,30 @@ export class EditorControlsElement extends HTMLElement {
         EditorController.shuffleAndRenderPosterToElement(this.ref.poster);
       }
     }
-  }
+  };
 
   #onDownloadClick = () => {
     EditorController.download(this.ref.poster);
-  }
+  };
 
   #onRotationChange = (e) => {
     EditorController.setRotation(e.state.valueLerped);
     if (this.ref.poster) {
       EditorController.renderCurrentPosterToElement(this.ref.poster);
     }
-  }
+  };
 
   #onScaleChange = (e) => {
     EditorController.setScale(e.state.valueLerped);
     if (this.ref.poster) {
       EditorController.renderCurrentPosterToElement(this.ref.poster);
     }
-  }
+  };
 
   #onCloseClick = (e) => {
     const $section = e.currentTarget.closest('[page-section-view]');
     this.listeners.section.emit(Section.DEACTIVATE, $section);
-  }
+  };
 
   #onBackgroundColorChange = (e) => {
     if (e && e.state) {
@@ -280,7 +282,11 @@ export class EditorControlsElement extends HTMLElement {
         document.body.classList.remove('is-dark');
       }
     }
-  }
+  };
+
+  #onInputHostChange = (e) => {
+    console.log(e.currentTarget.value);
+  };
 
   // built in callback once JSX rendered
   connectedCallback() {
@@ -316,7 +322,15 @@ export class EditorControlsElement extends HTMLElement {
 
     // background color selector
     this.ref.inputBackgroundColor = this.ref.el.querySelector<RadioSelectorElement>('[data-background-color]');
-    if (this.ref.inputBackgroundColor) this.ref.inputBackgroundColor.emitter.on(RadioSelectorElement.CHANGE, this.#onBackgroundColorChange);
+    if (this.ref.inputBackgroundColor)
+      this.ref.inputBackgroundColor.emitter.on(RadioSelectorElement.CHANGE, this.#onBackgroundColorChange);
+
+    // host text field (speaker only)
+    this.ref.inputHost = this.ref.el.querySelector<HTMLInputElement>('[data-input-host] input');
+    if (this.ref.inputHost) {
+      this.ref.inputHost.addEventListener('change', this.#onInputHostChange);
+      this.ref.inputHost.addEventListener('input', this.#onInputHostChange);
+    }
 
     // generate button
     this.ref.generate = this.ref.el.querySelector<HTMLInputElement>('[data-generate]');
@@ -334,7 +348,8 @@ export class EditorControlsElement extends HTMLElement {
 
     // randomize word characters toggle
     this.ref.randomizeEachWord = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-each-word]');
-    if (this.ref.randomizeEachWord) this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWordClick);
+    if (this.ref.randomizeEachWord)
+      this.ref.randomizeEachWord.addEventListener('click', this.#onRandomizeEachWordClick);
 
     // shuffle button
     this.ref.shuffle = this.ref.el.querySelector<HTMLInputElement>('[data-shuffle]');
@@ -363,7 +378,7 @@ export class EditorControlsElement extends HTMLElement {
     // listen for page resize
     this.controllers.resize = ResizeController.set({
       update: this.#onResizeUpdate,
-      render: this.#onResizeRender
+      render: this.#onResizeRender,
     });
   }
 
@@ -371,7 +386,7 @@ export class EditorControlsElement extends HTMLElement {
     if (e.id) {
       this.switchSection(e.id);
     }
-  }
+  };
 
   switchSection = (id: string) => {
     const $target = this.ref.el?.querySelector<HTMLElement>(`[data-editor-section=${id}]`);
@@ -392,19 +407,19 @@ export class EditorControlsElement extends HTMLElement {
             if (this.ref.input) {
               this.ref.input.focus();
             }
-          }
+          },
         });
       }
 
       $target.setAttribute('data-active', '');
     }
-  }
+  };
 
   #onControlsActivate = (e: EditorSectionChangeEventProps) => {
     if (e.id) {
       this.switchControls(e.id);
     }
-  }
+  };
 
   switchControls = (id: string) => {
     const $target = this.ref.el?.querySelector<HTMLElement>(`[data-editor-control-section=${id}]`);
@@ -415,29 +430,32 @@ export class EditorControlsElement extends HTMLElement {
       }
       $target.setAttribute('data-active', '');
     }
-  }
+  };
 
   resetControls = () => {
     this.switchControls('edit');
-  }
+  };
 
-  #onResizeUpdate = ():boolean => {
+  #onResizeUpdate = (): boolean => {
     return true;
-  }
+  };
 
   #onResizeRender = () => {
     this.resizeInputBox();
-  }
+  };
 
   resizeInputBox = () => {
     if (this.ref.inputBox) {
-      const boxWidth = Math.max(this.ref.inputPlaceholderSpan?.offsetWidth ?? 0, this.ref.inputRendered?.offsetWidth ?? 0);
+      const boxWidth = Math.max(
+        this.ref.inputPlaceholderSpan?.offsetWidth ?? 0,
+        this.ref.inputRendered?.offsetWidth ?? 0,
+      );
       const boxPadding = ResizeController.isDesktop ? 60 : 30;
       const boxTotalWidth = boxWidth + boxPadding * 2;
       this.ref.inputBox.style.width = `${boxTotalWidth}px`;
       this.ref.inputBox.style.left = `calc(50% - ${boxTotalWidth / 2}px)`;
     }
-  }
+  };
 
 }
 
@@ -451,16 +469,21 @@ if (!window.customElements.get(EditorControlsElement.selector)) {
 
 const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
-    <EditorView className={styles['editor-controls__view-inputs-primary']} dataName={{ 'data-editor-section': 'intro', 'data-active': '' }}>
+    <EditorView
+      className={styles['editor-controls__view-inputs-primary']}
+      dataName={{ 'data-editor-section': 'intro', 'data-active': '' }}
+    >
       {/* heading information */}
       <input className={styles['editor-controls__input-text']} type="text" maxLength={21} />
-      <h2>Let&apos;s Create a <strong>Poster!</strong></h2>
+      <h2>
+        Let&apos;s Create a <strong>Poster!</strong>
+      </h2>
       <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
 
       {/* main input field */}
       <div className={styles['editor-controls__input-placeholder']}>
         <div className={styles['editor-controls__input-placeholder-text']} data-input-placeholder>
-          <span className='heading-display'>Your Name</span>
+          <span className="heading-display">Your Name</span>
         </div>
         <figure className={styles['editor-controls__input-placeholder-box']} data-input-box></figure>
         <div className={styles['editor-controls__input-rendered']} data-input-rendered></div>
@@ -468,13 +491,15 @@ const EditorControls: FC = () => (
 
       {/* generate button */}
       <div className={styles['editor-controls__primary-buttons-wrapper']}>
-        <BehaviorEditorSectionChange sectionId='edit'>
-          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Generate my poster</Button>
+        <BehaviorEditorSectionChange sectionId="edit">
+          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>
+            Generate my poster
+          </Button>
         </BehaviorEditorSectionChange>
       </div>
     </EditorView>
 
-    <EditorView className= {styles['editor-controls__view-inputs-poster']} dataName={{ 'data-editor-section': 'edit' }}>
+    <EditorView className={styles['editor-controls__view-inputs-poster']} dataName={{ 'data-editor-section': 'edit' }}>
       {/* poster preview */}
       <div className={styles['editor-controls__poster-column']}>
         <SddwPoster className={styles['editor-controls__poster']} dataName={{ 'data-poster': '' }} />
@@ -482,14 +507,30 @@ const EditorControls: FC = () => (
 
       <div className={styles['editor-controls__controls-column']}>
         {/* editing controls */}
-        <EditorControlView className={styles['editor-controls__controls-wrapper']} dataName={{ 'data-editor-control-section': 'edit', 'data-active': '' }}>
+        <EditorControlView
+          className={styles['editor-controls__controls-wrapper']}
+          dataName={{
+            'data-editor-control-section': 'edit',
+            'data-active': '',
+          }}
+        >
           <div className={styles['editor-controls__ranges-wrapper']}>
-            <RangeSlider dataName={{ 'data-range-scale': '' }} name='scale' value='50' index='0'>Size</RangeSlider>
-            <RangeSlider dataName={{ 'data-range-rotation': '' }} name='rotation' value="50" index='1'>Rotate</RangeSlider>
+            <RangeSlider dataName={{ 'data-range-scale': '' }} name="scale" value="50" index="0">
+              Size
+            </RangeSlider>
+            <RangeSlider dataName={{ 'data-range-rotation': '' }} name="rotation" value="50" index="1">
+              Rotate
+            </RangeSlider>
           </div>
 
           <div className={styles['editor-controls__radio-background-wrapper']}>
-            <RadioSelector dataName={{ 'data-background-color': '' }} name='background-color' values={['F8F9FA', '1B1C1E']}>Background Color</RadioSelector>
+            <RadioSelector
+              dataName={{ 'data-background-color': '' }}
+              name="background-color"
+              values={['F8F9FA', '1B1C1E']}
+            >
+              Background Color
+            </RadioSelector>
           </div>
 
           <div className={styles['editor-controls__options-wrapper']} data-dev-only>
@@ -498,30 +539,41 @@ const EditorControls: FC = () => (
           </div>
 
           <div className={styles['editor-controls__host-wrapper']} data-speaker-only>
-            <InputField id='hosted-by' maxLength={21}>Hosted By </InputField>
+            <InputField id="hosted-by" maxLength={21} dataName={{ 'data-input-host': '' }}>
+              Hosted By{' '}
+            </InputField>
           </div>
 
           <div className={styles['editor-controls__date-wrapper']} data-speaker-only>
-            <InputDate>Date of Your Talk</InputDate>
+            <InputDate dataName={{ 'data-date': '' }}>Date of Your Talk</InputDate>
           </div>
 
           <div className={styles['editor-controls__buttons-wrapper']} data-dev-only>
-            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>Shuffle</Button>
+            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>
+              Shuffle
+            </Button>
           </div>
 
           <div className={styles['editor-controls__buttons-wrapper']}>
-            <BehaviorEditorControlsChange sectionId='social'>
-              <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>Finish</Button>
+            <BehaviorEditorControlsChange sectionId="social">
+              <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>
+                Finish
+              </Button>
             </BehaviorEditorControlsChange>
           </div>
         </EditorControlView>
 
         {/* sharing */}
-        <EditorControlView className={styles['editor-controls__social-wrapper']} dataName={{ 'data-editor-control-section': 'social' }}>
+        <EditorControlView
+          className={styles['editor-controls__social-wrapper']}
+          dataName={{ 'data-editor-control-section': 'social' }}
+        >
           <ol className={styles['editor-controls__social-instructions']}>
             <li>
               <span>Download your design</span>
-              <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>Download</Button>
+              <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>
+                Download
+              </Button>
             </li>
             <li>
               <span data-speaker-only>Print your poster and share your design on social media</span>
@@ -547,10 +599,9 @@ const EditorControls: FC = () => (
       </div>
 
       {/* close */}
-      <BehaviorEditorSectionChange sectionId='intro'>
+      <BehaviorEditorSectionChange sectionId="intro">
         <ButtonClose className={styles['editor-controls__button-close']} dataName={{ 'data-close': '' }}></ButtonClose>
       </BehaviorEditorSectionChange>
-
     </EditorView>
   </div>
 );
