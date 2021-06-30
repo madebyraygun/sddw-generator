@@ -1,0 +1,18 @@
+.disclaimer-overlay {
+  position: absolute;
+  top: auto;
+  bottom: 3rem;
+  left: 0rem;
+  width: 100%;
+  text-align: center;
+  margin-top: 6rem;
+
+  a,
+  a strong {
+    color: var(--malibu);
+
+    &:hover {
+      color: var(--mint-green);
+    }
+  }
+}

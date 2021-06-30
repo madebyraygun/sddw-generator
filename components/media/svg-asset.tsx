@@ -5,6 +5,7 @@ interface Reference {
 }
 
 interface SvgProps {
+  alt?: string,
   className?: string,
   svgType: string,
   svgId: string,
@@ -23,7 +24,11 @@ export class SvgAssetElement extends HTMLElement {
     const { svgType, svgId, svgTheme } = this.ref.el.dataset;
     if (svgType && svgId) {
       const { svg } = AssetsController.getAsset(svgType, svgId, svgTheme);
-      if (svg) this.ref.el.appendChild(svg);
+      if (svg) {
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', this.ref.el.dataset.alt ?? '');
+        this.ref.el.appendChild(svg);
+      }
     }
   }
 
@@ -36,9 +41,9 @@ if (!window.customElements.get(SvgAssetElement.selector)) {
 }
 
 const SvgAsset: FC<SvgProps> = ({
-  className, svgType, svgId, svgTheme
+  alt, className, svgType, svgId, svgTheme
 }) => (
-  <div element={SvgAssetElement.selector} className={className ?? ''} data-svg-type={svgType} data-svg-id={svgId} data-svg-theme={svgTheme ?? 'default'}></div>
+  <div element={SvgAssetElement.selector} className={className ?? ''} data-alt={alt} data-svg-type={svgType} data-svg-id={svgId} data-svg-theme={svgTheme ?? 'default'}></div>
 );
 
 export default SvgAsset;

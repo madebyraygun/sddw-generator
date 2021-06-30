@@ -121,7 +121,8 @@
 
   &__buttons-wrapper,
   &__options-wrapper,
-  &__date-wrapper {
+  &__date-wrapper,
+  &__host-wrapper {
     display: flex;
     position: relative;
     z-index: 5;
@@ -141,8 +142,8 @@
     }
   }
 
-  &__date-wrapper {
-    
+  &__host-wrapper + &__date-wrapper {
+    margin-top: 2rem;
   }
 
   &__button-finish {
@@ -160,17 +161,44 @@
     list-style: none;
     counter-reset: social-instructions;
 
-    li {
+    > li {
+      position: relative;
       counter-increment: social-instructions;
+      padding-left: 3rem;
 
       &:before {
+        position: absolute;
+        top: 0rem;
+        left: 0rem;
         content: counter(social-instructions) '. ';
         color: var(--bright);
       }
+
+      span {
+        display: block;
+        position: relative;
+      }
+
+      span + ul,
+      span + button,
+      span + a {
+        margin-top: 1.5rem;
+      }
     }
 
-    li + li {
+    > li + li {
       margin-top: 3rem;
+    }
+  }
+
+  &__social-links {
+    display: flex;
+    position: relative;
+    width: 100%;
+    flex-flow: row nowrap;
+
+    > li + li {
+      margin-left: 2.7rem;
     }
   }
 
@@ -187,28 +215,6 @@
 
     button + button {
       margin-left: 2rem;
-    }
-  }
-
-  &__social-share-icons {
-    > span {
-      display: block;
-      position: relative;
-    }
-
-    > span + ul {
-      margin-top: 1.5rem;
-    }
-
-    ul {
-      display: flex;
-      position: relative;
-      width: 100%;
-      flex-flow: row nowrap;
-
-      > li + li {
-        margin-left: 2.7rem;
-      }
     }
   }
 

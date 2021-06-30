@@ -24,21 +24,6 @@
     align-items: center;
   }
 
-  &__footnote {
-    position: absolute;
-    top: auto;
-    bottom: 3rem;
-    left: 0rem;
-    width: 100%;
-    text-align: center;
-    margin-top: 6rem;
-
-    a,
-    a strong {
-      color: var(--malibu);
-    }
-  }
-
   svg-asset,
   figure {
     width: 100%;

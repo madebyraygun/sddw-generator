@@ -27,6 +27,7 @@ import Section from '../../assets/js/constants/section';
 import EditorControlView from './controls/editor-control-view';
 import BehaviorEditorControlsChange from '../behaviors/editor-controls-change';
 import InputDate from '../input/date';
+import InputField from '../input/field';
 import Role from '../../assets/js/constants/role';
 
 import PxToRem from '../../assets/js/utils/pxToRem';
@@ -496,6 +497,10 @@ const EditorControls: FC = () => (
             <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
           </div>
 
+          <div className={styles['editor-controls__host-wrapper']} data-speaker-only>
+            <InputField id='hosted-by' maxLength={21}>Hosted By </InputField>
+          </div>
+
           <div className={styles['editor-controls__date-wrapper']} data-speaker-only>
             <InputDate>Date of Your Talk</InputDate>
           </div>
@@ -514,28 +519,30 @@ const EditorControls: FC = () => (
         {/* sharing */}
         <EditorControlView className={styles['editor-controls__social-wrapper']} dataName={{ 'data-editor-control-section': 'social' }}>
           <ol className={styles['editor-controls__social-instructions']}>
-            <li>Download your design</li>
-            <li>Print and share your poster on social media</li>
+            <li>
+              <span>Download your design</span>
+              <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>Download</Button>
+            </li>
+            <li>
+              <span data-speaker-only>Print your poster and share your design on social media</span>
+              <span data-public-only>Share your poster on social media</span>
+              <ul className={styles['editor-controls__social-links']}>
+                <li>
+                  <ButtonIcon dataName={{ 'data-social-instagram': '' }}>instagram</ButtonIcon>
+                </li>
+                <li>
+                  <ButtonIcon dataName={{ 'data-social-facebook': '' }}>facebook</ButtonIcon>
+                </li>
+                <li>
+                  <ButtonIcon dataName={{ 'data-social-twitter': '' }}>twitter</ButtonIcon>
+                </li>
+                <li>
+                  <ButtonIcon dataName={{ 'data-email': '' }}>email</ButtonIcon>
+                </li>
+              </ul>
+            </li>
             <li>Tag us #SDDESIGNWEEK</li>
           </ol>
-          <div className={styles['editor-controls__social-download-email-wrapper']}>
-            <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>Download</Button>
-            <Button big={true} className={styles['editor-controls__email']} dataName={{ 'data-email': '' }}>Email It</Button>
-          </div>
-          <div className={styles['editor-controls__social-share-icons']}>
-            <span className='text-p'>Share:</span>
-            <ul>
-              <li>
-                <ButtonIcon dataName={{ 'data-social-instagram': '' }}>instagram</ButtonIcon>
-              </li>
-              <li>
-                <ButtonIcon dataName={{ 'data-social-facebook': '' }}>facebook</ButtonIcon>
-              </li>
-              <li>
-                <ButtonIcon dataName={{ 'data-social-twitter': '' }}>twitter</ButtonIcon>
-              </li>
-            </ul>
-          </div>
         </EditorControlView>
       </div>
 

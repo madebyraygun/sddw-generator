@@ -325,7 +325,7 @@ class Design {
           <defs>
             <style type='text/css'>
               { `@font-face {
-                  font-family: SharpSansNo3;
+                  font-family: SharpSansNo2;
                   font-weight: 900;
                   font-style: normal;
                   src: url(data:application/font-woff;charset=utf-8;base64,${SharpSansDisplayNo2});

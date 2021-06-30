@@ -146,10 +146,8 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
 
   return (
     <div element={InputDateElement.selector} className={`${className ?? ''} ${styles['input-date']}`} {...dataName}>
-      <span className='text-p'>{children}</span>
-
       <div className={styles['input-date__controls-wrapper']}>
-        <SvgAsset svgId='calendar' svgType='icon' />
+        <SvgAsset svgId='calendar' svgType='icon' alt={children} />
 
         <div className={styles['input-date__control']}>
           <label className='a11y' htmlFor='date-month'>Select Month</label>
@@ -167,7 +165,7 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             <option value='Nov'>Nov</option>
             <option value='Dec'>Dec</option>
           </select>
-          <span className='text-p-sm' data-month-rendered></span>
+          <span className='text-p' data-month-rendered></span>
         </div>
 
         <div className={styles['input-date__control']}>
@@ -175,10 +173,10 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
           <select name='date-day' id='date-day' date-input-day>
             {days}
           </select>
-          <span className='text-p-sm' data-day-rendered></span>
+          <span className='text-p' data-day-rendered></span>
         </div>
 
-        <SvgAsset svgId='time' svgType='icon' />
+        <SvgAsset svgId='time' svgType='icon' alt={children} />
 
         <div className={styles['input-date__control']}>
           <label className='a11y' htmlFor='date-hour'>Select Hour</label>
@@ -196,9 +194,11 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             <option value='11'>11</option>
             <option value='12'>12</option>
           </select>
-          <span className='text-p-sm' data-hour-rendered></span>
+          <span className='text-p' data-hour-rendered></span>
         </div>
-
+        <figure className={styles['input-date__colon']}>
+          <span className='text-p'>:</span>
+        </figure>
         <div className={styles['input-date__control']}>
           <label className='a11y' htmlFor='date-minute'>Select Minute</label>
           <select name='date-minute' id='date-minute'>
@@ -207,7 +207,7 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             <option value='30'>30</option>
             <option value='45'>45</option>
           </select>
-          <span className='text-p-sm' data-minute-rendered></span>
+          <span className='text-p' data-minute-rendered></span>
         </div>
 
         <div className={`${styles['input-date__control']} ${styles['input-date__control-am-pm']}`}>
@@ -216,9 +216,10 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             <option value='AM'>AM</option>
             <option value='PM'>PM</option>
           </select>
-          <span className='text-p-sm' data-am-pm-rendered></span>
+          <span className='text-p' data-am-pm-rendered></span>
         </div>
       </div>
+      <figure></figure>
     </div>
   );
 };

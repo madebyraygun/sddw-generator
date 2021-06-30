@@ -213,7 +213,7 @@ class EditorController implements Controller {
         const attributes = {
           color: computedStyles.color,
           fill: computedStyles.color,
-          'font-family': 'SharpSansNo3',
+          'font-family': 'SharpSansNo2',
           'font-size': computedStyles.fontSize,
           'font-weight': computedStyles.fontWeight,
           'letter-spacing': computedStyles.letterSpacing

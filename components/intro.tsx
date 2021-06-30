@@ -19,9 +19,6 @@ const Intro: FC = () => (
         <Button big={true}>Get started</Button>
       </BehaviorSectionChange>
     </div>
-    <div className={styles['intro__footnote']}>
-      <span className='text-p-sm'>Please be respectful. <a href='https://sddesignweek.org/code-of-conduct' target='_blank' rel="noreferrer">SDDW Code of Conduct</a> community guidelines apply.</span>
-    </div>
   </div>
 );
 

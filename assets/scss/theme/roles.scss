@@ -9,4 +9,10 @@
       display: none;
     }
   }
+  body.is-speaker,
+  body.is-developer, {
+    [data-public-only] {
+      display: none;
+    }
+  }
 }

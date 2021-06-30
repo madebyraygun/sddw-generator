@@ -7,6 +7,7 @@ import EventEmitter from 'node:events';
 
 import Section from '../assets/js/constants/section';
 import { SectionChangeEventProps } from '../components/behaviors/section-change';
+import DisclaimerOverlay from '../components/footnote/disclaimer';
 
 
 interface Reference {
@@ -85,6 +86,7 @@ const PageIndex: FC = () => (
     <PageSectionView dataName={{ 'data-section': 'editor' }}>
       <EditorControls />
     </PageSectionView>
+    <DisclaimerOverlay />
   </div>
 );
 

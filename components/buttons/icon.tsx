@@ -24,7 +24,7 @@ export class ButtonIconElement extends HTMLElement {
   }
 
   #onButtonClick = () => {
-    console.log('close');
+    console.log('click', this.ref.el);
   }
 
 }

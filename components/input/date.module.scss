@@ -1,5 +1,11 @@
 .input-date {
+  display: flex;
   position: relative;
+  width: 24rem;
+  height: 4rem;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
 
   span + div {
     margin-top: 2.5rem;
@@ -11,20 +17,11 @@
     flex-flow: row nowrap;
     align-items: flex-end;
     justify-content: flex-start;
-    padding: 0 0 1rem;
-
-    &:after {
-      content: '';
-      position: absolute;
-      top: auto;
-      bottom: 0rem;
-      left: 0rem;
-      width: 100%;
-      height: 0.1rem;
-      background: var(--bright);
-    }
+    padding: 0;
 
     svg-asset {
+      position: relative;
+      top: -0.2rem;
       width: 2rem;
       height: 2rem;
       margin-right: 0.3rem;
@@ -34,10 +31,26 @@
         margin-left: 0;
       }
     }
+
+    &:focus + figure {
+      box-shadow: inset 0rem 0rem 0rem 0.1rem var(--bright-alpha-100);
+    }
+  }
+
+  &__controls-wrapper + figure {
+    pointer-events: none;
+    position: absolute;
+    top: 0.1rem;
+    left: 0rem;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.8rem;
+    box-shadow: inset 0rem 0rem 0rem 0.1rem var(--bright-alpha-40);
   }
 
   &__control {
     position: relative;
+    top: 0.1rem;
 
     select {
       position: absolute;
@@ -53,6 +66,10 @@
       padding: 0 0.3rem;
       text-transform: capitalize;
     }
+  }
+
+  &__colon {
+    color: var(--bright);
   }
 
   &__control-am-pm {
