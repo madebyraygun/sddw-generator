@@ -8,29 +8,28 @@ import { EventEmitter } from 'events';
 import Editor from '../constants/editor';
 
 export interface CharacterCallback {
-  word: WordState,
-  characterIndex: number,
-  target?: HTMLElement | null,
-  container?: HTMLElement | null,
+  word: WordState;
+  characterIndex: number;
+  target?: HTMLElement | null;
+  container?: HTMLElement | null;
 }
 export interface WordCallback {
-  word: WordState,
-  target?: HTMLElement | null,
-  container?: HTMLElement | null,
+  word: WordState;
+  target?: HTMLElement | null;
+  container?: HTMLElement | null;
 }
 
 class EditorController implements Controller {
-
   posters: Array<PosterState>;
   currentPoster: PosterState;
   currentWord: WordState;
   sectionEmitter: EventEmitter;
 
   flags: {
-    isInitialized: boolean
+    isInitialized: boolean;
   } = {
-    isInitialized: false
-  }
+    isInitialized: false,
+  };
 
   constructor() {
     this.initialize();
@@ -46,7 +45,12 @@ class EditorController implements Controller {
 
   // render phrases and characters
 
-  nextCharacter(word: WordState, characterIndex: number, $container?: HTMLElement | null, callback?: (value: CharacterCallback) => void) {
+  nextCharacter(
+    word: WordState,
+    characterIndex: number,
+    $container?: HTMLElement | null,
+    callback?: (value: CharacterCallback) => void,
+  ) {
     word.nextCharacterByIndex(characterIndex);
 
     let $word: HTMLElement | null = null;
@@ -56,12 +60,20 @@ class EditorController implements Controller {
 
     if (callback) {
       callback({
-        word, characterIndex, target: $word, container: $container
+        word,
+        characterIndex,
+        target: $word,
+        container: $container,
       });
     }
   }
 
-  prevCharacter(word: WordState, characterIndex: number, $container?: HTMLElement | null, callback?: (value: CharacterCallback) => void) {
+  prevCharacter(
+    word: WordState,
+    characterIndex: number,
+    $container?: HTMLElement | null,
+    callback?: (value: CharacterCallback) => void,
+  ) {
     word.prevCharacterByIndex(characterIndex);
 
     let $word: HTMLElement | null = null;
@@ -71,12 +83,20 @@ class EditorController implements Controller {
 
     if (callback) {
       callback({
-        word, characterIndex, target: $word, container: $container
+        word,
+        characterIndex,
+        target: $word,
+        container: $container,
       });
     }
   }
 
-  shuffleCharacter(word: WordState, characterIndex: number, $container?: HTMLElement | null, callback?: (value: CharacterCallback) => void) {
+  shuffleCharacter(
+    word: WordState,
+    characterIndex: number,
+    $container?: HTMLElement | null,
+    callback?: (value: CharacterCallback) => void,
+  ) {
     word.shuffleCharacterByIndex(characterIndex);
 
     let $word: HTMLElement | null = null;
@@ -86,7 +106,10 @@ class EditorController implements Controller {
 
     if (callback) {
       callback({
-        word, characterIndex, target: $word, container: $container
+        word,
+        characterIndex,
+        target: $word,
+        container: $container,
       });
     }
   }
@@ -118,12 +141,12 @@ class EditorController implements Controller {
 
   setRotation(value: number) {
     const { design } = this.currentPoster;
-    this.currentPoster.rotation = design.rotationMin + value / 100 * design.rotationMax * 2;
+    this.currentPoster.rotation = design.rotationMin + (value / 100) * design.rotationMax * 2;
   }
 
   setScale(value: number) {
     const { design } = this.currentPoster;
-    this.currentPoster.scale = design.scaleMin + value / 100 * design.scaleMax;
+    this.currentPoster.scale = design.scaleMin + (value / 100) * design.scaleMax;
   }
 
   // connect primary input (or database stored) word object
@@ -135,8 +158,12 @@ class EditorController implements Controller {
 
   // render word to container
 
-  renderWord(word: WordState, $container?: HTMLElement | null, renderedHeight = this.currentWord.theme.inputRenderedHeight) {
-    const $word:HTMLElement = word.renderInput(renderedHeight);
+  renderWord(
+    word: WordState,
+    $container?: HTMLElement | null,
+    renderedHeight = this.currentWord.theme.inputRenderedHeight,
+  ) {
+    const $word: HTMLElement = word.renderInput(renderedHeight);
 
     if ($container) {
       $word.setAttribute('data-phrase', '');
@@ -184,10 +211,24 @@ class EditorController implements Controller {
     }
   }
 
+  renderSticker(
+    $target: HTMLElement,
+    props: { host: string; dateTime: number; backgroundColor: string },
+    poster?: PosterState,
+  ) {
+    const posterState = poster ?? this.currentPoster;
+    if (props.host || props.host === '') posterState.sticker.host = props.host;
+    if (props.dateTime) posterState.sticker.dateTime = props.dateTime;
+    if (props.backgroundColor) posterState.sticker.backgroundColor = props.backgroundColor;
+    if ($target) {
+      this.renderCurrentPosterToElement($target, posterState);
+    }
+  }
+
   // download poster
 
   download($target: HTMLElement, scale = 1) {
-    const $svgElement:SVGElement | null = $target.querySelector<SVGElement>('svg');
+    const $svgElement: SVGElement | null = $target.querySelector<SVGElement>('svg');
     if ($svgElement) {
       const $clonedSvgElement = $svgElement.cloneNode(true) as SVGElement;
 
@@ -216,7 +257,7 @@ class EditorController implements Controller {
           'font-family': 'SharpSansNo2',
           'font-size': computedStyles.fontSize,
           'font-weight': computedStyles.fontWeight,
-          'letter-spacing': computedStyles.letterSpacing
+          'letter-spacing': computedStyles.letterSpacing,
         };
         for (const key in attributes) {
           const value = key ? attributes[key] : '';
@@ -265,7 +306,6 @@ class EditorController implements Controller {
       image.src = blobURL;
     }
   }
-
 }
 
 export default new EditorController();

@@ -8,6 +8,7 @@ import FooterState from './footer-state';
 import WordState from './word-state';
 import Theme from '../themes/theme';
 import Design from '../designs/design';
+import StickerState from './sticker-state';
 
 class PosterState {
 
@@ -15,28 +16,29 @@ class PosterState {
   design: Design;
   theme: Theme;
   word: WordState;
+  sticker: StickerState;
 
   adjustments: {
-    rotation: number,
-    scale: number,
+    rotation: number;
+    scale: number;
   } = {
     rotation: 0,
     scale: 1,
   };
 
   coords: {
-    width: number,
-    height: number,
+    width: number;
+    height: number;
   } = {
     width: 1440,
     height: 1800,
   };
 
   flags: {
-    isRandomColors: boolean,
-    isRandomWords: boolean,
-    isLineClamped: boolean,
-    isWordWrap: boolean,
+    isRandomColors: boolean;
+    isRandomWords: boolean;
+    isLineClamped: boolean;
+    isWordWrap: boolean;
   } = {
     isRandomColors: false,
     isRandomWords: false,
@@ -44,13 +46,17 @@ class PosterState {
     isWordWrap: true,
   };
 
-  constructor(theme: Theme, design?: Design, word?: WordState) {
+  constructor(theme: Theme, design?: Design, word?: WordState, sticker?:StickerState) {
     // theme dictates colors and svgs
     this.theme = theme;
 
     // design dictates poster layout
     if (design) this.design = design;
     else this.design = new Design(this);
+
+    // sticker dictates sticker
+    if (sticker) this.sticker = sticker;
+    else this.sticker = new StickerState();
 
     if (word) this.word = word;
   }

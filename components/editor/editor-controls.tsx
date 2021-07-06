@@ -70,7 +70,6 @@ interface Reference {
 }
 
 export class EditorControlsElement extends HTMLElement {
-
   static selector = 'editor-controls-element';
 
   controllers: Controllers = {};
@@ -285,7 +284,7 @@ export class EditorControlsElement extends HTMLElement {
   };
 
   #onInputHostChange = (e) => {
-    console.log(e.currentTarget.value);
+    EditorController.renderSticker(this.ref.poster, { host: e.currentTarget.value });
   };
 
   // built in callback once JSX rendered
@@ -456,7 +455,6 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.inputBox.style.left = `calc(50% - ${boxTotalWidth / 2}px)`;
     }
   };
-
 }
 
 // connect markup to javascript class -------------------------------------- //

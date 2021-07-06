@@ -42,8 +42,10 @@
     "css-loader": "^3.6.0",
     "dotenv": "^8.6.0",
     "eslint": "^7.29.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "file-loader": "^6.2.0",
     "jsdom": "16.5.2",
@@ -72,6 +74,7 @@
     "@types/month-days": "^3.0.0",
     "bad-words": "git+https://github.com/dmrobbins03/badwords.git",
     "badwords": "https://github.com/dmrobbins03/badwords",
+    "date-fns": "^2.22.1",
     "gsap": "file:gsap-bonus.tgz"
   }
 }
