@@ -228,20 +228,20 @@ class Design {
         <g transform="rotate(-15)">
           <text transform={`translate(0 ${0 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
             <tspan x="0" y="38.669">
-              {hostedLines[0].trim()}
+              {hostedLines[0].toUpperCase().trim()}
             </tspan>
             <tspan x="0" y="83.669">
-              {hostedLines.length > 1 && hostedLines[1].trim()}
+              {hostedLines.length > 1 && hostedLines[1].toUpperCase().trim()}
             </tspan>
           </text>
           <text transform={`translate(0 ${100 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
             <tspan x="0" y="71.6895">
-              {dateMonth}
+              {dateMonth.toUpperCase()}
             </tspan>
           </text>
           <text transform={`translate(0 ${184 - textVertCenterY})`} {...{ 'text-anchor': 'middle' }}>
             <tspan x="0" y="38.669">
-              {dateTime}
+              {dateTime.toUpperCase()}
             </tspan>
           </text>
         </g>

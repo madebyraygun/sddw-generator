@@ -1,3 +1,5 @@
+import jsPDF from 'jspdf';
+
 import ThemeController from './theme';
 
 import PosterState from '../../../components/poster/poster-state';
@@ -279,15 +281,17 @@ class EditorController implements Controller {
       const image = new Image();
       document.body.appendChild(image);
       const canvas = document.createElement('canvas');
-      canvas.width = this.currentPoster.width * scale;
-      canvas.height = this.currentPoster.height * scale;
+      const widthScaled = this.currentPoster.width * scale;
+      const heightScaled = this.currentPoster.height * scale;
+      canvas.width = widthScaled;
+      canvas.height = heightScaled;
       const context = canvas.getContext('2d');
       let png: string;
 
       // wait for image to load
       image.onload = () => {
         if (context) {
-          context.drawImage(image, 0, 0, this.currentPoster.width * scale, this.currentPoster.height * scale);
+          context.drawImage(image, 0, 0, widthScaled, heightScaled);
           png = canvas.toDataURL();
 
           // trigger download
@@ -300,7 +304,14 @@ class EditorController implements Controller {
             link.click();
             link.remove();
           };
-          download(png, 'sddw-poster.png');
+          // download(png, 'sddw-poster.png');
+
+          var pdf = new jsPDF({
+            unit: 'px',
+            format: [widthScaled, heightScaled],
+          });
+          pdf.addImage(png, 'png', 0, 0, widthScaled, heightScaled);
+          pdf.save('poster.pdf');
         }
       };
       image.src = blobURL;

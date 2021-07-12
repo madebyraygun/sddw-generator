@@ -345,6 +345,7 @@ export class EditorControlsElement extends HTMLElement {
     this.ref.inputDate = this.ref.el.querySelector<HTMLInputElement>('[data-input-date]');
     if (this.ref.inputDate) {
       this.ref.inputDate.addEventListener('change', this.#onInputDateChange);
+      this.ref.inputDate.dispatchEvent(new Event('dispatch'));
     }
 
     // generate button

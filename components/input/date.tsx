@@ -39,12 +39,12 @@ export class InputDateElement extends HTMLElement {
 
     const now = new Date();
     this.state = {
-      year: now.getFullYear(),
-      month: '',
-      day: -1,
-      hour: -1,
-      minute: -1,
-      amPm: '',
+      year: `${now.getFullYear()}`,
+      month: '01',
+      day: '01',
+      hour: '00',
+      minute: '00',
+      amPm: 'AM',
     };
   }
 
@@ -63,6 +63,8 @@ export class InputDateElement extends HTMLElement {
       $dropdown.addEventListener('change', this.#onSelectChange);
     }
 
+    this.ref.el.addEventListener('dispatch', this.#onSelectChange);
+
     this.ref.renderMonth = this.ref.el.querySelector('[data-month-rendered]') as HTMLElement;
     this.ref.renderDay = this.ref.el.querySelector('[data-day-rendered]') as HTMLElement;
     this.ref.renderHour = this.ref.el.querySelector('[data-hour-rendered]') as HTMLElement;
@@ -70,32 +72,14 @@ export class InputDateElement extends HTMLElement {
     this.ref.renderAmPm = this.ref.el.querySelector('[data-am-pm-rendered]') as HTMLElement;
 
     this.resetState();
+    this.updateState();
     this.renderState();
   }
 
   #onSelectChange = () => {
     this.updateState();
     this.renderState();
-
-    const month = this.ref.inputMonth?.value ?? '01';
-    const day = this.ref.inputDay?.value ?? '01';
-    const amPm = this.ref.inputAmPm?.value ?? 'AM';
-    const hour = this.ref.inputHour?.value ?? '00';
-    const hour24 = parseInt(hour) + (amPm === 'PM' ? 12 : 0);
-    const minute = this.ref.inputMinute?.value ?? '00';
-
-    this.ref.el?.dispatchEvent(
-      new CustomEvent('change', {
-        detail: {
-          month,
-          day,
-          hour,
-          minute,
-          amPm,
-          date: new Date(`${day} ${month} ${new Date().getFullYear()}, ${hour24}:${minute}:00`),
-        },
-      }),
-    );
+    this.dispatchState();
   };
 
   resetState = () => {
@@ -142,6 +126,28 @@ export class InputDateElement extends HTMLElement {
     if (this.ref.renderHour) this.ref.renderHour.innerHTML = this.state.hour;
     if (this.ref.renderMinute) this.ref.renderMinute.innerHTML = this.state.minute;
     if (this.ref.renderAmPm) this.ref.renderAmPm.innerHTML = this.state.amPm;
+  };
+
+  dispatchState = () => {
+    const month = this.ref.inputMonth?.value ?? '01';
+    const day = this.ref.inputDay?.value ?? '01';
+    const amPm = this.ref.inputAmPm?.value ?? 'AM';
+    const hour = this.ref.inputHour?.value ?? '00';
+    const hour24 = parseInt(hour) + (amPm === 'PM' ? 12 : 0);
+    const minute = this.ref.inputMinute?.value ?? '00';
+
+    this.ref.el?.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          month,
+          day,
+          hour,
+          minute,
+          amPm,
+          date: new Date(`${day} ${month} ${new Date().getFullYear()}, ${hour24}:${minute}:00`),
+        },
+      }),
+    );
   };
 }
 
