@@ -213,12 +213,12 @@ class EditorController implements Controller {
 
   renderSticker(
     $target: HTMLElement,
-    props: { host: string; dateTime: number; backgroundColor: string },
+    props: { host?: string; date?: Date; backgroundColor?: string },
     poster?: PosterState,
   ) {
     const posterState = poster ?? this.currentPoster;
     if (props.host || props.host === '') posterState.sticker.host = props.host;
-    if (props.dateTime) posterState.sticker.dateTime = props.dateTime;
+    if (props.date) posterState.sticker.date = props.date;
     if (props.backgroundColor) posterState.sticker.backgroundColor = props.backgroundColor;
     if ($target) {
       this.renderCurrentPosterToElement($target, posterState);

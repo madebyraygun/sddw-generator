@@ -5,30 +5,29 @@ import { CustomProps } from '../types/props';
 import styles from './date.module.scss';
 
 interface Reference {
-  el?: HTMLElement,
-  inputMonth?: HTMLInputElement,
-  inputDay?: HTMLInputElement,
-  inputHour?: HTMLInputElement,
-  inputMinute?: HTMLInputElement,
-  inputAmPm?: HTMLInputElement,
-  renderMonth?: HTMLElement,
-  renderDay?: HTMLElement,
-  renderHour?: HTMLElement,
-  renderMinute?: HTMLElement,
-  renderAmPm?: HTMLElement,
+  el?: HTMLElement;
+  inputMonth?: HTMLInputElement;
+  inputDay?: HTMLInputElement;
+  inputHour?: HTMLInputElement;
+  inputMinute?: HTMLInputElement;
+  inputAmPm?: HTMLInputElement;
+  renderMonth?: HTMLElement;
+  renderDay?: HTMLElement;
+  renderHour?: HTMLElement;
+  renderMinute?: HTMLElement;
+  renderAmPm?: HTMLElement;
 }
 
 interface InputDateState {
-  year: string,
-  month: string,
-  day: string,
-  hour: string,
-  minute: string,
-  amPm: string
+  year: string;
+  month: string;
+  day: string;
+  hour: string;
+  minute: string;
+  amPm: string;
 }
 
 export class InputDateElement extends HTMLElement {
-
   static selector = 'input-date-element';
 
   ref: Reference = {};
@@ -45,7 +44,7 @@ export class InputDateElement extends HTMLElement {
       day: -1,
       hour: -1,
       minute: -1,
-      amPm: ''
+      amPm: '',
     };
   }
 
@@ -77,7 +76,27 @@ export class InputDateElement extends HTMLElement {
   #onSelectChange = () => {
     this.updateState();
     this.renderState();
-  }
+
+    const month = this.ref.inputMonth?.value ?? '01';
+    const day = this.ref.inputDay?.value ?? '01';
+    const amPm = this.ref.inputAmPm?.value ?? 'AM';
+    const hour = this.ref.inputHour?.value ?? '00';
+    const hour24 = parseInt(hour) + (amPm === 'PM' ? 12 : 0);
+    const minute = this.ref.inputMinute?.value ?? '00';
+
+    this.ref.el?.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          month,
+          day,
+          hour,
+          minute,
+          amPm,
+          date: new Date(`${day} ${month} ${new Date().getFullYear()}, ${hour24}:${minute}:00`),
+        },
+      }),
+    );
+  };
 
   resetState = () => {
     if (this.ref.inputMonth) {
@@ -97,7 +116,7 @@ export class InputDateElement extends HTMLElement {
     }
 
     this.updateState();
-  }
+  };
 
   updateState = () => {
     if (this.ref.inputMonth) {
@@ -115,7 +134,7 @@ export class InputDateElement extends HTMLElement {
     if (this.ref.inputAmPm) {
       this.state.amPm = this.ref.inputAmPm.value;
     }
-  }
+  };
 
   renderState = () => {
     if (this.ref.renderMonth) this.ref.renderMonth.innerHTML = this.state.month;
@@ -123,8 +142,7 @@ export class InputDateElement extends HTMLElement {
     if (this.ref.renderHour) this.ref.renderHour.innerHTML = this.state.hour;
     if (this.ref.renderMinute) this.ref.renderMinute.innerHTML = this.state.minute;
     if (this.ref.renderAmPm) this.ref.renderAmPm.innerHTML = this.state.amPm;
-  }
-
+  };
 }
 
 // connect to functional component -------------------------------------- //
@@ -139,84 +157,92 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
   const days: Node[] = [];
   for (let i = 0; i < 30; i++) {
     const day = i < 10 ? `0${i + 1}` : String(i + 1);
-    days.push((
-      <option value={`${day}`}>{day}</option>
-    ));
+    days.push(<option value={`${day}`}>{day}</option>);
   }
 
   return (
     <div element={InputDateElement.selector} className={`${className ?? ''} ${styles['input-date']}`} {...dataName}>
       <div className={styles['input-date__controls-wrapper']}>
-        <SvgAsset svgId='calendar' svgType='icon' alt={children} />
+        <SvgAsset svgId="calendar" svgType="icon" alt={children} />
 
         <div className={styles['input-date__control']}>
-          <label className='a11y' htmlFor='date-month'>Select Month</label>
-          <select name='date-month' id='date-month'>
-            <option value='Jan'>Jan</option>
-            <option value='Feb'>Feb</option>
-            <option value='Mar'>Mar</option>
-            <option value='Apr'>Apr</option>
-            <option value='May'>May</option>
-            <option value='Jun'>Jun</option>
-            <option value='Jul'>Jul</option>
-            <option value='Aug'>Aug</option>
-            <option value='Sep'>Sep</option>
-            <option value='Oct'>Oct</option>
-            <option value='Nov'>Nov</option>
-            <option value='Dec'>Dec</option>
+          <label className="a11y" htmlFor="date-month">
+            Select Month
+          </label>
+          <select name="date-month" id="date-month">
+            <option value="Jan">Jan</option>
+            <option value="Feb">Feb</option>
+            <option value="Mar">Mar</option>
+            <option value="Apr">Apr</option>
+            <option value="May">May</option>
+            <option value="Jun">Jun</option>
+            <option value="Jul">Jul</option>
+            <option value="Aug">Aug</option>
+            <option value="Sep">Sep</option>
+            <option value="Oct">Oct</option>
+            <option value="Nov">Nov</option>
+            <option value="Dec">Dec</option>
           </select>
-          <span className='text-p' data-month-rendered></span>
+          <span className="text-p" data-month-rendered></span>
         </div>
 
         <div className={styles['input-date__control']}>
-          <label className='a11y' htmlFor='date-day'>Select Day</label>
-          <select name='date-day' id='date-day' date-input-day>
+          <label className="a11y" htmlFor="date-day">
+            Select Day
+          </label>
+          <select name="date-day" id="date-day" date-input-day>
             {days}
           </select>
-          <span className='text-p' data-day-rendered></span>
+          <span className="text-p" data-day-rendered></span>
         </div>
 
-        <SvgAsset svgId='time' svgType='icon' alt={children} />
+        <SvgAsset svgId="time" svgType="icon" alt={children} />
 
         <div className={styles['input-date__control']}>
-          <label className='a11y' htmlFor='date-hour'>Select Hour</label>
-          <select name='date-hour' id='date-hour'>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-            <option value='5'>5</option>
-            <option value='6'>6</option>
-            <option value='7'>7</option>
-            <option value='8'>8</option>
-            <option value='9'>9</option>
-            <option value='10'>10</option>
-            <option value='11'>11</option>
-            <option value='12'>12</option>
+          <label className="a11y" htmlFor="date-hour">
+            Select Hour
+          </label>
+          <select name="date-hour" id="date-hour">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
           </select>
-          <span className='text-p' data-hour-rendered></span>
+          <span className="text-p" data-hour-rendered></span>
         </div>
         <figure className={styles['input-date__colon']}>
-          <span className='text-p'>:</span>
+          <span className="text-p">:</span>
         </figure>
         <div className={styles['input-date__control']}>
-          <label className='a11y' htmlFor='date-minute'>Select Minute</label>
-          <select name='date-minute' id='date-minute'>
-            <option value='00'>00</option>
-            <option value='15'>15</option>
-            <option value='30'>30</option>
-            <option value='45'>45</option>
+          <label className="a11y" htmlFor="date-minute">
+            Select Minute
+          </label>
+          <select name="date-minute" id="date-minute">
+            <option value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
           </select>
-          <span className='text-p' data-minute-rendered></span>
+          <span className="text-p" data-minute-rendered></span>
         </div>
 
         <div className={`${styles['input-date__control']} ${styles['input-date__control-am-pm']}`}>
-          <label className='a11y' htmlFor='date-am-pm'>Select AM or PM</label>
-          <select name='date-am-pm' id='date-am-pm'>
-            <option value='AM'>AM</option>
-            <option value='PM'>PM</option>
+          <label className="a11y" htmlFor="date-am-pm">
+            Select AM or PM
+          </label>
+          <select name="date-am-pm" id="date-am-pm">
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
           </select>
-          <span className='text-p' data-am-pm-rendered></span>
+          <span className="text-p" data-am-pm-rendered></span>
         </div>
       </div>
       <figure></figure>

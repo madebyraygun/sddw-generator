@@ -1,12 +1,12 @@
 class StickerState {
   backgroundColor: string;
   host: string;
-  dateTime: number;
+  date: Date;
 
-  constructor(backgroundColor, host, dateTime) {
+  constructor(backgroundColor: string, host: string, date: Date) {
     this.backgroundColor = backgroundColor ?? '#F9F15A';
-    this.host = host ?? 'Hosted By \n Balboa Park';
-    this.dateTime = dateTime ?? Date.now();
+    this.host = host ?? 'Hosted By \n SDDW';
+    this.date = date ?? new Date();
   }
 }
 

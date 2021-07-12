@@ -196,7 +196,7 @@ class Design {
     const edgeGutter = 231.451 - r;
     const edgeXY = r * scale + edgeGutter;
 
-    const date = new Date(this.poster.sticker.dateTime);
+    const date = new Date(this.poster.sticker.date);
     const dateMonth = format(date, 'MMM. dd');
     const dateTime = `${format(date, 'h:mm aaa')} PT`;
     let hostedLines = [];
@@ -217,8 +217,6 @@ class Design {
         hostedLines[hostedLines.length - 1] += ` ${word}`;
       }
     }
-
-    console.log(hostedLines);
 
     const el = (
       <g

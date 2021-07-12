@@ -283,8 +283,18 @@ export class EditorControlsElement extends HTMLElement {
     }
   };
 
-  #onInputHostChange = (e) => {
-    EditorController.renderSticker(this.ref.poster, { host: e.currentTarget.value });
+  #onInputHostChange = (e: CustomEvent) => {
+    if (this.ref.poster) {
+      const host = e.currentTarget.value as string;
+      EditorController.renderSticker(this.ref.poster, { host });
+    }
+  };
+
+  #onInputDateChange = (e: CustomEvent) => {
+    if (this.ref.poster && e?.detail) {
+      const date: Date = e.detail.date;
+      EditorController.renderSticker(this.ref.poster, { date });
+    }
   };
 
   // built in callback once JSX rendered
@@ -329,6 +339,12 @@ export class EditorControlsElement extends HTMLElement {
     if (this.ref.inputHost) {
       this.ref.inputHost.addEventListener('change', this.#onInputHostChange);
       this.ref.inputHost.addEventListener('input', this.#onInputHostChange);
+    }
+
+    // event date (speaker only)
+    this.ref.inputDate = this.ref.el.querySelector<HTMLInputElement>('[data-input-date]');
+    if (this.ref.inputDate) {
+      this.ref.inputDate.addEventListener('change', this.#onInputDateChange);
     }
 
     // generate button
@@ -538,12 +554,12 @@ const EditorControls: FC = () => (
 
           <div className={styles['editor-controls__host-wrapper']} data-speaker-only>
             <InputField id="hosted-by" maxLength={21} dataName={{ 'data-input-host': '' }}>
-              Hosted By{' '}
+              Hosted By SDDW
             </InputField>
           </div>
 
           <div className={styles['editor-controls__date-wrapper']} data-speaker-only>
-            <InputDate dataName={{ 'data-date': '' }}>Date of Your Talk</InputDate>
+            <InputDate dataName={{ 'data-input-date': '' }}>Date of Your Talk</InputDate>
           </div>
 
           <div className={styles['editor-controls__buttons-wrapper']} data-dev-only>
