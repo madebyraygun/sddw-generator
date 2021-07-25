@@ -1,0 +1,17 @@
+.editor-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 0;
+  left: -9999rem;
+  visibility: hidden;
+  background: var(--dark-alpha-80);
+  z-index: var(--sddw_z-overlay);
+
+  &[data-active] {
+    position: fixed;
+    left: 0;
+    height: 100vh;
+    visibility: visible;
+  }
+}

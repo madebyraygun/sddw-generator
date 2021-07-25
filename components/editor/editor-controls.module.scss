@@ -10,8 +10,7 @@
   // animation ------------------------------------------------------------- //
 
   &__input-placeholder-box {
-    transition:
-      width var(--sddw_ease-dur-fast) var(--sddw_ease-out-jim-dynamic),
+    transition: width var(--sddw_ease-dur-fast) var(--sddw_ease-out-jim-dynamic),
       left var(--sddw_ease-dur-fast) var(--sddw_ease-out-jim-dynamic);
   }
 
@@ -43,7 +42,6 @@
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    position: relative;
   }
 
   &__view-inputs-poster {
@@ -147,7 +145,6 @@
   }
 
   &__button-finish {
-
   }
 
   // social buttons
@@ -325,7 +322,6 @@
   &__generate,
   &__randomize,
   &__clear {
-
   }
 
   &__clear {
@@ -336,15 +332,12 @@
 
   &__button-restart,
   &__button-finish {
-
   }
 
   &__button-restart {
-
   }
 
   &__button-finish {
-
   }
 
   &__poster {

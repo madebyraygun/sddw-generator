@@ -2,33 +2,37 @@
   --black: #000;
   --white: #fff;
 
-  --athens-gray: #F8F9FA;
-  --bright-grey: #5D5E60;
-  --candy-corn: #F9F15A;
-  --cinnabar: #E75334;
-  --cornflower-blue: #4D78F6;
-  --malibu: #66DEF4;
-  --mandy: #E94568;
-  --mint-green: #76FA95;
-  --royal-purple: #6A2FA1;
-  --shark: #1B1C1E;
+  --athens-gray: #f8f9fa;
+  --bright-grey: #5d5e60;
+  --candy-corn: #f9f15a;
+  --cinnabar: #e75334;
+  --cornflower-blue: #4d78f6;
+  --malibu: #66def4;
+  --mandy: #e94568;
+  --mint-green: #76fa95;
+  --royal-purple: #6a2fa1;
+  --shark: #1b1c1e;
 
   // light / dark - can be inverted depending on theme state
-  --dark: #1B1C1E;
-  --bright: #F8F9FA;
+  --dark: #1b1c1e;
+  --bright: #f8f9fa;
 
   --bright-alpha-0: rgba(248, 249, 250, 0);
   --bright-alpha-20: rgba(248, 249, 250, 0.2);
   --bright-alpha-40: rgba(248, 249, 250, 0.4);
   --bright-alpha-100: rgba(248, 249, 250, 1);
 
+  --dark-alpha-0: rgba(27, 28, 30, 0);
+  --dark-alpha-80: rgba(27, 28, 30, 0.8);
+  --dark-alpha-100: rgba(27, 28, 30, 1);
+
   --gradient-rainbow: linear-gradient(to right, var(--royal-purple), var(--cornflower-blue), var(--malibu), var(--mint-green), var(--candy-corn), var(--cinnabar), var(--mandy));
 }
 
 :global {
   body.is-dark {
-    --dark: #F8F9FA;
-    --bright: #1B1C1E;
+    --dark: #f8f9fa;
+    --bright: #1b1c1e;
 
     --bright-alpha-0: rgba(27, 28, 30, 0);
     --bright-alpha-20: rgba(27, 28, 30, 0.2);

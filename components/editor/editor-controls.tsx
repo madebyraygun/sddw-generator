@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import Filter from 'badwords';
 
 import AnimationController from '../../assets/js/controllers/animation';
 import AssetsController from '../../assets/js/controllers/assets';
@@ -10,15 +11,17 @@ import ThemeController from '../../assets/js/controllers/theme';
 
 import Button from '../buttons/button';
 import ButtonClose from '../buttons/close';
+import ButtonIcon from '../buttons/icon';
 import ButtonToggle from '../buttons/toggle';
+
 import RadioSelector, { RadioSelectorElement } from '../controls/radio-selector';
 import RangeSlider, { RangeSliderElement } from '../controls/range-slider';
-import SddwPoster from '../poster/poster';
 
-import styles from './editor-controls.module.scss';
+import InputDate from '../input/date';
+import InputField from '../input/field';
+
+import SddwPoster from '../poster/poster';
 import WordState from '../poster/word-state';
-import EditorView from './views/editor-view';
-import ButtonIcon from '../buttons/icon';
 
 import BehaviorEditorSectionChange, {
   EditorSectionChangeEventProps,
@@ -26,15 +29,17 @@ import BehaviorEditorSectionChange, {
 
 import Editor from '../../assets/js/constants/editor';
 import Section from '../../assets/js/constants/section';
-import EditorControlView from './controls/editor-control-view';
-import BehaviorEditorControlsChange from '../behaviors/editor-controls-change';
-import InputDate from '../input/date';
-import InputField from '../input/field';
-import Role from '../../assets/js/constants/role';
 
+import EditorControlView from './controls/editor-control-view';
+import EditorOverlay from './overlays/editor-overlay';
+import EditorView from './views/editor-view';
+
+import BehaviorEditorControlsChange from '../behaviors/editor-controls-change';
+
+import Role from '../../assets/js/constants/role';
 import PxToRem from '../../assets/js/utils/pxToRem';
 
-import Filter from 'badwords';
+import styles from './editor-controls.module.scss';
 
 interface Controllers {
   resize?: ResizeSubscriber;
@@ -646,6 +651,10 @@ const EditorControls: FC = () => (
         ></ButtonClose>
       </BehaviorEditorSectionChange>
     </EditorView>
+
+    <EditorOverlay dataName={{ 'data-active': '' }}>
+      <h2>Processing, Please Wait...</h2>
+    </EditorOverlay>
   </div>
 );
 
