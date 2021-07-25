@@ -3,11 +3,10 @@ import EventEmitter from 'events';
 import Controller from './controller';
 import DebugController from './debug';
 
-
 export interface EmitterSubscriber {
-  key: any,
-  emitter: EventEmitter,
-  die?: boolean,
+  key: any;
+  emitter: EventEmitter;
+  die?: boolean;
 }
 
 class EventController implements Controller {
@@ -25,14 +24,14 @@ class EventController implements Controller {
     if (!emitter) {
       emitter = {
         key,
-        emitter: new EventEmitter()
+        emitter: new EventEmitter(),
       };
       this.emitters.push(emitter);
     } else if (DebugController.isActive) {
       console.warn(`EventController: Matching key ${key}. Attempt to set subscriber failed.`);
     }
     return emitter;
-  }
+  };
 
   clear = (emitter: EmitterSubscriber) => {
     for (let i = 0; i < this.emitters.length; i++) {
@@ -42,18 +41,18 @@ class EventController implements Controller {
         break;
       }
     }
-  }
+  };
 
   clearByIndex = (index: number) => {
     this.emitters.splice(index, 1);
-  }
+  };
 
   // subscribe new object for only one emit
 
   one = (emitter: EmitterSubscriber) => {
     this.set(emitter);
     emitter.die = true;
-  }
+  };
 
   // find a subscriber by its key
 
@@ -65,17 +64,17 @@ class EventController implements Controller {
       }
     }
     return null;
-  }
+  };
 
   getEmitter = (key: any): EventEmitter | null => {
     return this.getSubscriber(key)?.emitter ?? null;
-  }
+  };
 
   // return an emitter no matter what - if it doesn't exist, create it
 
   getEmitterAlways = (key: any): EventEmitter => {
     return this.set(key).emitter;
-  }
+  };
 
 }
 

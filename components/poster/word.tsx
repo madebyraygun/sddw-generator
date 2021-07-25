@@ -3,7 +3,7 @@ import WordState from './word-state';
 import styles from './word.module.scss';
 
 interface Reference {
-  button?: HTMLButtonElement | null,
+  button?: HTMLButtonElement | null;
 }
 
 export class WordElement extends HTMLElement {
@@ -14,7 +14,7 @@ export class WordElement extends HTMLElement {
   state: WordState;
 
   state: {
-    isToggled: boolean,
+    isToggled: boolean;
   } = {
     isToggled: true,
   };

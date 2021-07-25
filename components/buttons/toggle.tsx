@@ -3,8 +3,8 @@ import { CustomProps } from '../types/props';
 import styles from './toggle.module.scss';
 
 interface Reference {
-  el?: HTMLElement,
-  button?: HTMLButtonElement | null,
+  el?: HTMLElement;
+  button?: HTMLButtonElement | null;
 }
 
 export class ButtonToggleElement extends HTMLElement {
@@ -14,17 +14,17 @@ export class ButtonToggleElement extends HTMLElement {
   ref: Reference = {};
 
   config: {
-    colorVariations: number
+    colorVariations: number;
   } = {
-    colorVariations: 4
+    colorVariations: 4,
   };
 
   state: {
-    isToggled: boolean,
-    lastColorVariation: number
+    isToggled: boolean;
+    lastColorVariation: number;
   } = {
     isToggled: false,
-    lastColorVariation: -1
+    lastColorVariation: -1,
   };
 
   connectedCallback() {
@@ -58,7 +58,7 @@ export class ButtonToggleElement extends HTMLElement {
 
   #onButtonClick = () => {
     this.toggleButton(!this.state.isToggled);
-  }
+  };
 
 }
 

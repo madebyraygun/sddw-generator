@@ -2,14 +2,14 @@ import { Character, Characters, InlineSVG, InlineSVGs } from '../../../component
 import Controller from './controller';
 
 interface AssetTheme {
-  [category: string]: AssetCategory
+  [category: string]: AssetCategory;
 }
 
 interface AssetCategory {
-  characters: Characters,
-  footers: InlineSVGs,
-  icons: InlineSVGs,
-  logos: InlineSVGs
+  characters: Characters;
+  footers: InlineSVGs;
+  icons: InlineSVGs;
+  logos: InlineSVGs;
 }
 
 class AssetsController implements Controller {
@@ -17,13 +17,13 @@ class AssetsController implements Controller {
   allowedCharacters = '';
 
   assets: {
-    [theme: string]: AssetTheme
+    [theme: string]: AssetTheme;
   } = {};
 
   state: {
-    theme: string
+    theme: string;
   } = {
-    theme: 'default'
+    theme: 'default',
   };
 
   initialize() {
@@ -54,7 +54,7 @@ class AssetsController implements Controller {
         characters: {},
         footers: {},
         icons: {},
-        logos: {}
+        logos: {},
       };
     }
   }
@@ -67,20 +67,20 @@ class AssetsController implements Controller {
       const { default: SvgCharacter } = required(path);
       const svg = SvgCharacter({});
       const children = svg.querySelectorAll('path, rect, circle');
-      const [,, width, height] = svg.getAttribute('viewBox').split(' ');
+      const [, , width, height] = svg.getAttribute('viewBox').split(' ');
       const dimension = [parseFloat(width), parseFloat(height)];
       if (this.allowedCharacters.indexOf(character) === -1) this.allowedCharacters += character;
       if (!this.assets[theme].characters[character]) this.assets[theme].characters[character] = [];
       this.assets[theme].characters[character].push({
         svg,
         children: children,
-        dimension
+        dimension,
       });
     });
     console.log(this.allowedCharacters);
   }
 
-  loadInlineSVGs(required, category:string, themeSlug?: string | null) {
+  loadInlineSVGs(required, category: string, themeSlug?: string | null) {
     const theme = themeSlug || this.state.theme;
     this.checkAssets(category, themeSlug);
     required.keys().map((path: string) => {
@@ -88,19 +88,21 @@ class AssetsController implements Controller {
       const { default: SvgAsset } = required(path);
       const svg = SvgAsset({});
       const children = svg.querySelectorAll('path, rect, circle');
-      const [,, width, height] = svg.getAttribute('viewBox').split(' ');
+      const [, , width, height] = svg.getAttribute('viewBox').split(' ');
       const dimension = [parseFloat(width), parseFloat(height)];
       this.assets[theme][category][svgName] = {
         svg,
         children: children,
-        dimension
+        dimension,
       };
     });
   }
 
   getCharacter(glyph: string, variationIndex = 0, themeSlug?: string | null): Character | null {
     const theme = themeSlug || this.state.theme;
-    return this.assets[theme].characters[glyph][Math.min(variationIndex, this.assets[theme].characters[glyph].length - 1)];
+    return this.assets[theme].characters[glyph][
+      Math.min(variationIndex, this.assets[theme].characters[glyph].length - 1)
+    ];
   }
 
   getAsset(type: string, id: string, themeSlug?: string | null): InlineSVG {

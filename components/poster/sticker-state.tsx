@@ -1,4 +1,5 @@
 class StickerState {
+
   backgroundColor: string;
   host: string;
   date: Date;
@@ -8,6 +9,7 @@ class StickerState {
     this.host = host ?? 'Hosted By \n SDDW';
     this.date = date ?? new Date();
   }
+
 }
 
 export default StickerState;

@@ -4,8 +4,8 @@ import SvgAsset from '../media/svg-asset';
 import styles from './icon.module.scss';
 
 interface Reference {
-  el?: HTMLElement,
-  button?: HTMLButtonElement,
+  el?: HTMLElement;
+  button?: HTMLButtonElement;
 }
 
 export class ButtonIconElement extends HTMLElement {
@@ -25,7 +25,7 @@ export class ButtonIconElement extends HTMLElement {
 
   #onButtonClick = () => {
     console.log('click', this.ref.el);
-  }
+  };
 
 }
 
@@ -41,9 +41,9 @@ const ButtonIcon: FC<CustomProps> = ({ className, dataName, children = 'Click to
   <div element={ButtonIconElement.selector} className={`${className ?? ''} ${styles['button-icon']}`} {...dataName}>
     <button>
       <figure className={styles['button-icon__icon']}>
-        <SvgAsset svgId={children} svgType='icon' />
+        <SvgAsset svgId={children} svgType="icon" />
       </figure>
-      <label className='a11y'>Click to share on {children}</label>
+      <label className="a11y">Click to share on {children}</label>
     </button>
   </div>
 );

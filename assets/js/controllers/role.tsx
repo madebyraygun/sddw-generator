@@ -4,9 +4,9 @@ import Role from '../constants/role';
 class RoleController implements Controller {
 
   state: {
-    role: Role,
+    role: Role;
   } = {
-    role: Role.PUBLIC
+    role: Role.PUBLIC,
   };
 
   initialize() {
@@ -20,7 +20,7 @@ class RoleController implements Controller {
     }
   }
 
-  get role():Role {
+  get role(): Role {
     return this.state.role;
   }
 

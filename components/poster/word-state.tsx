@@ -19,7 +19,7 @@ class WordState {
   constructor(characters: CharacterState[] | string, theme: Theme, poster?: PosterState) {
     this.theme = theme;
 
-    if (typeof (characters) === 'string') {
+    if (typeof characters === 'string') {
       this.characters = this.charactersFromString(String(characters));
     } else {
       this.characters = [...characters] as CharacterState[];
@@ -51,7 +51,14 @@ class WordState {
     const characters: CharacterState[] = [];
     for (let i = 0; i < characterString.length; i++) {
       const glyph: string = characterString[i];
-      characters.push(new CharacterState(glyph, this.theme.getShuffledColors(), this.getShuffledVariationIndex(), /^[&@#]+$/.test(glyph)));
+      characters.push(
+        new CharacterState(
+          glyph,
+          this.theme.getShuffledColors(),
+          this.getShuffledVariationIndex(),
+          /^[&@#]+$/.test(glyph),
+        ),
+      );
     }
     return characters;
   }
@@ -95,7 +102,7 @@ class WordState {
     }
   }
 
-  changeCharacterByIndex(characterIndex:number, variationIndex: number) {
+  changeCharacterByIndex(characterIndex: number, variationIndex: number) {
     const character = this.getCharacterByIndex(characterIndex);
     if (character) {
       this.changeCharacter(character, variationIndex);
@@ -107,7 +114,7 @@ class WordState {
     this.changeCharacter(character, character.variationIndex + 1);
   }
 
-  nextCharacterByIndex(characterIndex:number) {
+  nextCharacterByIndex(characterIndex: number) {
     const character = this.getCharacterByIndex(characterIndex);
     if (character) {
       this.nextCharacter(character);
@@ -119,7 +126,7 @@ class WordState {
     this.changeCharacter(character, character.variationIndex - 1);
   }
 
-  prevCharacterByIndex(characterIndex:number) {
+  prevCharacterByIndex(characterIndex: number) {
     const character = this.getCharacterByIndex(characterIndex);
     if (character) {
       this.prevCharacter(character);
@@ -131,7 +138,7 @@ class WordState {
     this.changeCharacter(character, this.getShuffledVariationIndex(character.variationIndex));
   }
 
-  shuffleCharacterByIndex(characterIndex:number) {
+  shuffleCharacterByIndex(characterIndex: number) {
     const character = this.getCharacterByIndex(characterIndex);
     if (character) {
       this.shuffleCharacter(character);
@@ -149,7 +156,9 @@ class WordState {
   shuffleCharacters(allowSameVariationIndex = false) {
     for (let i = 0; i < this.characters.length; i++) {
       const character = this.characters[i];
-      character.variationIndex = this.getShuffledVariationIndex(allowSameVariationIndex ? -1 : character.variationIndex);
+      character.variationIndex = this.getShuffledVariationIndex(
+        allowSameVariationIndex ? -1 : character.variationIndex,
+      );
     }
   }
 
@@ -186,7 +195,7 @@ class WordState {
   }
 
   // get character by index
-  getCharacterByIndex(index:number): CharacterState | null {
+  getCharacterByIndex(index: number): CharacterState | null {
     return this.characters[index] ?? null;
   }
 
@@ -214,18 +223,30 @@ class WordState {
       if (svgCharacter) {
         const [width, height] = svgCharacter.dimension;
         const renderedWidth = width * (renderedHeight / height);
-        const letterSpacing = renderedHeight / this.theme.inputRenderedHeight * this.theme.inputRenderedLetterSpacing;
+        const letterSpacing = (renderedHeight / this.theme.inputRenderedHeight) * this.theme.inputRenderedLetterSpacing;
         $word.appendChild(
-          <figure data-character data-index={$word.children.length} style={{ width: `${PxToRem.convert(renderedWidth)}rem`, height: `${PxToRem.convert(renderedHeight)}rem`, marginLeft: `${PxToRem.convert(letterSpacing)}rem` }}>
+          <figure
+            data-character
+            data-index={$word.children.length}
+            style={{
+              width: `${PxToRem.convert(renderedWidth)}rem`,
+              height: `${PxToRem.convert(renderedHeight)}rem`,
+              marginLeft: `${PxToRem.convert(letterSpacing)}rem`,
+            }}
+          >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
               {[...svgCharacter.children].map((path, index) => {
                 const d = path.getAttribute('d');
                 return d ? (
-                  <path key={index} d={d} fill={!character.variationIndex ? this.theme.bright : character.colors[index]}></path>
+                  <path
+                    key={index}
+                    d={d}
+                    fill={!character.variationIndex ? this.theme.bright : character.colors[index]}
+                  ></path>
                 ) : null;
               })}
             </svg>
-          </figure>
+          </figure>,
         );
         i++;
       }

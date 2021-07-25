@@ -38,10 +38,7 @@ if (!window.customElements.get(AppLinkElement.selector)) {
 
 const Link: FC<{
   href: string;
-}> = ({
-  href,
-  children
-}) => (
+}> = ({ href, children }) => (
   <div element={AppLinkElement.selector}>
     <a href={href}>{children}</a>
   </div>

@@ -3,8 +3,8 @@ import { CustomProps } from '../types/props';
 import styles from './close.module.scss';
 
 interface Reference {
-  el?: HTMLElement,
-  button?: HTMLButtonElement,
+  el?: HTMLElement;
+  button?: HTMLButtonElement;
 }
 
 export class ButtonCloseElement extends HTMLElement {
@@ -33,7 +33,7 @@ const ButtonClose: FC<CustomProps> = ({ className, dataName, children = 'Click t
     <button>
       <figure className={styles['button-close__x']}></figure>
       <figure className={styles['button-close__x']}></figure>
-      <label className='a11y'>{children}</label>
+      <label className="a11y">{children}</label>
     </button>
   </div>
 );

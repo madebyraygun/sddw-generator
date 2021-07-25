@@ -44,6 +44,7 @@ interface CircleGenerated {
 }
 
 class Design {
+
   config: {
     rotationMin: number;
     rotationMax: number;
@@ -199,11 +200,11 @@ class Design {
     const date = new Date(this.poster.sticker.date);
     const dateMonth = format(date, 'MMM. dd');
     const dateTime = `${format(date, 'h:mm aaa')} PT`;
-    let hostedLines = [];
+    const hostedLines = [];
     const maxCharsPerLine = 13;
     const hostedWords = this.poster.sticker.host.split(' ');
 
-    let charCount = 0;
+    const charCount = 0;
     for (const word of hostedWords) {
       if (
         !hostedLines.length ||
@@ -409,6 +410,7 @@ class Design {
   get scaleMax(): number {
     return this.config.scaleMax;
   }
+
 }
 
 export default Design;

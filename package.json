@@ -71,11 +71,14 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@types/file-saver": "^2.0.3",
     "@types/month-days": "^3.0.0",
     "bad-words": "git+https://github.com/dmrobbins03/badwords.git",
     "badwords": "https://github.com/dmrobbins03/badwords",
     "date-fns": "^2.22.1",
+    "file-saver": "^2.0.5",
     "gsap": "file:gsap-bonus.tgz",
-    "jspdf": "^2.3.1"
+    "jspdf": "^2.3.1",
+    "jszip": "^3.7.0"
   }
 }

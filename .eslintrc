@@ -3,8 +3,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "plugin:@typescript-eslint/recommended"
   ],
   "globals": {
     "window": true,
@@ -16,7 +15,7 @@
     }
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["react", "babel", "prettier"],
+  "plugins": ["react", "babel"],
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
@@ -78,7 +77,6 @@
       }
     ],
     "no-console": "warn",
-    "prettier/prettier": "error",
     "no-else-return": "error",
     "no-eval": "error",
     "no-loop-func": "error",

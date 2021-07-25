@@ -80,12 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       const path = `/${page !== 'index' ? `${page}/` : ''}${secondary ? `${secondary}/` : ''}`;
-      const html = await fetch(`${path}body.html`).then((res) => (res.ok ? res.text() : fetch('/404/body.html').then((r) => r.text())));
+      const html = await fetch(`${path}body.html`).then((res) =>
+        res.ok ? res.text() : fetch('/404/body.html').then((r) => r.text()),
+      );
       renderPage(html);
     };
     Router.start({
       '/': () => open('index'),
-      '/:page/?:secondary': (page: string, secondary?: string) => open(page, secondary)
+      '/:page/?:secondary': (page: string, secondary?: string) => open(page, secondary),
     });
   } else {
     Router.start(routing);

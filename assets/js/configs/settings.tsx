@@ -3,6 +3,7 @@ interface Breakpoints {
 }
 
 export default class Settings {
+
   static breakpoints: Breakpoints = {
     mobile: 1,
     'mobile-h': 480,
@@ -13,4 +14,5 @@ export default class Settings {
     'desktop-xxl': 1920,
     'desktop-xxxl': 2560,
   };
+
 }

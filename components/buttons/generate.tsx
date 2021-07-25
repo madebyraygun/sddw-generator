@@ -1,8 +1,8 @@
 import styles from './generate.module.scss';
 
 interface Reference {
-  el?: HTMLElement,
-  button?: HTMLButtonElement,
+  el?: HTMLElement;
+  button?: HTMLButtonElement;
 }
 
 export class ButtonGenerateElement extends HTMLElement {

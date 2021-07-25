@@ -3,8 +3,8 @@ import { CustomProps } from '../types/props';
 import styles from './button.module.scss';
 
 interface ButtonProps extends CustomProps {
-  big?: boolean,
-  icon?: string | null
+  big?: boolean;
+  icon?: string | null;
 }
 
 const Button: FC<ButtonProps> = ({

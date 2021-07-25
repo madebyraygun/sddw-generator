@@ -9,10 +9,10 @@ import gsap from 'gsap';
 import Controller from './controller';
 
 export interface AnimationSubscriber {
-  die?: boolean,
-  willRender?: boolean,
-  update: () => boolean,
-  render?: (() => void) | null
+  die?: boolean;
+  willRender?: boolean;
+  update: () => boolean;
+  render?: (() => void) | null;
 }
 
 class AnimationController implements Controller {
@@ -68,15 +68,15 @@ class AnimationController implements Controller {
 
   start = () => {
     gsap.ticker.add(this.#onTick);
-  }
+  };
 
   stop = () => {
     gsap.ticker.remove(this.#onTick);
-  }
+  };
 
   #onTick = () => {
     this.loop();
-  }
+  };
 
   // add / remove subscribers
 
@@ -84,7 +84,7 @@ class AnimationController implements Controller {
     subscriber.willRender = false;
     this.subscribers.push(subscriber);
     return subscriber;
-  }
+  };
 
   clear = (subscriber: AnimationSubscriber) => {
     for (let i = 0; i < this.subscribers.length; i++) {
@@ -94,18 +94,18 @@ class AnimationController implements Controller {
         break;
       }
     }
-  }
+  };
 
   clearByIndex = (index: number) => {
     this.subscribers.splice(index, 1);
-  }
+  };
 
   // subscribe new object for only one tick cycle
 
   one = (subscriber: AnimationSubscriber) => {
     this.set(subscriber);
     subscriber.die = true;
-  }
+  };
 
   renderOne = (callback: () => void) => {
     const tempSubscriber: AnimationSubscriber = {
@@ -114,7 +114,7 @@ class AnimationController implements Controller {
       die: true,
     };
     this.set(tempSubscriber);
-  }
+  };
 
 }
 

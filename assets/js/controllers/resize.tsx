@@ -16,13 +16,13 @@ import Controller from './controller';
 
 interface Coords {
   window: {
-    width: number,
-    height: number,
+    width: number;
+    height: number;
     last: {
-      width: number,
-      height: number,
-    }
-  }
+      width: number;
+      height: number;
+    };
+  };
 }
 
 interface Reference {
@@ -30,24 +30,24 @@ interface Reference {
 }
 
 interface Observers {
-  resizeBody?: ResizeObserver | null,
-  resizeSections?: ResizeObserver | null,
+  resizeBody?: ResizeObserver | null;
+  resizeSections?: ResizeObserver | null;
 }
 
 interface Throttled {
-  measure?(): void
+  measure?(): void;
 }
 
 interface States {
-  lastPlatform: Platform,
-  platform: Platform,
+  lastPlatform: Platform;
+  platform: Platform;
 }
 
 export interface ResizeSubscriber {
-  die?: boolean,
-  willRender?: boolean,
-  update(): boolean,
-  render(): void
+  die?: boolean;
+  willRender?: boolean;
+  update(): boolean;
+  render(): void;
 }
 
 class ResizeController implements Controller {
@@ -82,14 +82,10 @@ class ResizeController implements Controller {
   subscribers: ResizeSubscriber[] = [];
 
   initialize() {
-    this.throttled.measure = lodash.throttle(
-      this._measureNow.bind(this),
-      500,
-      {
-        leading: false,
-        trailing: true,
-      },
-    );
+    this.throttled.measure = lodash.throttle(this._measureNow.bind(this), 500, {
+      leading: false,
+      trailing: true,
+    });
     this.addEventListeners();
     this.measure(true);
   }
@@ -110,9 +106,7 @@ class ResizeController implements Controller {
 
   observeSections(sections: NodeList) {
     this.disconnectSections();
-    this.observers.resizeSections = new ResizeObserver(
-      this.#onResizeObserved,
-    );
+    this.observers.resizeSections = new ResizeObserver(this.#onResizeObserved);
     for (let i = 0; i < sections.length; i++) {
       const $section: HTMLElement = sections[i] as HTMLElement;
       this.observers.resizeSections.observe($section);
@@ -161,7 +155,7 @@ class ResizeController implements Controller {
     subscriber.willRender = false;
     this.subscribers.push(subscriber);
     return subscriber;
-  }
+  };
 
   clear = (subscriber: ResizeSubscriber) => {
     for (let i = 0; i < this.subscribers.length; i++) {
@@ -171,11 +165,11 @@ class ResizeController implements Controller {
         break;
       }
     }
-  }
+  };
 
   clearByIndex = (index: number) => {
     this.subscribers.splice(index, 1);
-  }
+  };
 
   // subscribe new object for only one tick cycle
 
@@ -244,11 +238,11 @@ class ResizeController implements Controller {
   }
 
   get isMobile() {
-    return (this.platform === Platform.MOBILE);
+    return this.platform === Platform.MOBILE;
   }
 
   get isTablet() {
-    return (this.platform === Platform.TABLET);
+    return this.platform === Platform.TABLET;
   }
 
   // determine if platform just changed
@@ -261,8 +255,8 @@ class ResizeController implements Controller {
 
   get isViewportChange() {
     return (
-      this.coords.window.width !== this.coords.window.last.width
-          || this.coords.window.height !== this.coords.window.last.height
+      this.coords.window.width !== this.coords.window.last.width ||
+      this.coords.window.height !== this.coords.window.last.height
     );
   }
 

@@ -1,15 +1,15 @@
 import AssetsController from '../../assets/js/controllers/assets';
 
 interface Reference {
-  el?: HTMLElement
+  el?: HTMLElement;
 }
 
 interface SvgProps {
-  alt?: string,
-  className?: string,
-  svgType: string,
-  svgId: string,
-  svgTheme?: string
+  alt?: string;
+  className?: string;
+  svgType: string;
+  svgId: string;
+  svgTheme?: string;
 }
 
 export class SvgAssetElement extends HTMLElement {
@@ -43,7 +43,14 @@ if (!window.customElements.get(SvgAssetElement.selector)) {
 const SvgAsset: FC<SvgProps> = ({
   alt, className, svgType, svgId, svgTheme
 }) => (
-  <div element={SvgAssetElement.selector} className={className ?? ''} data-alt={alt} data-svg-type={svgType} data-svg-id={svgId} data-svg-theme={svgTheme ?? 'default'}></div>
+  <div
+    element={SvgAssetElement.selector}
+    className={className ?? ''}
+    data-alt={alt}
+    data-svg-type={svgType}
+    data-svg-id={svgId}
+    data-svg-theme={svgTheme ?? 'default'}
+  ></div>
 );
 
 export default SvgAsset;

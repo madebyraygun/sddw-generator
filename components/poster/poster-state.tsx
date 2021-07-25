@@ -46,7 +46,7 @@ class PosterState {
     isWordWrap: true,
   };
 
-  constructor(theme: Theme, design?: Design, word?: WordState, sticker?:StickerState) {
+  constructor(theme: Theme, design?: Design, word?: WordState, sticker?: StickerState) {
     // theme dictates colors and svgs
     this.theme = theme;
 

@@ -20,7 +20,9 @@ import WordState from '../poster/word-state';
 import EditorView from './views/editor-view';
 import ButtonIcon from '../buttons/icon';
 
-import BehaviorEditorSectionChange, { EditorSectionChangeEventProps } from '../behaviors/editor-section-change';
+import BehaviorEditorSectionChange, {
+  EditorSectionChangeEventProps,
+} from '../behaviors/editor-section-change';
 
 import Editor from '../../assets/js/constants/editor';
 import Section from '../../assets/js/constants/section';
@@ -70,6 +72,7 @@ interface Reference {
 }
 
 export class EditorControlsElement extends HTMLElement {
+
   static selector = 'editor-controls-element';
 
   controllers: Controllers = {};
@@ -235,7 +238,9 @@ export class EditorControlsElement extends HTMLElement {
   #onShuffleClick = () => {
     if (this.ref.generate) {
       EditorController.shuffleWord(this.inputWord, this.ref.inputRendered, (value) => {
-        const $phrase: HTMLElement | null = this.ref.inputRendered?.querySelector('[data-phrase]') as HTMLElement;
+        const $phrase: HTMLElement | null = this.ref.inputRendered?.querySelector(
+          '[data-phrase]',
+        ) as HTMLElement;
         if ($phrase) {
           this.addPhraseListeners($phrase);
         }
@@ -292,7 +297,7 @@ export class EditorControlsElement extends HTMLElement {
 
   #onInputDateChange = (e: CustomEvent) => {
     if (this.ref.poster && e?.detail) {
-      const date: Date = e.detail.date;
+      const { date } = e.detail;
       EditorController.renderSticker(this.ref.poster, { date });
     }
   };
@@ -323,14 +328,16 @@ export class EditorControlsElement extends HTMLElement {
 
     // range selector - rotation
     this.ref.inputRotation = this.ref.el.querySelector<RangeSliderElement>('[data-range-rotation]');
-    if (this.ref.inputRotation) this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
+    if (this.ref.inputRotation)
+      this.ref.inputRotation.emitter.on(RangeSliderElement.CHANGE, this.#onRotationChange);
 
     // range selector - input
     this.ref.inputScale = this.ref.el.querySelector<RangeSliderElement>('[data-range-scale]');
     if (this.ref.inputScale) this.ref.inputScale.emitter.on(RangeSliderElement.CHANGE, this.#onScaleChange);
 
     // background color selector
-    this.ref.inputBackgroundColor = this.ref.el.querySelector<RadioSelectorElement>('[data-background-color]');
+    this.ref.inputBackgroundColor =
+      this.ref.el.querySelector<RadioSelectorElement>('[data-background-color]');
     if (this.ref.inputBackgroundColor)
       this.ref.inputBackgroundColor.emitter.on(RadioSelectorElement.CHANGE, this.#onBackgroundColorChange);
 
@@ -360,7 +367,8 @@ export class EditorControlsElement extends HTMLElement {
 
     // randomize color toggle
     this.ref.randomizeColors = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-colors]');
-    if (this.ref.randomizeColors) this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColorsClick);
+    if (this.ref.randomizeColors)
+      this.ref.randomizeColors.addEventListener('click', this.#onRandomizeColorsClick);
 
     // randomize word characters toggle
     this.ref.randomizeEachWord = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-each-word]');
@@ -472,6 +480,7 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.inputBox.style.left = `calc(50% - ${boxTotalWidth / 2}px)`;
     }
   };
+
 }
 
 // connect markup to javascript class -------------------------------------- //
@@ -507,14 +516,21 @@ const EditorControls: FC = () => (
       {/* generate button */}
       <div className={styles['editor-controls__primary-buttons-wrapper']}>
         <BehaviorEditorSectionChange sectionId="edit">
-          <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>
+          <Button
+            big={true}
+            className={styles['editor-controls__generate']}
+            dataName={{ 'data-generate': '' }}
+          >
             Generate my poster
           </Button>
         </BehaviorEditorSectionChange>
       </div>
     </EditorView>
 
-    <EditorView className={styles['editor-controls__view-inputs-poster']} dataName={{ 'data-editor-section': 'edit' }}>
+    <EditorView
+      className={styles['editor-controls__view-inputs-poster']}
+      dataName={{ 'data-editor-section': 'edit' }}
+    >
       {/* poster preview */}
       <div className={styles['editor-controls__poster-column']}>
         <SddwPoster className={styles['editor-controls__poster']} dataName={{ 'data-poster': '' }} />
@@ -564,14 +580,22 @@ const EditorControls: FC = () => (
           </div>
 
           <div className={styles['editor-controls__buttons-wrapper']} data-dev-only>
-            <Button big={true} className={styles['editor-controls__shuffle']} dataName={{ 'data-shuffle': '' }}>
+            <Button
+              big={true}
+              className={styles['editor-controls__shuffle']}
+              dataName={{ 'data-shuffle': '' }}
+            >
               Shuffle
             </Button>
           </div>
 
           <div className={styles['editor-controls__buttons-wrapper']}>
             <BehaviorEditorControlsChange sectionId="social">
-              <Button big={true} className={styles['editor-controls__generate']} dataName={{ 'data-generate': '' }}>
+              <Button
+                big={true}
+                className={styles['editor-controls__generate']}
+                dataName={{ 'data-generate': '' }}
+              >
                 Finish
               </Button>
             </BehaviorEditorControlsChange>
@@ -586,7 +610,11 @@ const EditorControls: FC = () => (
           <ol className={styles['editor-controls__social-instructions']}>
             <li>
               <span>Download your design</span>
-              <Button big={true} className={styles['editor-controls__download']} dataName={{ 'data-download': '' }}>
+              <Button
+                big={true}
+                className={styles['editor-controls__download']}
+                dataName={{ 'data-download': '' }}
+              >
                 Download
               </Button>
             </li>
@@ -603,9 +631,6 @@ const EditorControls: FC = () => (
                 <li>
                   <ButtonIcon dataName={{ 'data-social-twitter': '' }}>twitter</ButtonIcon>
                 </li>
-                <li>
-                  <ButtonIcon dataName={{ 'data-email': '' }}>email</ButtonIcon>
-                </li>
               </ul>
             </li>
             <li>Tag us #SDDESIGNWEEK</li>
@@ -615,7 +640,10 @@ const EditorControls: FC = () => (
 
       {/* close */}
       <BehaviorEditorSectionChange sectionId="intro">
-        <ButtonClose className={styles['editor-controls__button-close']} dataName={{ 'data-close': '' }}></ButtonClose>
+        <ButtonClose
+          className={styles['editor-controls__button-close']}
+          dataName={{ 'data-close': '' }}
+        ></ButtonClose>
       </BehaviorEditorSectionChange>
     </EditorView>
   </div>

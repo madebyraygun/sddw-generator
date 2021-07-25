@@ -1,10 +1,10 @@
 interface Redirects {
-  [from: string]: string
+  [from: string]: string;
 }
 
 interface Route {
-  params: string[],
-  fn: (...variables: string[]) => void
+  params: string[];
+  fn: (...variables: string[]) => void;
 }
 
 class Router {
@@ -23,9 +23,11 @@ class Router {
   }
 
   parse(path: string) {
-    return decodeURI(path).split('/').filter((v) => {
-      return v !== '' ? v : null;
-    });
+    return decodeURI(path)
+      .split('/')
+      .filter((v) => {
+        return v !== '' ? v : null;
+      });
   }
 
   route(path: string, fn: () => void) {
@@ -33,7 +35,7 @@ class Router {
     this.routes.push(path);
     this.map[path] = {
       params,
-      fn
+      fn,
     };
   }
 
@@ -56,7 +58,7 @@ class Router {
       match = {
         route: '',
         accuracy: 0,
-        variables: [] as string[]
+        variables: [] as string[],
       };
 
     if (this.redirects[path]) path = this.redirects[path];

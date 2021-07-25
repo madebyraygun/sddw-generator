@@ -28,6 +28,7 @@ interface InputDateState {
 }
 
 export class InputDateElement extends HTMLElement {
+
   static selector = 'input-date-element';
 
   ref: Reference = {};
@@ -149,6 +150,7 @@ export class InputDateElement extends HTMLElement {
       }),
     );
   };
+
 }
 
 // connect to functional component -------------------------------------- //

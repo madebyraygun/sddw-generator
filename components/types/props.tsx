@@ -1,7 +1,7 @@
 export interface CustomProps {
-  className?: string,
+  className?: string;
   dataName?: {
-    [key: string]: any
-  },
-  index?: string,
+    [key: string]: any;
+  };
+  index?: string;
 }

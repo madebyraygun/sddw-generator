@@ -5,12 +5,12 @@ import EventManager from '../../assets/js/controllers/event';
 import Editor from '../../assets/js/constants/editor';
 
 interface Reference {
-  el?: HTMLElement,
-  button?: HTMLButtonElement,
+  el?: HTMLElement;
+  button?: HTMLButtonElement;
 }
 
 export interface EditorSectionChangeEventProps {
-  id: string
+  id: string;
 }
 
 export class BehaviorEditorSectionChangeElement extends HTMLElement {
@@ -34,7 +34,7 @@ export class BehaviorEditorSectionChangeElement extends HTMLElement {
       const id = this.ref.el.dataset.editorSectionChangeId as string;
       this.emitter.emit(Editor.ACTIVATE, { id });
     }
-  }
+  };
 
 }
 
@@ -47,14 +47,22 @@ if (!window.customElements.get(BehaviorEditorSectionChangeElement.selector)) {
 // JSX template ------------------------------------------------------------ //
 
 interface BehaviorEditorSectionChangeProps extends CustomProps {
-  sectionId: string
+  sectionId: string;
 }
 
 const BehaviorEditorSectionChange: FC<BehaviorEditorSectionChangeProps> = ({
-  className, dataName, children, sectionId
+  className,
+  dataName,
+  children,
+  sectionId,
 }) => (
-  <div element={BehaviorEditorSectionChangeElement.selector} className={`${className ?? ''}`} {...dataName} data-editor-section-change-id={sectionId}>
-    { children }
+  <div
+    element={BehaviorEditorSectionChangeElement.selector}
+    className={`${className ?? ''}`}
+    {...dataName}
+    data-editor-section-change-id={sectionId}
+  >
+    {children}
   </div>
 );
 

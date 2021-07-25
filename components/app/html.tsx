@@ -1,9 +1,6 @@
 const HTML: FC<{
   mode: string;
-}> = ({
-  mode,
-  children
-}) => (
+}> = ({ mode, children }) => (
   <html>
     <head>
       <title>San Diego Design Week</title>

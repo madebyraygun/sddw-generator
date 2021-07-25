@@ -7,55 +7,55 @@ import Controller from './controller';
 */
 
 interface Controllers {
-  animation?: AnimationSubscriber
+  animation?: AnimationSubscriber;
 }
 
 interface Config {
   lerp: {
-    ratio: number,
-    roundOff: number,
-  }
+    ratio: number;
+    roundOff: number;
+  };
 }
 
 interface Coords {
   cursor: {
-    x: number,
-    y: number,
+    x: number;
+    y: number;
     last: {
-      x: number | null,
-      y: number | null,
-    },
-  },
+      x: number | null;
+      y: number | null;
+    };
+  };
   lerped: {
-    x: number,
-    y: number,
+    x: number;
+    y: number;
     last: {
-      x: number | null,
-      y: number | null,
-    },
-  },
+      x: number | null;
+      y: number | null;
+    };
+  };
 }
 
 interface Flags {
-  isMouseDown: boolean
+  isMouseDown: boolean;
 }
 
 interface State {
   velocity: {
-    v: number,
-    vx: number,
-    vy: number,
+    v: number;
+    vx: number;
+    vy: number;
     last: {
-      v: number | null,
-      vx: number | null,
-      vy: number | null,
-    },
+      v: number | null;
+      vx: number | null;
+      vy: number | null;
+    };
     lerped: {
-      v: number | null,
-      vx: number | null,
-      vy: number | null,
-    },
-  },
+      v: number | null;
+      vx: number | null;
+      vy: number | null;
+    };
+  };
 }
 
 class CursorController implements Controller {
@@ -75,7 +75,7 @@ class CursorController implements Controller {
       y: 0,
       last: {
         x: null,
-        y: null
+        y: null,
       },
     },
     lerped: {
@@ -83,7 +83,7 @@ class CursorController implements Controller {
       y: 0,
       last: {
         x: null,
-        y: null
+        y: null,
       },
     },
   };
@@ -124,7 +124,7 @@ class CursorController implements Controller {
     window.addEventListener('mouseup', this.#onMouseUp);
 
     this.controllers.animation = AnimationController.set({
-      update: this.#onAnimationUpdate
+      update: this.#onAnimationUpdate,
     });
   }
 
@@ -180,7 +180,7 @@ class CursorController implements Controller {
 
     const vx = this.coords.cursor.last.x === null ? 0 : this.coords.cursor.x - this.coords.cursor.last.x;
     const vy = this.coords.cursor.last.y === null ? 0 : this.coords.cursor.y - this.coords.cursor.last.y;
-    const v = Math.sqrt((vx ** 2) + (vy ** 2));
+    const v = Math.sqrt(vx ** 2 + vy ** 2);
 
     if (this.state.velocity.last.v === null) {
       this.state.velocity.last.v = v;
@@ -221,14 +221,18 @@ class CursorController implements Controller {
     const lerpedLastX = this.coords.lerped.last.x;
     const lerpedLastY = this.coords.lerped.last.y;
 
-    this.coords.lerped.x = this.checkRounding(lerpedLastX + (this.coords.cursor.x - lerpedLastX) * this.config.lerp.ratio);
-    this.coords.lerped.y = this.checkRounding(lerpedLastY + (this.coords.cursor.y - lerpedLastY) * this.config.lerp.ratio);
+    this.coords.lerped.x = this.checkRounding(
+      lerpedLastX + (this.coords.cursor.x - lerpedLastX) * this.config.lerp.ratio,
+    );
+    this.coords.lerped.y = this.checkRounding(
+      lerpedLastY + (this.coords.cursor.y - lerpedLastY) * this.config.lerp.ratio,
+    );
 
     // calculate velocity lerping
 
     const vx = this.coords.lerped.x - this.coords.lerped.last.x;
     const vy = this.coords.lerped.y - this.coords.lerped.last.y;
-    const v = Math.sqrt((vx ** 2) + (vy ** 2));
+    const v = Math.sqrt(vx ** 2 + vy ** 2);
 
     this.state.velocity.lerped.v = v;
     this.state.velocity.lerped.vx = vx;

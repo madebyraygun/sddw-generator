@@ -5,39 +5,45 @@ This stack combines [React JSX](https://reactjs.org/docs/introducing-jsx.html) a
 ```tsx
 <div element="custom-element" className="additional-class"></div>
 ```
+
 ... compiles into ...
+
 ```html
 <custom-element class="additional-class"></custom-element>
 ```
+
 More modifications like global data or inline event support can be added to `/assets/js/dom.ts` and `/.node/render.tsx`.
 
 ## Requirements
 
-* [node](https://nodejs.org/)
+- [node](https://nodejs.org/)
 
 ## Installation
 
 ```bash
-npm install
+yarn install
 ```
 
 ## Usage
 
 ###### Clean `out/` directory
+
 ```bash
-npm run clean
+yarn clean
 ```
 
 ###### Start local server
+
 - Clean directory
 - Render templates and watch for changes
 - Start webpack server
 
 ```bash
-npm start
+yarn start
 ```
 
 ###### Render templates
+
 - Check `ssr` config setting
 - Render either **one** root `index.html` or **each page** as `index.html` and `body.html`
 - Parameters
@@ -45,33 +51,37 @@ npm start
   - `--watch`
 
 ```bash
-npm run render
+yarn render
 ```
 
 ###### Bundle files
+
 - Clean directory
 - Render templates
 - Bundle JS, CSS, and assets
 
 ```bash
-npm run build
+yarn build
 ```
 
 ###### Serve from `out/`
+
 ```bash
-npm run serve:static # ssr enabled
-npm run serve:dynamic # ssr disabled
+yarn serve:static # ssr enabled
+yarn serve:dynamic # ssr disabled
 ```
 
 ###### Lint and fix files
+
 ```bash
-npm run lint:js
-npm run lint:css
+yarn lint:js
+yarn lint:css
 ```
 
 ###### Test anchors
+
 ```bash
-npm run test:anchors
+yarn test:anchors
 ```
 
 ## Config Files

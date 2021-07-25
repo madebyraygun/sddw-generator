@@ -9,15 +9,14 @@ import Section from '../assets/js/constants/section';
 import { SectionChangeEventProps } from '../components/behaviors/section-change';
 import DisclaimerOverlay from '../components/footnote/disclaimer';
 
-
 interface Reference {
-  el?: HTMLElement | null,
-  intro?: HTMLElement | null,
-  editor?: HTMLElement | null,
+  el?: HTMLElement | null;
+  intro?: HTMLElement | null;
+  editor?: HTMLElement | null;
 }
 
 interface Listeners {
-  section: EventEmitter,
+  section: EventEmitter;
 }
 
 class PageIndexElement extends HTMLElement {
@@ -25,7 +24,7 @@ class PageIndexElement extends HTMLElement {
   static selector = 'page-index';
 
   listeners: Listeners = {
-    section: EventController.getEmitterAlways(Section.SECTION_EMITTER)
+    section: EventController.getEmitterAlways(Section.SECTION_EMITTER),
   };
 
   ref: Reference = {};
@@ -56,7 +55,7 @@ class PageIndexElement extends HTMLElement {
     if ($section) {
       this.switchSection($section);
     }
-  }
+  };
 
   switchSection = ($target: HTMLElement) => {
     if (!$target.hasAttribute('data-active')) {
@@ -66,7 +65,7 @@ class PageIndexElement extends HTMLElement {
       }
       $target.setAttribute('data-active', '');
     }
-  }
+  };
 
 }
 
@@ -79,7 +78,7 @@ if (!window.customElements.get(PageIndexElement.selector)) {
 // JSX template ------------------------------------------------------------ //
 
 const PageIndex: FC = () => (
-  <div element={ PageIndexElement.selector } data-slug='index'>
+  <div element={PageIndexElement.selector} data-slug="index">
     <PageSectionView dataName={{ 'data-section': 'intro', 'data-active': '' }}>
       <Intro />
     </PageSectionView>

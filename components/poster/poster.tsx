@@ -1,11 +1,10 @@
-
 import styles from './poster.module.scss';
 
 import { CustomProps } from '../types/props';
 
 export interface PosterProps extends CustomProps {
-  width?: number,
-  height?: number,
+  width?: number;
+  height?: number;
 }
 
 export class PosterElement extends HTMLElement {

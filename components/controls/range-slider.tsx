@@ -10,27 +10,27 @@ import Number from '../../assets/js/utils/number';
 import styles from './range-slider.module.scss';
 
 export interface RangeSliderProps extends CustomProps {
-  name: string,
-  value?: string
+  name: string;
+  value?: string;
 }
 
 export interface RangeSliderState {
-  lastValue: number,
-  x: number,
-  value: number,
-  valueLerped: number,
+  lastValue: number;
+  x: number;
+  value: number;
+  valueLerped: number;
 }
 
 interface Flags {
-  isAnimating: boolean,
-  isMouseDown: boolean,
+  isAnimating: boolean;
+  isMouseDown: boolean;
 }
 interface Reference {
-  el?: HTMLElement,
-  inputRange?: HTMLInputElement | null,
-  track?: HTMLInputElement | null,
-  progress?: HTMLInputElement | null,
-  knob?: HTMLInputElement | null,
+  el?: HTMLElement;
+  inputRange?: HTMLInputElement | null;
+  track?: HTMLInputElement | null;
+  progress?: HTMLInputElement | null;
+  knob?: HTMLInputElement | null;
 }
 
 export class RangeSliderElement extends HTMLElement {
@@ -44,20 +44,20 @@ export class RangeSliderElement extends HTMLElement {
   flags: Flags = {
     isAnimating: false,
     isMouseDown: false,
-  }
+  };
 
-  state: RangeSliderState= {
+  state: RangeSliderState = {
     lastValue: -1,
     x: -1,
     value: 0,
     valueLerped: -1,
-  }
+  };
 
   constructor() {
     super();
     ResizeController.set({
       update: () => true,
-      render: this.render
+      render: this.render,
     });
   }
 
@@ -66,11 +66,11 @@ export class RangeSliderElement extends HTMLElement {
 
     const maxColors = 3;
     const index = parseInt(this.ref.el.dataset.index || '0');
-    const timerIndex = Math.round(parseInt(String(Date.now()).slice(-4, -3)) / 10 * (maxColors - 1));
+    const timerIndex = Math.round((parseInt(String(Date.now()).slice(-4, -3)) / 10) * (maxColors - 1));
     const colorIndex = Number.clamp(timerIndex + index, maxColors, 0, true);
     this.ref.el.setAttribute('data-color-index', String(colorIndex));
 
-    this.ref.inputRange = this.ref.el.querySelector('input[type="range"]') as HTMLInputElement ?? null;
+    this.ref.inputRange = (this.ref.el.querySelector('input[type="range"]') as HTMLInputElement) ?? null;
     if (this.ref.inputRange) {
       this.state.value = parseInt(this.ref.inputRange.value ?? '0');
       this.state.valueLerped = this.state.value;
@@ -78,9 +78,9 @@ export class RangeSliderElement extends HTMLElement {
       this.ref.inputRange.addEventListener('mousedown', this.#onMouseDown);
     }
 
-    this.ref.track = this.ref.el.querySelector('[data-range-slider-track]') as HTMLInputElement ?? null;
-    this.ref.progress = this.ref.el.querySelector('[data-range-slider-progress]') as HTMLInputElement ?? null;
-    this.ref.knob = this.ref.el.querySelector('[data-range-slider-knob]') as HTMLInputElement ?? null;
+    this.ref.track = (this.ref.el.querySelector('[data-range-slider-track]') as HTMLInputElement) ?? null;
+    this.ref.progress = (this.ref.el.querySelector('[data-range-slider-progress]') as HTMLInputElement) ?? null;
+    this.ref.knob = (this.ref.el.querySelector('[data-range-slider-knob]') as HTMLInputElement) ?? null;
 
     AnimationController.set({
       update: this.update,
@@ -95,11 +95,11 @@ export class RangeSliderElement extends HTMLElement {
     e.preventDefault();
     e.stopImmediatePropagation();
     this.render();
-  }
+  };
 
   #onMouseDown = () => {
     this.flags.isMouseDown = true;
-  }
+  };
 
   update = () => {
     if (this.flags.isMouseDown && !CursorController.isMouseDown) {
@@ -107,7 +107,7 @@ export class RangeSliderElement extends HTMLElement {
     }
 
     return this.flags.isMouseDown || this.flags.isAnimating;
-  }
+  };
 
   render = () => {
     const trackWidth = this.ref.track?.offsetWidth;
@@ -133,7 +133,7 @@ export class RangeSliderElement extends HTMLElement {
 
       this.emitter.emit(RangeSliderElement.CHANGE, { state: this.state });
     }
-  }
+  };
 
 }
 
@@ -146,10 +146,15 @@ if (!window.customElements.get(RangeSliderElement.selector)) {
 const RangeSlider: FC<RangeSliderProps> = ({
   className, dataName, index, name, children, value = '50'
 }) => (
-  <div element='range-slider' className={`${className ?? ''} ${styles['range-slider']}`} data-index={index} {...dataName}>
+  <div
+    element="range-slider"
+    className={`${className ?? ''} ${styles['range-slider']}`}
+    data-index={index}
+    {...dataName}
+  >
     <label>{children}</label>
     <div className={styles['range-slider__combo-wrapper']}>
-      <input type='range' id={name} name={name} min='0' max='100' value={value} />
+      <input type="range" id={name} name={name} min="0" max="100" value={value} />
       <div className={styles['range-slider__controls-wrapper']}>
         <figure className={styles['range-slider__track']} data-range-slider-track></figure>
         <figure className={styles['range-slider__progress']} data-range-slider-progress></figure>

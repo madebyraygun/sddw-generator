@@ -1,6 +1,6 @@
 // global data
 const sys: SystemData = {
-  version: process.env.npm_package_version
+  version: process.env.npm_package_version,
 };
 
 const isSVG = (tag: string) => {
@@ -19,7 +19,7 @@ const setAttributes = (element: SVGElement | HTMLElement, attrs: any) => {
       } else if (property === 'style') {
         let styles = '';
         for (const rule in value) {
-          const dashed = rule.replace(/[A-Z]/g, s => '-' + s.toLowerCase());
+          const dashed = rule.replace(/[A-Z]/g, (s) => '-' + s.toLowerCase());
           styles += `${dashed}:${value[rule]};`;
         }
         element.setAttribute('style', styles);
@@ -57,7 +57,9 @@ window.dom = (tag: (props: any) => void | Node, attrs: any, ...children: any): N
   } else if (typeof tag === 'string') {
     // virtual dom
     // console.log(tag, attrs, children);
-    const element = isSVG(tag) ? document.createElementNS('http://www.w3.org/2000/svg', tag) as SVGElement : document.createElement(attrs?.element || tag) as HTMLElement;
+    const element = isSVG(tag)
+      ? (document.createElementNS('http://www.w3.org/2000/svg', tag) as SVGElement)
+      : (document.createElement(attrs?.element || tag) as HTMLElement);
     if (attrs) setAttributes(element, attrs);
     appendChildren(element, children);
     return element;

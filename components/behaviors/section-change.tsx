@@ -5,12 +5,12 @@ import EventManager from '../../assets/js/controllers/event';
 import Section from '../../assets/js/constants/section';
 
 interface Reference {
-  el?: HTMLElement,
-  button?: HTMLButtonElement,
+  el?: HTMLElement;
+  button?: HTMLButtonElement;
 }
 
 export interface SectionChangeEventProps {
-  id: string
+  id: string;
 }
 
 export class BehaviorSectionChangeElement extends HTMLElement {
@@ -34,7 +34,7 @@ export class BehaviorSectionChangeElement extends HTMLElement {
       const id = this.ref.el.dataset.sectionChangeId as string;
       this.emitter.emit(Section.ACTIVATE, { id });
     }
-  }
+  };
 
 }
 
@@ -47,14 +47,19 @@ if (!window.customElements.get(BehaviorSectionChangeElement.selector)) {
 // JSX template ------------------------------------------------------------ //
 
 interface BehaviorSectionChangeProps extends CustomProps {
-  sectionId: string
+  sectionId: string;
 }
 
 const BehaviorSectionChange: FC<BehaviorSectionChangeProps> = ({
   className, dataName, children, sectionId
 }) => (
-  <div element={BehaviorSectionChangeElement.selector} className={`${className ?? ''}`} {...dataName} data-section-change-id={sectionId}>
-    { children }
+  <div
+    element={BehaviorSectionChangeElement.selector}
+    className={`${className ?? ''}`}
+    {...dataName}
+    data-section-change-id={sectionId}
+  >
+    {children}
   </div>
 );
 
