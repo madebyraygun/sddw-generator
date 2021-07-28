@@ -2,7 +2,7 @@ import { CustomProps } from '../types/props';
 import { EventEmitter } from 'events';
 
 import EventManager from '../../assets/js/controllers/event';
-import Editor from '../../assets/js/constants/editor';
+import Section from '../../assets/js/constants/section';
 
 interface Reference {
   el?: HTMLElement;
@@ -17,7 +17,7 @@ export class BehaviorEditorSectionChangeElement extends HTMLElement {
 
   static selector = 'behavior-editor-section-change';
 
-  emitter: EventEmitter = EventManager.getEmitterAlways(Editor.SECTION_EMITTER);
+  emitter: EventEmitter = EventManager.getEmitterAlways(Section.SECTION_EMITTER);
   ref: Reference = {};
 
   connectedCallback() {
@@ -32,7 +32,8 @@ export class BehaviorEditorSectionChangeElement extends HTMLElement {
   #onButtonClick = () => {
     if (this.ref.el) {
       const id = this.ref.el.dataset.editorSectionChangeId as string;
-      this.emitter.emit(Editor.ACTIVATE, { id });
+      console.log(id);
+      this.emitter.emit(Section.ACTIVATE, { id });
     }
   };
 
@@ -41,7 +42,10 @@ export class BehaviorEditorSectionChangeElement extends HTMLElement {
 // connect to functional component -------------------------------------- //
 
 if (!window.customElements.get(BehaviorEditorSectionChangeElement.selector)) {
-  window.customElements.define(BehaviorEditorSectionChangeElement.selector, BehaviorEditorSectionChangeElement);
+  window.customElements.define(
+    BehaviorEditorSectionChangeElement.selector,
+    BehaviorEditorSectionChangeElement,
+  );
 }
 
 // JSX template ------------------------------------------------------------ //

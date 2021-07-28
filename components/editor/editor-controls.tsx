@@ -48,6 +48,7 @@ interface Controllers {
 interface Listeners {
   editor: EventEmitter;
   controls: EventEmitter;
+  processing: EventEmitter;
   section: EventEmitter;
 }
 interface Reference {
@@ -64,6 +65,7 @@ interface Reference {
   inputRendered?: HTMLElement | null;
   inputRotation?: RangeSliderElement | null;
   inputScale?: RangeSliderElement | null;
+  overlayProcessing?: HTMLElement | null;
   shareDownload?: HTMLInputElement | null;
   shareEmail?: HTMLInputElement | null;
   shareSocialFacebook?: HTMLInputElement | null;
@@ -86,7 +88,8 @@ export class EditorControlsElement extends HTMLElement {
 
   listeners: Listeners = {
     controls: EventController.getEmitterAlways(Editor.CONTROLS_EMITTER),
-    editor: EventController.getEmitterAlways(Editor.SECTION_EMITTER),
+    editor: EventController.getEmitterAlways(Editor.EDITOR_EMITTER),
+    processing: EventController.getEmitterAlways(Editor.PROCESSING_EMITTER),
     section: EventController.getEmitterAlways(Section.SECTION_EMITTER),
   };
 
@@ -388,6 +391,13 @@ export class EditorControlsElement extends HTMLElement {
     this.ref.close = this.ref.el.querySelector<HTMLElement>('[data-close]');
     if (this.ref.close) this.ref.close.addEventListener('click', this.#onCloseClick);
 
+    // overlays
+    this.ref.overlayProcessing = this.ref.el.querySelector<HTMLElement>('[data-overlay-processing');
+    if (this.ref.overlayProcessing) {
+      this.listeners.processing.on(Editor.PROCESSING, this.#onEditorProcessing);
+      this.listeners.processing.on(Editor.PROCESSING_COMPLETE, this.#onEditorProcessingComplete);
+    }
+
     const sections = this.ref.el.querySelectorAll<HTMLElement>('[data-editor-section]');
     for (let i = 0; i < sections.length; i++) {
       const $section = sections[i];
@@ -401,8 +411,8 @@ export class EditorControlsElement extends HTMLElement {
     }
 
     // listen for section changes
-    this.listeners.editor.on(Section.ACTIVATE, this.#onSectionActivate);
-    this.listeners.controls.on(Section.ACTIVATE, this.#onControlsActivate);
+    this.listeners.section.on(Section.ACTIVATE, this.#onSectionActivate);
+    this.listeners.controls.on(Editor.ACTIVATE, this.#onControlsActivate);
 
     // listen for page resize
     this.controllers.resize = ResizeController.set({
@@ -411,9 +421,27 @@ export class EditorControlsElement extends HTMLElement {
     });
   }
 
+  #onEditorProcessing = () => {
+    if (this.ref.overlayProcessing) {
+      this.ref.overlayProcessing.setAttribute('data-active', '');
+    }
+  };
+
+  #onEditorProcessingComplete = () => {
+    if (this.ref.overlayProcessing) {
+      this.ref.overlayProcessing.removeAttribute('data-active');
+    }
+  };
+
   #onSectionActivate = (e: EditorSectionChangeEventProps) => {
     if (e.id) {
       this.switchSection(e.id);
+    }
+  };
+
+  #onControlsActivate = (e: EditorSectionChangeEventProps) => {
+    if (e.id) {
+      this.switchControls(e.id);
     }
   };
 
@@ -441,12 +469,6 @@ export class EditorControlsElement extends HTMLElement {
       }
 
       $target.setAttribute('data-active', '');
-    }
-  };
-
-  #onControlsActivate = (e: EditorSectionChangeEventProps) => {
-    if (e.id) {
-      this.switchControls(e.id);
     }
   };
 
@@ -652,7 +674,7 @@ const EditorControls: FC = () => (
       </BehaviorEditorSectionChange>
     </EditorView>
 
-    <EditorOverlay dataName={{ 'data-active': '' }}>
+    <EditorOverlay dataName={{ 'data-overlay-processing': '' }}>
       <h2>Processing, Please Wait...</h2>
     </EditorOverlay>
   </div>

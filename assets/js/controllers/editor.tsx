@@ -237,6 +237,10 @@ class EditorController implements Controller {
   download($target: HTMLElement) {
     const $svgElement: SVGElement | null = $target.querySelector<SVGElement>('svg');
     if ($svgElement) {
+      // show processing
+      EventController.getEmitter(Editor.PROCESSING_EMITTER)?.emit(Editor.PROCESSING);
+
+      // clone svg element to make changes
       const $clonedSvgElement = $svgElement.cloneNode(true) as SVGElement;
 
       // make any tweaks to colors (such as replacing css variables with calculated values)
@@ -337,6 +341,8 @@ class EditorController implements Controller {
       Promise.all(filePromises).then(() => {
         zip.generateAsync({ type: 'blob' }).then((content) => {
           saveAs(content, 'poster.zip');
+          // hide processing
+          EventController.getEmitter(Editor.PROCESSING_EMITTER)?.emit(Editor.PROCESSING_COMPLETE);
         });
       });
     }
