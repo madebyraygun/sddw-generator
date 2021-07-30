@@ -165,11 +165,23 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
   const days: Node[] = [];
   for (let i = 0; i < 30; i++) {
     const day = i < 10 ? `0${i + 1}` : String(i + 1);
-    days.push(<option value={`${day}`}>{day}</option>);
+    const dayParams = {};
+    if (i === 7) {
+      dayParams['selected'] = true;
+    }
+    days.push(
+      <option value={`${day}`} {...dayParams}>
+        {day}
+      </option>,
+    );
   }
 
   return (
-    <div element={InputDateElement.selector} className={`${className ?? ''} ${styles['input-date']}`} {...dataName}>
+    <div
+      element={InputDateElement.selector}
+      className={`${className ?? ''} ${styles['input-date']}`}
+      {...dataName}
+    >
       <div className={styles['input-date__controls-wrapper']}>
         <SvgAsset svgId="calendar" svgType="icon" alt={children} />
 
@@ -186,7 +198,9 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             <option value="Jun">Jun</option>
             <option value="Jul">Jul</option>
             <option value="Aug">Aug</option>
-            <option value="Sep">Sep</option>
+            <option value="Sep" selected>
+              Sep
+            </option>
             <option value="Oct">Oct</option>
             <option value="Nov">Nov</option>
             <option value="Dec">Dec</option>
@@ -216,7 +230,9 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-            <option value="6">6</option>
+            <option value="6" selected>
+              6
+            </option>
             <option value="7">7</option>
             <option value="8">8</option>
             <option value="9">9</option>
@@ -248,7 +264,9 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
           </label>
           <select name="date-am-pm" id="date-am-pm">
             <option value="AM">AM</option>
-            <option value="PM">PM</option>
+            <option value="PM" selected>
+              PM
+            </option>
           </select>
           <span className="text-p" data-am-pm-rendered></span>
         </div>

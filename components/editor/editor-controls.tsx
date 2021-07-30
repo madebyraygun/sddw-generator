@@ -263,6 +263,24 @@ export class EditorControlsElement extends HTMLElement {
     EditorController.download(this.ref.poster);
   };
 
+  // sharing
+
+  #onShareFacebookClick = () => {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=https://sddesignweek.org');
+  };
+
+  #onShareInstagramClick = () => {
+    window.open('https://www.instagram.com');
+  };
+
+  #onShareTwitterClick = () => {
+    window.open(
+      'https://twitter.com/intent/tweet?url=https://sddesignweek.org&text=SEPTEMBER%208-12,%202021%0APRESENTED%20BY%20MINGEI%20INTERNATIONAL%20MUSEUM',
+    );
+  };
+
+  // track control modifications
+
   #onRotationChange = (e) => {
     EditorController.setRotation(e.state.valueLerped);
     if (this.ref.poster) {
@@ -368,6 +386,17 @@ export class EditorControlsElement extends HTMLElement {
     if (this.ref.generate) this.ref.generate.addEventListener('click', this.#onGenerateClick);
 
     // sharing options
+    this.ref.shareSocialFacebook = this.ref.el.querySelector<HTMLInputElement>('[data-share-facebook]');
+    if (this.ref.shareSocialFacebook)
+      this.ref.shareSocialFacebook.addEventListener('click', this.#onShareFacebookClick);
+
+    this.ref.shareSocialInstagram = this.ref.el.querySelector<HTMLInputElement>('[data-share-instagram]');
+    if (this.ref.shareSocialInstagram)
+      this.ref.shareSocialInstagram.addEventListener('click', this.#onShareInstagramClick);
+
+    this.ref.shareSocialTwitter = this.ref.el.querySelector<HTMLInputElement>('[data-share-twitter]');
+    if (this.ref.shareSocialTwitter)
+      this.ref.shareSocialTwitter.addEventListener('click', this.#onShareTwitterClick);
 
     // download button
     this.ref.shareDownload = this.ref.el.querySelector<HTMLInputElement>('[data-download]');
@@ -650,13 +679,13 @@ const EditorControls: FC = () => (
               <span data-public-only>Share your poster on social media</span>
               <ul className={styles['editor-controls__social-links']}>
                 <li>
-                  <ButtonIcon dataName={{ 'data-social-instagram': '' }}>instagram</ButtonIcon>
+                  <ButtonIcon dataName={{ 'data-share-instagram': '' }}>instagram</ButtonIcon>
                 </li>
                 <li>
-                  <ButtonIcon dataName={{ 'data-social-facebook': '' }}>facebook</ButtonIcon>
+                  <ButtonIcon dataName={{ 'data-share-facebook': '' }}>facebook</ButtonIcon>
                 </li>
                 <li>
-                  <ButtonIcon dataName={{ 'data-social-twitter': '' }}>twitter</ButtonIcon>
+                  <ButtonIcon dataName={{ 'data-share-twitter': '' }}>twitter</ButtonIcon>
                 </li>
               </ul>
             </li>

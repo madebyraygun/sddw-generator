@@ -18,14 +18,7 @@ export class ButtonIconElement extends HTMLElement {
     this.ref.el = this;
 
     this.ref.button = this.ref.el?.children[0] as HTMLButtonElement;
-    if (this.ref.button) {
-      this.ref.button.addEventListener('click', this.#onButtonClick);
-    }
   }
-
-  #onButtonClick = () => {
-    console.log('click', this.ref.el);
-  };
 
 }
 
@@ -38,7 +31,11 @@ if (!window.customElements.get(ButtonIconElement.selector)) {
 // JSX template ------------------------------------------------------------ //
 
 const ButtonIcon: FC<CustomProps> = ({ className, dataName, children = 'Click to Share' }) => (
-  <div element={ButtonIconElement.selector} className={`${className ?? ''} ${styles['button-icon']}`} {...dataName}>
+  <div
+    element={ButtonIconElement.selector}
+    className={`${className ?? ''} ${styles['button-icon']}`}
+    {...dataName}
+  >
     <button>
       <figure className={styles['button-icon__icon']}>
         <SvgAsset svgId={children} svgType="icon" />
