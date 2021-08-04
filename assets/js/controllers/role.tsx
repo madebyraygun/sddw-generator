@@ -11,9 +11,12 @@ class RoleController implements Controller {
 
   initialize() {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('speaker') !== null) {
+    if (urlParams.get('speaker-no-sticker') !== null) {
+      this.state.role = Role.SPEAKER_NO_STICKER;
+      document.body.classList.add('is-speaker', 'is-speaker-no-sticker');
+    } else if (urlParams.get('speaker') !== null) {
       this.state.role = Role.SPEAKER;
-      document.body.classList.add('is-speaker');
+      document.body.classList.add('is-speaker', 'is-speaker-sticker');
     } else if (urlParams.get('developer') !== null) {
       this.state.role = Role.DEVELOPER;
       document.body.classList.add('is-developer');

@@ -9,8 +9,18 @@
       display: none;
     }
   }
+  body:not(.is-speaker-sticker) {
+    [data-speaker-sticker-only] {
+      display: none;
+    }
+  }
+  body:not(.is-speaker-no-sticker) {
+    [data-speaker-no-sticker-only] {
+      display: none;
+    }
+  }
   body.is-speaker,
-  body.is-developer, {
+  body.is-developer {
     [data-public-only] {
       display: none;
     }

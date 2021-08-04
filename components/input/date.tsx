@@ -6,11 +6,11 @@ import styles from './date.module.scss';
 
 interface Reference {
   el?: HTMLElement;
-  inputMonth?: HTMLInputElement;
-  inputDay?: HTMLInputElement;
-  inputHour?: HTMLInputElement;
-  inputMinute?: HTMLInputElement;
-  inputAmPm?: HTMLInputElement;
+  inputMonth?: HTMLSelectElement;
+  inputDay?: HTMLSelectElement;
+  inputHour?: HTMLSelectElement;
+  inputMinute?: HTMLSelectElement;
+  inputAmPm?: HTMLSelectElement;
   renderMonth?: HTMLElement;
   renderDay?: HTMLElement;
   renderHour?: HTMLElement;
@@ -52,11 +52,11 @@ export class InputDateElement extends HTMLElement {
   connectedCallback() {
     this.ref.el = this;
 
-    this.ref.inputMonth = this.ref.el.querySelector('#date-month') as HTMLInputElement;
-    this.ref.inputDay = this.ref.el.querySelector('#date-day') as HTMLInputElement;
-    this.ref.inputHour = this.ref.el.querySelector('#date-hour') as HTMLInputElement;
-    this.ref.inputMinute = this.ref.el.querySelector('#date-minute') as HTMLInputElement;
-    this.ref.inputAmPm = this.ref.el.querySelector('#date-am-pm') as HTMLInputElement;
+    this.ref.inputMonth = this.ref.el.querySelector('#date-month') as HTMLSelectElement;
+    this.ref.inputDay = this.ref.el.querySelector('#date-day') as HTMLSelectElement;
+    this.ref.inputHour = this.ref.el.querySelector('#date-hour') as HTMLSelectElement;
+    this.ref.inputMinute = this.ref.el.querySelector('#date-minute') as HTMLSelectElement;
+    this.ref.inputAmPm = this.ref.el.querySelector('#date-am-pm') as HTMLSelectElement;
 
     const dropdowns = this.ref.el.querySelectorAll('select');
     for (let i = 0; i < dropdowns.length; i++) {
@@ -72,7 +72,6 @@ export class InputDateElement extends HTMLElement {
     this.ref.renderMinute = this.ref.el.querySelector('[data-minute-rendered]') as HTMLElement;
     this.ref.renderAmPm = this.ref.el.querySelector('[data-am-pm-rendered]') as HTMLElement;
 
-    this.resetState();
     this.updateState();
     this.renderState();
   }
@@ -105,19 +104,19 @@ export class InputDateElement extends HTMLElement {
 
   updateState = () => {
     if (this.ref.inputMonth) {
-      this.state.month = this.ref.inputMonth.value;
+      this.state.month = this.ref.inputMonth.options[this.ref.inputMonth.selectedIndex].text;
     }
     if (this.ref.inputDay) {
-      this.state.day = this.ref.inputDay.value;
+      this.state.day = this.ref.inputDay.options[this.ref.inputDay.selectedIndex].text;
     }
     if (this.ref.inputHour) {
-      this.state.hour = this.ref.inputHour.value;
+      this.state.hour = this.ref.inputHour.options[this.ref.inputHour.selectedIndex].text;
     }
     if (this.ref.inputMinute) {
-      this.state.minute = this.ref.inputMinute.value;
+      this.state.minute = this.ref.inputMinute.options[this.ref.inputMinute.selectedIndex].text;
     }
     if (this.ref.inputAmPm) {
-      this.state.amPm = this.ref.inputAmPm.value;
+      this.state.amPm = this.ref.inputAmPm.options[this.ref.inputAmPm.selectedIndex].text;
     }
   };
 
@@ -163,7 +162,7 @@ if (!window.customElements.get(InputDateElement.selector)) {
 
 const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of your talk' }) => {
   const days: Node[] = [];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 7; i < 11; i++) {
     const day = i < 10 ? `0${i + 1}` : String(i + 1);
     const dayParams = {};
     if (i === 7) {
@@ -190,20 +189,9 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
             Select Month
           </label>
           <select name="date-month" id="date-month">
-            <option value="Jan">Jan</option>
-            <option value="Feb">Feb</option>
-            <option value="Mar">Mar</option>
-            <option value="Apr">Apr</option>
-            <option value="May">May</option>
-            <option value="Jun">Jun</option>
-            <option value="Jul">Jul</option>
-            <option value="Aug">Aug</option>
             <option value="Sep" selected>
               Sep
             </option>
-            <option value="Oct">Oct</option>
-            <option value="Nov">Nov</option>
-            <option value="Dec">Dec</option>
           </select>
           <span className="text-p" data-month-rendered></span>
         </div>
@@ -262,7 +250,7 @@ const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of y
           <label className="a11y" htmlFor="date-am-pm">
             Select AM or PM
           </label>
-          <select name="date-am-pm" id="date-am-pm">
+          <select name="date-am-pm" id="date-am-pm" value="pm">
             <option value="AM">AM</option>
             <option value="PM" selected>
               PM

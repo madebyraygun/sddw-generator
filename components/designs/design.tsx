@@ -316,7 +316,7 @@ class Design {
 
     let $circle = <g id="circle-sticker"></g>;
 
-    if (RoleController.role !== Role.PUBLIC) {
+    if (RoleController.role !== Role.PUBLIC && RoleController.role !== Role.SPEAKER_NO_STICKER) {
       $circle = this.generateCircle().el;
     }
 

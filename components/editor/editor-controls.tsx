@@ -187,7 +187,7 @@ export class EditorControlsElement extends HTMLElement {
     }
 
     let filteredValue = !value ? '' : value;
-    if (RoleController.role !== Role.SPEAKER) {
+    if (RoleController.role === Role.PUBLIC) {
       // filter for bad words
       filteredValue = !value ? '' : this.filter.clean(value);
     }
@@ -266,7 +266,7 @@ export class EditorControlsElement extends HTMLElement {
   // sharing
 
   #onShareFacebookClick = () => {
-    window.open('https://www.facebook.com/sharer/sharer.php?u=https://sddesignweek.org');
+    window.open('https://www.facebook.com');
   };
 
   #onShareInstagramClick = () => {
@@ -558,7 +558,7 @@ const EditorControls: FC = () => (
       <h2>
         Let&apos;s Create a <strong>Poster!</strong>
       </h2>
-      <p>[TYPE YOUR NAME, ROLLOVER THE LETTERS AND PICK A COMBINATION]</p>
+      <p>[Type Your Name, and Click Each Letter to Change Your Design]</p>
 
       {/* main input field */}
       <div className={styles['editor-controls__input-placeholder']}>
@@ -625,13 +625,13 @@ const EditorControls: FC = () => (
             <ButtonToggle dataName={{ 'data-randomize-colors': '' }}>Randomize Colors</ButtonToggle>
           </div>
 
-          <div className={styles['editor-controls__host-wrapper']} data-speaker-only>
+          <div className={styles['editor-controls__host-wrapper']} data-speaker-sticker-only>
             <InputField id="hosted-by" maxLength={21} dataName={{ 'data-input-host': '' }}>
               Hosted By SDDW
             </InputField>
           </div>
 
-          <div className={styles['editor-controls__date-wrapper']} data-speaker-only>
+          <div className={styles['editor-controls__date-wrapper']} data-speaker-sticker-only>
             <InputDate dataName={{ 'data-input-date': '' }}>Date of Your Talk</InputDate>
           </div>
 

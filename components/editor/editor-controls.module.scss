@@ -228,6 +228,10 @@
       margin-top: 3rem;
     }
 
+    > p {
+      text-transform: uppercase;
+    }
+
     > h2 + #{$this}__input-placeholder,
     > p + #{$this}__input-placeholder {
       margin-top: 4rem;
@@ -299,6 +303,10 @@
     figure[data-phrase] {
       display: flex;
       position: relative;
+
+      > figure {
+        cursor: pointer;
+      }
     }
 
     *[fill='#F8F9FA'] {
