@@ -307,7 +307,7 @@ class EditorController implements Controller {
       const blobURL = URL.createObjectURL(blob);
 
       // generate image with canvas data (to convert to PNG and other formats)
-      const widthForPrint = 18 * 200; // (18 inches at 200 dpi)
+      const widthForPrint = 11 * 300; // (18 inches at 300 dpi)
       const heightForPrint = widthForPrint * (this.currentPoster.height / this.currentPoster.width);
 
       const widthForWeb = 1080; // (instgram max)
