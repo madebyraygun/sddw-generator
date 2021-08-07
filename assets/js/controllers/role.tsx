@@ -19,7 +19,7 @@ class RoleController implements Controller {
       document.body.classList.add('is-speaker', 'is-speaker-sticker');
     } else if (urlParams.get('developer') !== null) {
       this.state.role = Role.DEVELOPER;
-      document.body.classList.add('is-developer');
+      document.body.classList.add('is-developer', 'is-speaker', 'is-speaker-no-sticker');
     }
   }
 
