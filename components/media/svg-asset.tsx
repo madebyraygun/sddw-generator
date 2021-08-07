@@ -23,7 +23,7 @@ export class SvgAssetElement extends HTMLElement {
 
     const { svgType, svgId, svgTheme } = this.ref.el.dataset;
     if (svgType && svgId) {
-      const { svg } = AssetsController.getAsset(svgType, svgId, svgTheme);
+      const svg = AssetsController.getAsset(svgType, svgId, svgTheme).svg?.cloneNode(true) as SVGElement;
       if (svg) {
         svg.setAttribute('role', 'img');
         svg.setAttribute('aria-label', this.ref.el.dataset.alt ?? '');

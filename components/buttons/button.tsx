@@ -1,26 +1,43 @@
 import { CustomProps } from '../types/props';
+import SvgAsset from '../media/svg-asset';
 
 import styles from './button.module.scss';
 
 interface ButtonProps extends CustomProps {
   big?: boolean;
-  icon?: string | null;
+  compact?: boolean;
+  iconSvgId?: string;
 }
 
 const Button: FC<ButtonProps> = ({
-  big = false, icon = null, className, dataName, children
+  big = false,
+  compact = false,
+  iconSvgId = '',
+  className,
+  dataName,
+  children,
 }) => {
-  if (icon) {
+  if (iconSvgId) {
     return (
-      <button className={`${className ?? ''} ${styles['button']}`} {...dataName} data-big={big}>
+      <button
+        className={`${className ?? ''} ${styles['button']}`}
+        {...dataName}
+        data-big={big}
+        data-compact={compact}
+      >
         <span>{children}</span>
-        {iconSVG}
+        <SvgAsset svgId={iconSvgId} svgType="icon" />
       </button>
     );
   }
 
   return (
-    <button className={`${className ?? ''} ${styles['button']}`} {...dataName} data-big={big}>
+    <button
+      className={`${className ?? ''} ${styles['button']}`}
+      {...dataName}
+      data-big={big}
+      data-compact={compact}
+    >
       <span>{children}</span>
     </button>
   );

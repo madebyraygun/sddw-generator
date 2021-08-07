@@ -171,15 +171,19 @@
         color: var(--bright);
       }
 
-      span {
+      > span {
         display: block;
         position: relative;
       }
 
-      span + ul,
-      span + button,
-      span + a {
+      > span + ul,
+      > span ~ button,
+      > span ~ a {
         margin-top: 1.5rem;
+      }
+
+      > button {
+        margin-right: 1rem;
       }
     }
 

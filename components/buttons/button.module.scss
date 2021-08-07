@@ -12,12 +12,14 @@
   font-size: 1.2rem;
   white-space: nowrap;
   box-shadow: inset 0rem 0rem 0rem 0.2rem var(--mint-green);
+  line-height: 5rem;
 
   // states ---------------------------------------------------------------- //
 
   &[data-big='true'] {
     min-width: 24rem;
     height: 7rem;
+    line-height: 7rem;
     padding: 0 4rem;
     border-radius: 3.5rem;
     font-size: 1.6rem;
@@ -32,11 +34,40 @@
       color: var(--shark);
       z-index: 1;
     }
+
+    span + * {
+      svg {
+        * {
+          fill: var(--shark);
+        }
+      }
+    }
+  }
+
+  &[data-compact='true'],
+  &[data-compact='true'][data-big='true'] {
+    min-width: 0;
+    padding: 0 2.5rem;
   }
 
   // elements -------------------------------------------------------------- //
 
   &:focus {
     outline: 0;
+  }
+
+  span + * {
+    display: inline-block;
+    position: relative;
+    width: 1.6rem;
+    height: 2rem;
+    margin-left: 1rem;
+    top: 0.3rem;
+
+    svg {
+      * {
+        fill: currentColor;
+      }
+    }
   }
 }

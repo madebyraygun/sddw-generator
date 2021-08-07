@@ -66,7 +66,8 @@ interface Reference {
   inputRotation?: RangeSliderElement | null;
   inputScale?: RangeSliderElement | null;
   overlayProcessing?: HTMLElement | null;
-  shareDownload?: HTMLInputElement | null;
+  shareDownloadSocial?: HTMLInputElement | null;
+  shareDownloadPrint?: HTMLInputElement | null;
   shareEmail?: HTMLInputElement | null;
   shareSocialFacebook?: HTMLInputElement | null;
   shareSocialInstagram?: HTMLInputElement | null;
@@ -259,8 +260,12 @@ export class EditorControlsElement extends HTMLElement {
     }
   };
 
-  #onDownloadClick = () => {
-    EditorController.download(this.ref.poster);
+  #onDownloadShareClick = () => {
+    EditorController.download(this.ref.poster, false);
+  };
+
+  #onDownloadPrintClick = () => {
+    EditorController.download(this.ref.poster, true);
   };
 
   // sharing
@@ -399,8 +404,13 @@ export class EditorControlsElement extends HTMLElement {
       this.ref.shareSocialTwitter.addEventListener('click', this.#onShareTwitterClick);
 
     // download button
-    this.ref.shareDownload = this.ref.el.querySelector<HTMLInputElement>('[data-download]');
-    if (this.ref.shareDownload) this.ref.shareDownload.addEventListener('click', this.#onDownloadClick);
+    this.ref.shareDownloadSocial = this.ref.el.querySelector<HTMLInputElement>('[data-download-share]');
+    if (this.ref.shareDownloadSocial)
+      this.ref.shareDownloadSocial.addEventListener('click', this.#onDownloadShareClick);
+
+    this.ref.shareDownloadPrint = this.ref.el.querySelector<HTMLInputElement>('[data-download-print]');
+    if (this.ref.shareDownloadPrint)
+      this.ref.shareDownloadPrint.addEventListener('click', this.#onDownloadPrintClick);
 
     // randomize color toggle
     this.ref.randomizeColors = this.ref.el.querySelector<HTMLInputElement>('[data-randomize-colors]');
@@ -665,13 +675,25 @@ const EditorControls: FC = () => (
         >
           <ol className={styles['editor-controls__social-instructions']}>
             <li>
-              <span>Download your design</span>
+              <span data-public-only>Download your design to share on social media. </span>
+              <span data-speaker-only>Download your design for print or to share on social media. </span>
               <Button
                 big={true}
+                compact={true}
                 className={styles['editor-controls__download']}
-                dataName={{ 'data-download': '' }}
+                dataName={{ 'data-download-print': '', 'data-speaker-only': '' }}
+                iconSvgId={'arrow-download'}
               >
-                Download
+                Print
+              </Button>
+              <Button
+                big={true}
+                compact={true}
+                className={styles['editor-controls__download']}
+                dataName={{ 'data-download-share': '' }}
+                iconSvgId={'arrow-download'}
+              >
+                Social Media
               </Button>
             </li>
             <li>

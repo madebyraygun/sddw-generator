@@ -234,7 +234,7 @@ class EditorController implements Controller {
 
   // download poster
 
-  download($target: HTMLElement) {
+  download($target: HTMLElement, isPrint = false) {
     const $svgElement: SVGElement | null = $target.querySelector<SVGElement>('svg');
     if ($svgElement) {
       // show processing
@@ -319,16 +319,18 @@ class EditorController implements Controller {
       const filePromises = [];
 
       // png for everyone
-      filePromises.push(
-        this.generateImage(blobURL, widthForWeb, heightForWeb, 'png').then(({ imageData, fileType }) => {
-          zip.file(`SDDW ${new Date().getFullYear()} - Web & Social Poster.${fileType}`, imageData, {
-            base64: true,
-          });
-        }),
-      );
+      if (!isPrint) {
+        filePromises.push(
+          this.generateImage(blobURL, widthForWeb, heightForWeb, 'png').then(({ imageData, fileType }) => {
+            zip.file(`SDDW ${new Date().getFullYear()} - Web & Social Poster.${fileType}`, imageData, {
+              base64: true,
+            });
+          }),
+        );
+      }
 
       // public does not get to download pdf
-      if (RoleController.role !== Role.PUBLIC) {
+      if (isPrint) {
         filePromises.push(
           this.generateImage(blobURL, widthForPrint, heightForPrint, 'pdf').then(
             ({ imageData, fileType }) => {
