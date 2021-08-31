@@ -188,7 +188,7 @@ export class EditorControlsElement extends HTMLElement {
     }
 
     let filteredValue = !value ? '' : value;
-    if (RoleController.role === Role.PUBLIC) {
+    if (RoleController.role !== Role.DEVELOPER) {
       // filter for bad words
       filteredValue = !value ? '' : this.filter.clean(value);
     }

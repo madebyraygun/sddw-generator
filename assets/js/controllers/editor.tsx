@@ -2,7 +2,6 @@ import JsPDF from 'jspdf';
 import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-import RoleController from './role';
 import ThemeController from './theme';
 
 import PosterState from '../../../components/poster/poster-state';
@@ -11,7 +10,6 @@ import Controller from './controller';
 import EventController from './event';
 import { EventEmitter } from 'events';
 import Editor from '../constants/editor';
-import Role from '../constants/role';
 
 export interface CharacterCallback {
   word: WordState;
@@ -356,7 +354,7 @@ class EditorController implements Controller {
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext('2d', { preserveDrawingBuffer: true }) as CanvasRenderingContext2D;
 
       // wait for image to load
       image.onload = () => {

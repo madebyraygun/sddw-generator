@@ -363,6 +363,8 @@ class Design {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox={`0 0 ${this.poster.width} ${this.poster.height}`}
+          width={this.poster.width}
+          height={this.poster.height}
           style={{
             position: 'absolute',
             top: '0',
