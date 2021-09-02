@@ -493,7 +493,7 @@ export class EditorControlsElement extends HTMLElement {
         $section.removeAttribute('data-active');
       }
 
-      if (id === 'intro') {
+      if (id === 'start') {
         this.resetControls();
 
         // wait one frame (until click is complete) then focus on main input
@@ -561,7 +561,7 @@ const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
     <EditorView
       className={styles['editor-controls__view-inputs-primary']}
-      dataName={{ 'data-editor-section': 'intro', 'data-active': '' }}
+      dataName={{ 'data-editor-section': 'start', 'data-active': '' }}
     >
       {/* heading information */}
       <input className={styles['editor-controls__input-text']} type="text" maxLength={21} />
