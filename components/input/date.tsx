@@ -162,8 +162,8 @@ if (!window.customElements.get(InputDateElement.selector)) {
 
 const InputDate: FC<CustomProps> = ({ className, dataName, children = 'Date of your talk' }) => {
   const days: Node[] = [];
-  for (let i = 7; i < 11; i++) {
-    const day = i < 10 ? `0${i + 1}` : String(i + 1);
+  for (let i = 7; i <= 11; i++) {
+    const day = i < 9 ? `0${i + 1}` : String(i + 1);
     const dayParams = {};
     if (i === 7) {
       dayParams['selected'] = true;
