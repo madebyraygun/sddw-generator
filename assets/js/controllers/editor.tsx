@@ -300,7 +300,7 @@ class EditorController implements Controller {
       const data = new XMLSerializer().serializeToString($clonedSvgElement);
 
       // generate blob with base64 data of image
-      const blob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+      const blob = new Blob([data], { type: 'image/svg+xml' });
       const URL = window.URL || window.webkitURL || window;
       const blobURL = URL.createObjectURL(blob);
 
@@ -316,7 +316,7 @@ class EditorController implements Controller {
       const zip: JsZip = new JsZip();
       const filePromises = [];
 
-      // png for everyone
+      // png for social media
       if (!isPrint) {
         filePromises.push(
           this.generateImage(blobURL, widthForWeb, heightForWeb, 'png').then(({ imageData, fileType }) => {

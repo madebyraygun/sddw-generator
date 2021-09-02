@@ -3,12 +3,13 @@
     g > text {
       font-family: 'SharpSansNo2';
       color: var(--shark);
+      fill: var(--shark);
       letter-spacing: 0.05em;
       font-weight: var(--font-weight-black);
       text-transform: uppercase;
 
       &:nth-child(1),
-      &:nth-child(3), {
+      &:nth-child(3) {
         font-size: 46px; /* stylelint-disable-line unit-allowed-list */
         letter-spacing: 0.04em;
       }
