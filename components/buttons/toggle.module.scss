@@ -45,13 +45,13 @@
 
   &[data-color='2'] {
     #{$this}__knob-bg {
-      background: var(--mint-green);
+      background: var(--theme-primary);
     }
   }
 
   &[data-color='3'] {
     #{$this}__knob-bg {
-      background: var(--malibu);
+      background: var(--theme-secondary);
     }
   }
 

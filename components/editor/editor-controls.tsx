@@ -280,7 +280,7 @@ export class EditorControlsElement extends HTMLElement {
 
   #onShareTwitterClick = () => {
     window.open(
-      'https://twitter.com/intent/tweet?url=https://sddesignweek.org&text=SEPTEMBER%208-12,%202021%0APRESENTED%20BY%20MINGEI%20INTERNATIONAL%20MUSEUM',
+      'https://twitter.com/intent/tweet?url=https://sddesignweek.org&text=SEPTEMBER%2021-25,%202022%0APRESENTED%20BY%20MINGEI%20INTERNATIONAL%20MUSEUM',
     );
   };
 
@@ -493,7 +493,7 @@ export class EditorControlsElement extends HTMLElement {
         $section.removeAttribute('data-active');
       }
 
-      if (id === 'intro') {
+      if (id === 'start') {
         this.resetControls();
 
         // wait one frame (until click is complete) then focus on main input
@@ -561,7 +561,7 @@ const EditorControls: FC = () => (
   <div element={EditorControlsElement.selector} className={styles['editor-controls']}>
     <EditorView
       className={styles['editor-controls__view-inputs-primary']}
-      dataName={{ 'data-editor-section': 'intro', 'data-active': '' }}
+      dataName={{ 'data-editor-section': 'start', 'data-active': '' }}
     >
       {/* heading information */}
       <input className={styles['editor-controls__input-text']} type="text" maxLength={21} />

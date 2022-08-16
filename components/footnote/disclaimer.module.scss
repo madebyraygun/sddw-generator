@@ -9,10 +9,10 @@
 
   a,
   a strong {
-    color: var(--malibu);
+    color: var(--theme-secondary);
 
     &:hover {
-      color: var(--mint-green);
+      color: var(--theme-primary);
     }
   }
 }

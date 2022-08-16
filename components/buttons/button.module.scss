@@ -11,7 +11,7 @@
   position: relative;
   font-size: 1.2rem;
   white-space: nowrap;
-  box-shadow: inset 0rem 0rem 0rem 0.2rem var(--mint-green);
+  box-shadow: inset 0rem 0rem 0rem 0.2rem var(--theme-primary);
   line-height: 5rem;
 
   // states ---------------------------------------------------------------- //
@@ -27,7 +27,7 @@
 
   &:hover,
   &[data-active] {
-    background: var(--mint-green);
+    background: var(--theme-primary);
 
     span {
       position: relative;

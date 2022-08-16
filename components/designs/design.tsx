@@ -322,7 +322,7 @@ class Design {
 
     // generate footer
 
-    const data = AssetsController.getFooter('light', '2021');
+    const data = AssetsController.getFooter('light', '2022');
     const [width, height] = data.dimension;
     const footerWidth = this.poster.width;
     const factor = footerWidth / width;
