@@ -2,6 +2,7 @@
   --black: #000;
   --white: #fff;
 
+  // 2021
   --athens-gray: #f8f9fa;
   --bright-grey: #5d5e60;
   --candy-corn: #f9f15a;
@@ -12,6 +13,10 @@
   --mint-green: #76fa95;
   --royal-purple: #6a2fa1;
   --shark: #1b1c1e;
+
+  // 2022
+  --theme-primary: var(--mandy);
+  --theme-secondary: var(--candy-corn);
 
   // light / dark - can be inverted depending on theme state
   --dark: #1b1c1e;

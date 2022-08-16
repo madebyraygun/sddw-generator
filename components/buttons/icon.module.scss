@@ -8,7 +8,7 @@
   overflow: hidden;
   margin: 0;
   padding: 0;
-  box-shadow: inset 0rem 0rem 0rem 0.2rem var(--mint-green);
+  box-shadow: inset 0rem 0rem 0rem 0.2rem var(--theme-primary);
 
   // c---[======================>
   // states
@@ -20,7 +20,7 @@
 
     &:hover,
     &[data-active] {
-      background: var(--mint-green);
+      background: var(--theme-primary);
 
       figure {
         position: relative;

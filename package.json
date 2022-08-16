@@ -52,7 +52,6 @@
     "jsdom-global": "3.0.2",
     "mini-css-extract-plugin": "^1.6.2",
     "mkdirp": "^1.0.4",
-    "node-sass": "^5.0.0",
     "node-watch": "^0.7.1",
     "ping": "^0.4.1",
     "postcss-loader": "^5.3.0",
@@ -79,6 +78,7 @@
     "file-saver": "^2.0.5",
     "gsap": "file:gsap-bonus.tgz",
     "jspdf": "^2.3.1",
-    "jszip": "^3.7.0"
+    "jszip": "^3.7.0",
+    "node-sass": "^7.0.1"
   }
 }

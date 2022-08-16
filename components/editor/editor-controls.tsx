@@ -280,7 +280,7 @@ export class EditorControlsElement extends HTMLElement {
 
   #onShareTwitterClick = () => {
     window.open(
-      'https://twitter.com/intent/tweet?url=https://sddesignweek.org&text=SEPTEMBER%208-12,%202021%0APRESENTED%20BY%20MINGEI%20INTERNATIONAL%20MUSEUM',
+      'https://twitter.com/intent/tweet?url=https://sddesignweek.org&text=SEPTEMBER%2021-25,%202022%0APRESENTED%20BY%20MINGEI%20INTERNATIONAL%20MUSEUM',
     );
   };
 
